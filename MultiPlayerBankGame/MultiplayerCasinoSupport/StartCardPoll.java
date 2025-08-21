@@ -10,9 +10,9 @@ public class StartCardPoll {
         ArrayList<Player> consenting = new ArrayList<>();
         System.out.println("\n🃏 A player has requested to start CARD GAMES!");
         for (Player p : players) {
-            System.out.print(p.name + ", do you agree? (yes/no): ");
+            System.out.print(p.name + ", do you agree? (Y/N): ");
             String vote = sc.next();
-            if (vote.equalsIgnoreCase("yes")) {
+            if (vote.equalsIgnoreCase("yes") || vote.equalsIgnoreCase("y")) {
                 yesVotes++;
                 consenting.add(p);
             }
