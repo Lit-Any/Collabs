@@ -117,11 +117,12 @@ public class MultiplayerCasino {
 
                 if (p.balance > maxBalance && enableCondition) {
                     maxBalance = p.balance; // Track highest balance
-                    if ((p.balance)*3 < maxBalance) {
+                }
+
+                if ((p.balance)*3 < maxBalance && enableCondition) {
                         System.out.println("🚨 " + p.name + " has fallen too far behind! Ending game.");
                         running = false;
                         break;
-                }
                 }
             }
         }
@@ -136,7 +137,7 @@ public class MultiplayerCasino {
         // 🏆 Leaderboard
         Leaderboard.showLeaderboard(players);
 
-        PrintMethods.pln("Program terminated.");
+        PrintMethods.pln("\nProgram terminated.");
         // 🏁 End of game
 
         sc.close();
