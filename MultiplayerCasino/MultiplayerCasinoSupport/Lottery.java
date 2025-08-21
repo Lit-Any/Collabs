@@ -1,8 +1,8 @@
-package MultiPlayerBankGame.MultiplayerCasinoSupport;
+package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.*;
 
-import MultiPlayerBankGame.MultiplayerCasino;
+import MultiplayerCasino.MultiplayerCasino;
 
 public class Lottery {
     // 🎰 Lottery System with Accumulating Bonus Pool (now counts flows)

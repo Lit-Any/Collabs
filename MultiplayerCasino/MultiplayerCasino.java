@@ -1,8 +1,9 @@
-package MultiPlayerBankGame;
+package MultiplayerCasino;
 
 import java.util.*;
+
+import MultiplayerCasino.MultiplayerCasinoSupport.*;
 import utility.*;
-import MultiPlayerBankGame.MultiplayerCasinoSupport.*;
 
 public class MultiplayerCasino {
     static Random rand = new Random();

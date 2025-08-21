@@ -1,8 +1,9 @@
-package MultiPlayerBankGame.MultiplayerCasinoSupport;
+package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.Random;
 import java.util.Scanner;
-import MultiPlayerBankGame.MultiplayerCasino;
+
+import MultiplayerCasino.MultiplayerCasino;
 
 public class GambleMenu {
 
