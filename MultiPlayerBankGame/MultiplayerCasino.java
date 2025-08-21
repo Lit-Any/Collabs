@@ -16,13 +16,18 @@ public class MultiplayerCasino {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enable win/loss condition? (Y/N): ");
+        System.out.println("Enable win/loss condition? (Y/N)\nSaying no enables infinite play. ");
         boolean enableCondition = sc.next().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
         sc.nextLine(); // Consume newline after next()
 
         System.out.print("Enter number of players: ");
         int n = sc.nextInt();
         sc.nextLine(); // Consume newline after nextInt()
+
+        if (n < 1) {
+            System.out.println("❌ Invalid number of players. Terminating program.");
+            System.exit(0);;
+        }
 
         Player[] players;
         if (n == 1) {
