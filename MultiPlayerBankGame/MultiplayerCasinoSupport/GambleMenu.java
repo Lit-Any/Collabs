@@ -1,7 +1,7 @@
-package MultiPlayerBankGame.MultiPlayerBankGameSupport;
+package MultiPlayerBankGame.MultiplayerCasinoSupport;
 
 import java.util.Scanner;
-import MultiPlayerBankGame.MultiPlayerBankGame;
+import MultiPlayerBankGame.MultiplayerCasino;
 
 public class GambleMenu {
 
@@ -32,7 +32,7 @@ public class GambleMenu {
         p.addFlow(bet);      // money out
         p.gamblesPlayed++;
         p.moneyLost += bet;  // will be corrected on push
-        MultiPlayerBankGame.jackpotPool += bet;  // add to carryover pool until outcome is known
+        MultiplayerCasino.jackpotPool += bet;  // add to carryover pool until outcome is known
 
         double winnings = 0;
 
@@ -68,7 +68,7 @@ public class GambleMenu {
             p.balance += bet;
             p.addFlow(bet); // money back in
             // Remove this bet from jackpot pool and moneyLost since it's a push
-            MultiPlayerBankGame.jackpotPool = Math.max(0, MultiPlayerBankGame.jackpotPool - bet);
+            MultiplayerCasino.jackpotPool = Math.max(0, MultiplayerCasino.jackpotPool - bet);
             p.moneyLost -= bet;
             System.out.println("↔️  Push! Your bet $" + bet + " was returned. (no jackpot awarded)");
             return;
@@ -76,16 +76,16 @@ public class GambleMenu {
 
         if (winnings > 0) {
             // Winner gets winnings + entire jackpot pool
-            double payout = winnings + MultiPlayerBankGame.jackpotPool;
+            double payout = winnings + MultiplayerCasino.jackpotPool;
             p.balance += payout;
             p.addFlow(payout); // money in
             p.gamblesWon++;
             p.moneyWon += payout;
             System.out.println("🎉 " + p.name + " won $" + payout + "! (includes jackpot pool)");
-            MultiPlayerBankGame.jackpotPool = 0; // reset after a win
+            MultiplayerCasino.jackpotPool = 0; // reset after a win
         } else {
             p.gamblesLost++;
-            System.out.println("❌ You lost this gamble. (jackpot grows: $" + MultiPlayerBankGame.jackpotPool + ")");
+            System.out.println("❌ You lost this gamble. (jackpot grows: $" + MultiplayerCasino.jackpotPool + ")");
         }
     }
 }

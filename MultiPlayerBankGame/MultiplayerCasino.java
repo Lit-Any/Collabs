@@ -1,15 +1,17 @@
 package MultiPlayerBankGame;
 
 import java.util.*;
-import MultiPlayerBankGame.MultiPlayerBankGameSupport.*;
+
+import MultiPlayerBankGame.MultiplayerCasinoSupport.*;
 
 
 
-public class MultiPlayerBankGame {
+public class MultiplayerCasino {
     static Random rand = new Random();
 
     // Pools
     public static double jackpotPool = 0.0;       // Gambling: all lost bets accumulate here until the next win
+    public static double lotteryBonusPool = 0.0;  // lottery: 10% tax accumulates across rounds
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

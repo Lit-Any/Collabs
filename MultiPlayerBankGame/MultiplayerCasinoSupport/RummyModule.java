@@ -1,4 +1,4 @@
-package MultiPlayerBankGame.MultiPlayerBankGameSupport;
+package MultiPlayerBankGame.MultiplayerCasinoSupport;
 
 import java.util.*;
 

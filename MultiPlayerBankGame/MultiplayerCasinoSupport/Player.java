@@ -1,4 +1,4 @@
-package MultiPlayerBankGame.MultiPlayerBankGameSupport;
+package MultiPlayerBankGame.MultiplayerCasinoSupport;
 
 public class Player {
     public String name;
