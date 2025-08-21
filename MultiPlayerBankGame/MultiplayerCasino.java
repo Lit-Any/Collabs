@@ -1,7 +1,7 @@
 package MultiPlayerBankGame;
 
 import java.util.*;
-
+import utility.*;
 import MultiPlayerBankGame.MultiplayerCasinoSupport.*;
 
 
@@ -16,20 +16,26 @@ public class MultiplayerCasino {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enable win/loss condition? (Y/N): ");
-        boolean enableCondition = sc.nextLine().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
+        System.out.print("Enable win/loss condition? (Y/N): ");
+        boolean enableCondition = sc.next().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
+        sc.nextLine(); // Consume newline after next()
+
         System.out.print("Enter number of players: ");
         int n = sc.nextInt();
-        sc.nextLine();
+        sc.nextLine(); // Consume newline after nextInt()
 
-        Player[] players = new Player[n];
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter player " + (i+1) + " name: ");
-            players[i] = new Player(sc.nextLine(), 1000);
-        }
-
-        if (n==1) {
-            players[1] = new Player("AI", 1000); // Add a computer player for single-player mode
+        Player[] players;
+        if (n == 1) {
+            players = new Player[2];
+            players[0] = new Player("Human", 1000);
+            players[1] = new Player("AI", 1000);
+            n = 2; // Now we have 2 players
+        } else {
+            players = new Player[n];
+            for (int i = 0; i < n; i++) {
+                System.out.print("Enter player " + (i+1) + " name: ");
+                players[i] = new Player(sc.nextLine(), 1000);
+            }
         }
 
         boolean running = true;
@@ -54,11 +60,10 @@ public class MultiplayerCasino {
                     } else if (action < 8) {
                         EconEvent.economicEvent(p); // Random economic event
                     } else {
-                        GambleMenu.gambleMenu(p, sc); // Random gamble
+                        GambleMenu.gambleMenuAI(p, sc); // Random gamble
                     }
-                }
-                
-                System.out.println(
+                } else {
+                    System.out.println(
                     "1. Check Balance\n" +
                     "2. Deposit Money\n" +
                     "3. Withdraw Money\n" +
@@ -70,40 +75,41 @@ public class MultiplayerCasino {
                     "9. Lottery\n" +
                     "10. Skip Turn\n" +
                     "11. Exit Game"
-                );
-                System.out.print("Choose: ");
-                int choice = sc.nextInt();
+                    );
+                    System.out.print("Choose: ");
+                    int choice = sc.nextInt();
 
-                if (choice == 1) {
-                    p.showStatus();
-                } else if (choice == 2) {
-                    System.out.print("Enter deposit amount: ");
-                    p.deposit(sc.nextDouble());
-                } else if (choice == 3) {
-                    System.out.print("Enter withdrawal amount: ");
-                    p.withdraw(sc.nextDouble());
-                } else if (choice == 4) {
-                    System.out.print("Enter loan amount: ");
-                    p.takeLoan(sc.nextDouble());
-                } else if (choice == 5) {
-                    System.out.print("Enter repayment amount: ");
-                    p.repayLoan(sc.nextDouble());
-                } else if (choice == 6) {
-                    EconEvent.economicEvent(p);
-                } else if (choice == 7) {
-                    GambleMenu.gambleMenu(p, sc);
-                } else if (choice == 8) {
-                    StartCardPoll.startCardPoll(players, sc);
-                } else if (choice == 9) {
-                    Lottery.lotterySystem(players, sc);
-                } else if (choice == 10) {
-                    System.out.println("⏭ " + p.name + " skipped their turn.");
-                } else if (choice == 11) {
-                    running = false;
-                    System.out.println("👋 Game ended by " + p.name);
-                    break;
-                } else {
-                    System.out.println("❌ Invalid choice!");
+                    if (choice == 1) {
+                        p.showStatus();
+                    } else if (choice == 2) {
+                        System.out.print("Enter deposit amount: ");
+                        p.deposit(sc.nextDouble());
+                    } else if (choice == 3) {
+                        System.out.print("Enter withdrawal amount: ");
+                        p.withdraw(sc.nextDouble());
+                    } else if (choice == 4) {
+                        System.out.print("Enter loan amount: ");
+                        p.takeLoan(sc.nextDouble());
+                    } else if (choice == 5) {
+                        System.out.print("Enter repayment amount: ");
+                        p.repayLoan(sc.nextDouble());
+                    } else if (choice == 6) {
+                        EconEvent.economicEvent(p);
+                    } else if (choice == 7) {
+                        GambleMenu.gambleMenu(p, sc);
+                    } else if (choice == 8) {
+                        StartCardPoll.startCardPoll(players, sc);
+                    } else if (choice == 9) {
+                        Lottery.lotterySystem(players, sc);
+                    } else if (choice == 10) {
+                        System.out.println("⏭ " + p.name + " skipped their turn.");
+                    } else if (choice == 11) {
+                        running = false;
+                        System.out.println("👋 Game ended by " + p.name);
+                        break;
+                    } else {
+                        System.out.println("❌ Invalid choice!");
+                    }
                 }
 
                 if (p.balance > maxBalance && enableCondition) {
@@ -126,6 +132,9 @@ public class MultiplayerCasino {
 
         // 🏆 Leaderboard
         Leaderboard.showLeaderboard(players);
+
+        PrintMethods.pln("Program terminated.");
+        // 🏁 End of game
 
         sc.close();
     }
