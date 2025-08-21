@@ -43,6 +43,7 @@ public class MultiplayerCasino {
 
         boolean running = true;
         double maxBalance = 0;
+        int count = 0;
 
         System.out.println("\n🏦 Welcome to the Multi-Player Casino Simulator!");
         System.out.println("Each player starts with $1000.");
@@ -53,18 +54,44 @@ public class MultiplayerCasino {
 
                 if (p.name.equals("AI")) {
                     // AI logic: random actions
-                    int action = rand.nextInt(10);
-                    if (action < 2) {
-                        p.deposit(rand.nextDouble() * 500); // Random deposit
-                    } else if (action < 5) {
-                        p.withdraw(rand.nextDouble() * 500); // Random withdrawal
-                    } else if (action < 7) {
-                        p.takeLoan(rand.nextDouble() * 300); // Random loan
-                    } else if (action < 8) {
-                        EconEvent.economicEvent(p); // Random economic event
+                    int choice = rand.nextInt(10)+1; // Random choice from 1 to 10
+
+                    choice = (count == 5) ? 1 : choice; // AI always checks balance on 5th turn
+
+                    if (choice == 1) {
+                        p.showStatus();
+                    } else if (choice == 2) {
+                        System.out.print("Enter deposit amount: ");
+                        p.deposit(sc.nextDouble());
+                    } else if (choice == 3) {
+                        System.out.print("Enter withdrawal amount: ");
+                        p.withdraw(sc.nextDouble());
+                    } else if (choice == 4) {
+                        System.out.print("Enter loan amount: ");
+                        p.takeLoan(sc.nextDouble());
+                    } else if (choice == 5) {
+                        System.out.print("Enter repayment amount: ");
+                        p.repayLoan(sc.nextDouble());
+                    } else if (choice == 6) {
+                        EconEvent.economicEvent(p);
+                    } else if (choice == 7) {
+                        GambleMenu.gambleMenu(p, sc);
+                    } else if (choice == 8) {
+                        StartCardPoll.startCardPoll(players, sc);
+                    } else if (choice == 9) {
+                        Lottery.lotterySystem(players, sc);
+                    } else if (choice == 10) {
+                        System.out.println("⏭ " + p.name + " skipped their turn.");
+                    } else if (choice == 11) {
+                        running = false;
+                        System.out.println("👋 Game ended by " + p.name);
+                        break;
                     } else {
-                        GambleMenu.gambleMenuAI(p, sc); // Random gamble
+                        System.out.println("❌ Invalid choice!");
                     }
+
+                    count++;
+
                 } else {
                     System.out.println(
                     "1. Check Balance\n" +
