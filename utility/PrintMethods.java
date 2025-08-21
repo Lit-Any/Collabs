@@ -8,4 +8,8 @@ public class PrintMethods {
     public static void p(Object message) {
         System.out.print(message);
     }
+
+    public static void main(String[] args){
+        
+    }
 }
