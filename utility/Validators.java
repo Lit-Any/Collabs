@@ -1,13 +1,13 @@
 package utility;
 
 import java.util.*;
-import utility.*;
+
 public class Validators {
     public static void yesOrNo(Scanner sc, String question) {
-        pln(question);
+        PrintMethods.pln(question);
         String response = sc.next().trim().toUpperCase();
         if (!response.equals("Y") && !response.equals("N")) {
-            pln("Invalid input. Please enter Y or N.");
+            PrintMethods.pln("Invalid input. Please enter Y or N.");
             yesOrNo(sc, question);
         }
     }
@@ -21,10 +21,10 @@ public class Validators {
             yesOrNo(sc, question);
             return;
         } else {
-            pln(question);
+            PrintMethods.pln(question);
             String input = sc.nextLine().trim();
             if (!validInputs.contains(input)) {
-                pln("Invalid input. Please try again.");
+                PrintMethods.pln("Invalid input. Please try again.");
                 Validator(sc, question, validInputs, false);
             }
         }
