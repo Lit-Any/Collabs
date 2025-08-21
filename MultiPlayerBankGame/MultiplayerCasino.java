@@ -16,6 +16,8 @@ public class MultiplayerCasino {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        System.out.println("Enable win/loss condition? (Y/N): ");
+        boolean enableCondition = sc.nextLine().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
         System.out.print("Enter number of players: ");
         int n = sc.nextInt();
         sc.nextLine();
@@ -27,8 +29,9 @@ public class MultiplayerCasino {
         }
 
         boolean running = true;
+        double maxBalance = 0;
 
-        System.out.println("\n🏦 Welcome to the Multi-Player Bank & Economy Simulator!");
+        System.out.println("\n🏦 Welcome to the Multi-Player Casino Simulator!");
         System.out.println("Each player starts with $1000.");
 
         while (running) {
@@ -80,6 +83,15 @@ public class MultiplayerCasino {
                     break;
                 } else {
                     System.out.println("❌ Invalid choice!");
+                }
+
+                if (p.balance > maxBalance && enableCondition) {
+                    maxBalance = p.balance; // Track highest balance
+                }
+                if ((p.balance)*3 < maxBalance) {
+                    System.out.println("🚨 " + p.name + " has fallen too far behind! Ending game.");
+                    running = false;
+                    break;
                 }
             }
         }
