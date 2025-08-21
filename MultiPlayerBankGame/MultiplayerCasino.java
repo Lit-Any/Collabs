@@ -7,7 +7,7 @@ import MultiPlayerBankGame.MultiplayerCasinoSupport.*;
 
 
 public class MultiplayerCasino {
-    Random rand = new Random();
+    static Random rand = new Random();
 
     // Pools
     public static double jackpotPool = 0.0;       // Gambling: all lost bets accumulate here until the next win
@@ -28,6 +28,10 @@ public class MultiplayerCasino {
             players[i] = new Player(sc.nextLine(), 1000);
         }
 
+        if (n==1) {
+            players[1] = new Player("AI", 1000); // Add a computer player for single-player mode
+        }
+
         boolean running = true;
         double maxBalance = 0;
 
@@ -37,6 +41,23 @@ public class MultiplayerCasino {
         while (running) {
             for (Player p : players) {
                 System.out.println("\n--- " + p.name + "'s Turn ---");
+
+                if (p.name.equals("AI")) {
+                    // AI logic: random actions
+                    int action = rand.nextInt(10);
+                    if (action < 2) {
+                        p.deposit(rand.nextDouble() * 500); // Random deposit
+                    } else if (action < 5) {
+                        p.withdraw(rand.nextDouble() * 500); // Random withdrawal
+                    } else if (action < 7) {
+                        p.takeLoan(rand.nextDouble() * 300); // Random loan
+                    } else if (action < 8) {
+                        EconEvent.economicEvent(p); // Random economic event
+                    } else {
+                        GambleMenu.gambleMenu(p, sc); // Random gamble
+                    }
+                }
+                
                 System.out.println(
                     "1. Check Balance\n" +
                     "2. Deposit Money\n" +
@@ -87,11 +108,11 @@ public class MultiplayerCasino {
 
                 if (p.balance > maxBalance && enableCondition) {
                     maxBalance = p.balance; // Track highest balance
+                    if ((p.balance)*3 < maxBalance) {
+                        System.out.println("🚨 " + p.name + " has fallen too far behind! Ending game.");
+                        running = false;
+                        break;
                 }
-                if ((p.balance)*3 < maxBalance) {
-                    System.out.println("🚨 " + p.name + " has fallen too far behind! Ending game.");
-                    running = false;
-                    break;
                 }
             }
         }
