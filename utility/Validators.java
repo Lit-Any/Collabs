@@ -3,12 +3,12 @@ package utility;
 import java.util.*;
 
 public class Validators {
-    public static void yesOrNo(Scanner sc, String question) {
+    public static void yesOrNo(Scanner sc, String question, ArrayList <String> validInputs) {
         PrintMethods.pln(question);
         String response = sc.next().trim().toUpperCase();
-        if (!response.equals("Y") && !response.equals("N")) {
+        if (!validInputs.contains(response)) {
             PrintMethods.pln("Invalid input. Please enter Y or N.");
-            yesOrNo(sc, question);
+            yesOrNo(sc, question, validInputs);
         }
     }
 
@@ -18,7 +18,7 @@ public class Validators {
             for (String input : binaryInputs) {
                 validInputs.add(input);
             }
-            yesOrNo(sc, question);
+            yesOrNo(sc, question, validInputs);
             return;
         } else {
             PrintMethods.pln(question);
