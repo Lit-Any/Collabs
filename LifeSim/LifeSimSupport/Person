@@ -1,4 +1,5 @@
 public static class Person {
+
         // -------- Life-sim attributes (from Code2, simplified to console) --------
         String name;
         int age = 18;
@@ -161,7 +162,7 @@ public static class Person {
         }
 
         String brief() {
-            return String.format("%s | Age:%d | Bal:Rs.%d | Loan:Rs.%d | H:%d | Happy:%d | Int:%d | Job:%s",
+            return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happy:%d | Int:%d | Job:%s",
                     name, age, balance, loan, health, happiness, intelligence, job);
         }
     }
