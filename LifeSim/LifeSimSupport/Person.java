@@ -1,6 +1,10 @@
 package LifeSim.LifeSimSupport;
 
-public static class Person {
+import java.util.*;
+
+public class Person {
+
+    Random RNG = new Random();
 
         // -------- Life-sim attributes (from Code2, simplified to console) --------
         String name;
