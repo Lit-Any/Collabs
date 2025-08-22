@@ -1,0 +1,167 @@
+public static class Person {
+        // -------- Life-sim attributes (from Code2, simplified to console) --------
+        String name;
+        int age = 18;
+        int health = 70;       // 0-100
+        int happiness = 70;    // 0-100
+        int intelligence = 50; // 0-100
+        int looks = 50;        // 0-100
+        String education = "None"; // None, HS, College, Masters
+        String job = "Unemployed";
+        boolean alive = true;
+
+        // -------- Economic framework fields (from Code1, unified to long Rs.) --------
+        long balance = 1000;     // starting money (Rs.)
+        long loan = 0;
+
+        // Gambling leaderboard stats (kept as personal stats; leaderboard UI removed)
+        int gamblesPlayed = 0;
+        int gamblesWon = 0;
+        int gamblesLost = 0;
+        long moneyWon = 0;       // gambling-only winnings credited (includes jackpot when won)
+        long moneyLost = 0;      // gambling-only bets deducted (net of pushes)
+        long lifetimeTotal = 0;  // TOTAL money handled across the whole game (ALL inflows/outflows)
+
+        // Lottery stats
+        long biggestLotteryWin = 0;     // largest single lottery prize ever won
+        long lotteryContribution = 0;   // total money spent on lottery tickets
+
+        Person(String name) {
+            this.name = name;
+            // small randomization
+            intelligence += RNG.nextInt(21) - 10; // -10..+10
+            looks += RNG.nextInt(21) - 10;
+            health += RNG.nextInt(11) - 5;
+            happiness += RNG.nextInt(11) - 5;
+            clampAll();
+        }
+
+        void clampAll() {
+            health = clamp(health);
+            happiness = clamp(happiness);
+            intelligence = clamp(intelligence);
+            looks = clamp(looks);
+            if (balance < 0) balance = 0;
+        }
+
+        int clamp(int v) { return Math.max(0, Math.min(100, v)); }
+
+        /* ===== Life simulator logic ===== */
+
+        void passYear(List<String> log) {
+            if (!alive) return;
+            age++;
+
+            // natural decline/gains
+            health -= age / 50; // slow decline
+            long income = incomePerYear();
+            balance += income; addFlow(income);
+            if (income > 0) log.add(name + " earned salary Rs." + income + " this year.");
+
+            // small random stat drift
+            intelligence += RNG.nextInt(3) - 1;
+            looks += RNG.nextInt(3) - 1;
+            happiness += RNG.nextInt(5) - 2;
+
+            // simple random events
+            doRandomEvent(log);
+
+            clampAll();
+
+            // death checks
+            if (health <= 0 || (age >= 100 && RNG.nextInt(100) < 50)) {
+                alive = false;
+                log.add(age + ": " + name + " has died.");
+            }
+        }
+
+        long incomePerYear() {
+            switch (job) {
+                case "Unemployed": return 0;
+                case "Retail Worker": return 12000 + intelligence * 10L;
+                case "Teacher": return 30000 + intelligence * 50L;
+                case "Engineer": return 60000 + intelligence * 100L;
+                case "Doctor": return 120000 + intelligence * 200L;
+                case "Artist": return 25000 + looks * 30L;
+                case "Criminal": return 20000 + (100 - happiness) * 20L;
+                default: return 10000;
+            }
+        }
+
+        void doRandomEvent(List<String> log) {
+            int roll = RNG.nextInt(100);
+            if (roll < 8) {
+                int severity = 5 + RNG.nextInt(20);
+                health -= severity;
+                happiness -= severity / 2;
+                log.add(age + ": " + name + " fell ill (-" + severity + " health).");
+            } else if (roll < 16) {
+                long amount = (RNG.nextInt(20) + 5) * 1000L;
+                balance += amount; addFlow(amount);
+                happiness += 5;
+                log.add(age + ": " + name + " received windfall Rs." + amount + ".");
+            } else if (roll < 28) {
+                if (RNG.nextBoolean()) {
+                    happiness += 3;
+                    log.add(age + ": " + name + " made a great new friend.");
+                } else {
+                    happiness -= 4;
+                    log.add(age + ": " + name + " had a falling out with a friend.");
+                }
+            } else if (roll < 34) {
+                if (RNG.nextInt(100) < (100 - happiness)) {
+                    long loss = 5000;
+                    balance = Math.max(0, balance - loss); addFlow(loss);
+                    health -= 5;
+                    log.add(age + ": " + name + " got into trouble (-Rs." + loss + ", -health).");
+                }
+            }
+        }
+
+        /* ===== Economy methods (from Code1, adapted to long) ===== */
+
+        void addFlow(long amount) { lifetimeTotal += Math.abs(amount); }
+
+        void showStatus() {
+            System.out.println("👤 " + name + " | Age: " + age +
+                               " | Balance: Rs." + balance + " | Loan: Rs." + loan +
+                               " | Health: " + health + " | Happy: " + happiness +
+                               " | Int: " + intelligence + " | Job: " + job);
+        }
+
+        void deposit(long amount) {
+            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            balance += amount; addFlow(amount);
+            System.out.println("✅ Deposited Rs." + amount);
+        }
+
+        void withdraw(long amount) {
+            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= balance) {
+                balance -= amount; addFlow(amount);
+                System.out.println("✅ Withdrawn Rs." + amount);
+            } else System.out.println("❌ Not enough balance!");
+        }
+
+        void takeLoan(long amount) {
+            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            // 10% interest
+            long interest = Math.round(amount * 0.10);
+            loan += amount + interest;
+            balance += amount; addFlow(amount);
+            System.out.println("🏦 Loan granted: Rs." + amount + " (+10% interest added to payable: +" + interest + ")");
+        }
+
+        void repayLoan(long amount) {
+            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= balance && amount <= loan) {
+                balance -= amount; loan -= amount; addFlow(amount);
+                System.out.println("✅ Repaid Rs." + amount);
+            } else System.out.println("❌ Repayment not possible!");
+        }
+
+        String brief() {
+            return String.format("%s | Age:%d | Bal:Rs.%d | Loan:Rs.%d | H:%d | Happy:%d | Int:%d | Job:%s",
+                    name, age, balance, loan, health, happiness, intelligence, job);
+        }
+    }
