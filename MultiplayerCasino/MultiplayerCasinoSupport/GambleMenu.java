@@ -2,6 +2,7 @@ package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.Random;
 import java.util.Scanner;
+import utility.*;
 
 import MultiplayerCasino.MultiplayerCasino;
 
@@ -9,23 +10,23 @@ public class GambleMenu {
 
     // 🎲 Gambling Menu (20 games)
     public static void gambleMenu(Player p, Scanner sc) {
-        System.out.println("\n--- 🎰 Gambling Games Menu ---");
-        System.out.println("1. Dice Guess\n2. Coin Toss\n3. High or Low\n4. Lucky Number\n5. Double or Nothing");
-        System.out.println("6. Spin Wheel\n7. Odd or Even\n8. Pick a Card\n9. Mini Lottery\n10. Rock Paper Scissors");
-        System.out.println("11. Blackjack Lite\n12. Roulette\n13. Slot Machine\n14. Horse Race\n15. Poker Draw");
-        System.out.println("16. High Card War\n17. Cricket Bet\n18. Football Penalty\n19. Stock Bet\n20. Jackpot Lottery");
-        System.out.print("Choose a game (1-20): ");
+        PrintMethods.pln("\n--- 🎰 Gambling Games Menu ---");
+        PrintMethods.pln("1. Dice Guess\n2. Coin Toss\n3. High or Low\n4. Lucky Number\n5. Double or Nothing");
+        PrintMethods.pln("6. Spin Wheel\n7. Odd or Even\n8. Pick a Card\n9. Mini Lottery\n10. Rock Paper Scissors");
+        PrintMethods.pln("11. Blackjack Lite\n12. Roulette\n13. Slot Machine\n14. Horse Race\n15. Poker Draw");
+        PrintMethods.pln("16. High Card War\n17. Cricket Bet\n18. Football Penalty\n19. Stock Bet\n20. Jackpot Lottery");
+        PrintMethods.p("Choose a game (1-20): ");
         int choice = sc.nextInt();
 
-        System.out.print("Enter your bet amount: ");
+        PrintMethods.p("Enter your bet amount: ");
         double bet = sc.nextDouble();
 
         if (bet <= 0) {
-            System.out.println("❌ Bet must be positive.");
+            PrintMethods.pln("❌ Bet must be positive.");
             return;
         }
         if (bet > p.balance) {
-            System.out.println("❌ Not enough balance!");
+            PrintMethods.pln("❌ Not enough balance!");
             return;
         }
 
@@ -60,7 +61,7 @@ public class GambleMenu {
             case 19: winnings = Games.gambleStock(bet); break;
             case 20: winnings = Games.gambleJackpotLottery(bet); break;
             default:
-                System.out.println("❌ Invalid choice.");
+                PrintMethods.pln("❌ Invalid choice.");
                 return;
         }
 
@@ -72,7 +73,7 @@ public class GambleMenu {
             // Remove this bet from jackpot pool and moneyLost since it's a push
             MultiplayerCasino.jackpotPool = Math.max(0, MultiplayerCasino.jackpotPool - bet);
             p.moneyLost -= bet;
-            System.out.println("↔️  Push! Your bet $" + bet + " was returned. (no jackpot awarded)");
+            PrintMethods.pln("↔️  Push! Your bet $" + bet + " was returned. (no jackpot awarded)");
             return;
         }
 
@@ -83,34 +84,34 @@ public class GambleMenu {
             p.addFlow(payout); // money in
             p.gamblesWon++;
             p.moneyWon += payout;
-            System.out.println("🎉 " + p.name + " won $" + payout + "! (includes jackpot pool)");
+            PrintMethods.pln("🎉 " + p.name + " won $" + payout + "! (includes jackpot pool)");
             MultiplayerCasino.jackpotPool = 0; // reset after a win
         } else {
             p.gamblesLost++;
-            System.out.println("❌ You lost this gamble. (jackpot grows: $" + MultiplayerCasino.jackpotPool + ")");
+            PrintMethods.pln("❌ You lost this gamble. (jackpot grows: $" + MultiplayerCasino.jackpotPool + ")");
         }
     }
 
     public static void gambleMenuAI(Player p, Scanner sc) {
         Random rand = new Random();
 
-        System.out.println("\n--- 🎰 Gambling Games Menu ---");
-        System.out.println("1. Dice Guess\n2. Coin Toss\n3. High or Low\n4. Lucky Number\n5. Double or Nothing");
-        System.out.println("6. Spin Wheel\n7. Odd or Even\n8. Pick a Card\n9. Mini Lottery\n10. Rock Paper Scissors");
-        System.out.println("11. Blackjack Lite\n12. Roulette\n13. Slot Machine\n14. Horse Race\n15. Poker Draw");
-        System.out.println("16. High Card War\n17. Cricket Bet\n18. Football Penalty\n19. Stock Bet\n20. Jackpot Lottery");
-        System.out.print("Choose a game (1-20): ");
+        PrintMethods.pln("\n--- 🎰 Gambling Games Menu ---");
+        PrintMethods.pln("1. Dice Guess\n2. Coin Toss\n3. High or Low\n4. Lucky Number\n5. Double or Nothing");
+        PrintMethods.pln("6. Spin Wheel\n7. Odd or Even\n8. Pick a Card\n9. Mini Lottery\n10. Rock Paper Scissors");
+        PrintMethods.pln("11. Blackjack Lite\n12. Roulette\n13. Slot Machine\n14. Horse Race\n15. Poker Draw");
+        PrintMethods.pln("16. High Card War\n17. Cricket Bet\n18. Football Penalty\n19. Stock Bet\n20. Jackpot Lottery");
+        PrintMethods.p("Choose a game (1-20): ");
         int choice = rand.nextInt(20) + 1; // AI randomly chooses a game
 
-        System.out.print("Enter your bet amount: ");
+        PrintMethods.p("Enter your bet amount: ");
         double bet = (rand.nextDouble())* 500; // AI randomly bets between $0 and $500
 
         if (bet <= 0) {
-            System.out.println("❌ Bet must be positive.");
+            PrintMethods.pln("❌ Bet must be positive.");
             return;
         }
         if (bet > p.balance) {
-            System.out.println("❌ Not enough balance!");
+            PrintMethods.pln("❌ Not enough balance!");
             return;
         }
 
@@ -145,7 +146,7 @@ public class GambleMenu {
             case 19: winnings = Games.gambleStock(bet); break;
             case 20: winnings = Games.gambleJackpotLottery(bet); break;
             default:
-                System.out.println("❌ Invalid choice.");
+                PrintMethods.pln("❌ Invalid choice.");
                 return;
         }
 
@@ -157,7 +158,7 @@ public class GambleMenu {
             // Remove this bet from jackpot pool and moneyLost since it's a push
             MultiplayerCasino.jackpotPool = Math.max(0, MultiplayerCasino.jackpotPool - bet);
             p.moneyLost -= bet;
-            System.out.println("↔️  Push! Your bet $" + bet + " was returned. (no jackpot awarded)");
+            PrintMethods.pln("↔️  Push! Your bet $" + bet + " was returned. (no jackpot awarded)");
             return;
         }
 
@@ -168,11 +169,11 @@ public class GambleMenu {
             p.addFlow(payout); // money in
             p.gamblesWon++;
             p.moneyWon += payout;
-            System.out.println("🎉 " + p.name + " won $" + payout + "! (includes jackpot pool)");
+            PrintMethods.pln("🎉 " + p.name + " won $" + payout + "! (includes jackpot pool)");
             MultiplayerCasino.jackpotPool = 0; // reset after a win
         } else {
             p.gamblesLost++;
-            System.out.println("❌ You lost this gamble. (jackpot grows: $" + MultiplayerCasino.jackpotPool + ")");
+            PrintMethods.pln("❌ You lost this gamble. (jackpot grows: $" + MultiplayerCasino.jackpotPool + ")");
         }
     }
 }

@@ -1,5 +1,7 @@
 package MultiplayerCasino.MultiplayerCasinoSupport;
 
+import utility.*;
+
 public class Player {
     public String name;
     public double balance;
@@ -30,48 +32,48 @@ public class Player {
 
     // ✅ Show player status
     public void showStatus() {
-        System.out.println("👤 " + name + " | Balance: $" + balance + " | Loan: $" + loan);
+        PrintMethods.pln("👤 " + name + " | Balance: $" + balance + " | Loan: $" + loan);
     }
 
     // ✅ Deposit
     public void deposit(double amount) {
-        if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+        if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
         balance += amount;
         addFlow(amount);
-        System.out.println("✅ Deposited $" + amount);
+        PrintMethods.pln("✅ Deposited $" + amount);
     }
 
     // ✅ Withdraw
     public void withdraw(double amount) {
-        if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+        if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
         if (amount <= balance) {
             balance -= amount;
             addFlow(amount);
-            System.out.println("✅ Withdrawn $" + amount);
+            PrintMethods.pln("✅ Withdrawn $" + amount);
         } else {
-            System.out.println("❌ Not enough balance!");
+            PrintMethods.pln("❌ Not enough balance!");
         }
     }
 
     // ✅ Take Loan
     public void takeLoan(double amount) {
-        if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+        if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
         loan += amount * 1.1; // 10% interest
         balance += amount;
         addFlow(amount); // player received this much spending power
-        System.out.println("🏦 Loan granted: $" + amount + " (10% interest applied)");
+        PrintMethods.pln("🏦 Loan granted: $" + amount + " (10% interest applied)");
     }
 
     // ✅ Repay Loan
     public void repayLoan(double amount) {
-        if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+        if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
         if (amount <= balance && amount <= loan) {
             balance -= amount;
             loan -= amount;
             addFlow(amount); // money out
-            System.out.println("✅ Repaid $" + amount);
+            PrintMethods.pln("✅ Repaid $" + amount);
         } else {
-            System.out.println("❌ Repayment not possible!");
+            PrintMethods.pln("❌ Repayment not possible!");
         }
     }
 }

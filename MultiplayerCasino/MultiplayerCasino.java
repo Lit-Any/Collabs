@@ -1,7 +1,6 @@
 package MultiplayerCasino;
 
 import java.util.*;
-
 import MultiplayerCasino.MultiplayerCasinoSupport.*;
 import utility.*;
 
@@ -15,16 +14,16 @@ public class MultiplayerCasino {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enable win/loss condition? (Y/N)\nSaying no enables infinite play. ");
+        PrintMethods.pln("Enable win/loss condition? (Y/N)\nSaying no enables infinite play. ");
         boolean enableCondition = sc.next().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
         sc.nextLine(); // Consume newline after next()
 
-        System.out.print("Enter number of players: ");
+        PrintMethods.p("Enter number of players: ");
         int n = sc.nextInt();
         sc.nextLine(); // Consume newline after nextInt()
 
         if (n < 1) {
-            System.out.println("❌ Invalid number of players. Terminating program.");
+            PrintMethods.pln("❌ Invalid number of players. Terminating program.");
             System.exit(0);;
         }
 
@@ -37,7 +36,7 @@ public class MultiplayerCasino {
         } else {
             players = new Player[n];
             for (int i = 0; i < n; i++) {
-                System.out.print("Enter player " + (i+1) + " name: ");
+                PrintMethods.p("Enter player " + (i+1) + " name: ");
                 players[i] = new Player(sc.nextLine(), 1000);
             }
         }
@@ -46,12 +45,12 @@ public class MultiplayerCasino {
         double maxBalance = 0;
         int count = 0;
 
-        System.out.println("\n🏦 Welcome to the Multi-Player Casino Simulator!");
-        System.out.println("Each player starts with $1000.");
+        PrintMethods.pln("\n🏦 Welcome to the Multi-Player Casino Simulator!");
+        PrintMethods.pln("Each player starts with $1000.");
 
         while (running) {
             for (Player p : players) {
-                System.out.println("\n--- " + p.name + "'s Turn ---");
+                PrintMethods.pln("\n--- " + p.name + "'s Turn ---");
 
                 if (p.name.equals("AI")) {
                     // AI logic: random actions
@@ -62,16 +61,16 @@ public class MultiplayerCasino {
                     if (choice == 1) {
                         p.showStatus();
                     } else if (choice == 2) {
-                        System.out.print("Enter deposit amount: ");
+                        PrintMethods.p("Enter deposit amount: ");
                         p.deposit(sc.nextDouble());
                     } else if (choice == 3) {
-                        System.out.print("Enter withdrawal amount: ");
+                        PrintMethods.p("Enter withdrawal amount: ");
                         p.withdraw(sc.nextDouble());
                     } else if (choice == 4) {
-                        System.out.print("Enter loan amount: ");
+                        PrintMethods.p("Enter loan amount: ");
                         p.takeLoan(sc.nextDouble());
                     } else if (choice == 5) {
-                        System.out.print("Enter repayment amount: ");
+                        PrintMethods.p("Enter repayment amount: ");
                         p.repayLoan(sc.nextDouble());
                     } else if (choice == 6) {
                         EconEvent.economicEvent(p);
@@ -82,19 +81,19 @@ public class MultiplayerCasino {
                     } else if (choice == 9) {
                         Lottery.lotterySystem(players, sc);
                     } else if (choice == 10) {
-                        System.out.println("⏭ " + p.name + " skipped their turn.");
+                        PrintMethods.pln("⏭ " + p.name + " skipped their turn.");
                     } else if (choice == 11) {
                         running = false;
-                        System.out.println("👋 Game ended by " + p.name);
+                        PrintMethods.pln("👋 Game ended by " + p.name);
                         break;
                     } else {
-                        System.out.println("❌ Invalid choice!");
+                        PrintMethods.pln("❌ Invalid choice!");
                     }
 
                     count++;
 
                 } else {
-                    System.out.println(
+                    PrintMethods.pln(
                     "1. Check Balance\n" +
                     "2. Deposit Money\n" +
                     "3. Withdraw Money\n" +
@@ -107,22 +106,22 @@ public class MultiplayerCasino {
                     "10. Skip Turn\n" +
                     "11. Exit Game"
                     );
-                    System.out.print("Choose: ");
+                    PrintMethods.p("Choose: ");
                     int choice = sc.nextInt();
 
                     if (choice == 1) {
                         p.showStatus();
                     } else if (choice == 2) {
-                        System.out.print("Enter deposit amount: ");
+                        PrintMethods.p("Enter deposit amount: ");
                         p.deposit(sc.nextDouble());
                     } else if (choice == 3) {
-                        System.out.print("Enter withdrawal amount: ");
+                        PrintMethods.p("Enter withdrawal amount: ");
                         p.withdraw(sc.nextDouble());
                     } else if (choice == 4) {
-                        System.out.print("Enter loan amount: ");
+                        PrintMethods.p("Enter loan amount: ");
                         p.takeLoan(sc.nextDouble());
                     } else if (choice == 5) {
-                        System.out.print("Enter repayment amount: ");
+                        PrintMethods.p("Enter repayment amount: ");
                         p.repayLoan(sc.nextDouble());
                     } else if (choice == 6) {
                         EconEvent.economicEvent(p);
@@ -133,13 +132,13 @@ public class MultiplayerCasino {
                     } else if (choice == 9) {
                         Lottery.lotterySystem(players, sc);
                     } else if (choice == 10) {
-                        System.out.println("⏭ " + p.name + " skipped their turn.");
+                        PrintMethods.pln("⏭ " + p.name + " skipped their turn.");
                     } else if (choice == 11) {
                         running = false;
-                        System.out.println("👋 Game ended by " + p.name);
+                        PrintMethods.pln("👋 Game ended by " + p.name);
                         break;
                     } else {
-                        System.out.println("❌ Invalid choice!");
+                        PrintMethods.pln("❌ Invalid choice!");
                     }
                 }
 
@@ -148,7 +147,7 @@ public class MultiplayerCasino {
                 }
 
                 if ((p.balance)*3 < maxBalance && enableCondition) {
-                        System.out.println("🚨 " + p.name + " has fallen too far behind! Ending game.");
+                        PrintMethods.pln("🚨 " + p.name + " has fallen too far behind! Ending game.");
                         running = false;
                         break;
                 }
@@ -156,10 +155,10 @@ public class MultiplayerCasino {
         }
 
         // 📊 Final Results
-        System.out.println("\n📊 Final Results:");
+        PrintMethods.pln("\n📊 Final Results:");
         for (Player p : players) {
             p.showStatus();
-            System.out.println("-----------------");
+            PrintMethods.pln("-----------------");
         }
 
         // 🏆 Leaderboard
