@@ -1,3 +1,5 @@
+package LifeSim.LifeSimSupport;
+
 public static class Person {
 
         // -------- Life-sim attributes (from Code2, simplified to console) --------
