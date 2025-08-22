@@ -7,33 +7,33 @@ public class Person {
     Random RNG = new Random();
 
         // -------- Life-sim attributes (from Code2, simplified to console) --------
-        String name;
-        int age = 18;
-        int health = 70;       // 0-100
-        int happiness = 70;    // 0-100
-        int intelligence = 50; // 0-100
-        int looks = 50;        // 0-100
-        String education = "None"; // None, HS, College, Masters
-        String job = "Unemployed";
-        boolean alive = true;
+        public String name;
+        public int age = 18;
+        public int health = 70;       // 0-100
+        public int happiness = 70;    // 0-100
+        public int intelligence = 50; // 0-100
+        public int looks = 50;        // 0-100
+        public String education = "None"; // None, HS, College, Masters
+        public String job = "Unemployed";
+        public boolean alive = true;
 
         // -------- Economic framework fields (from Code1, unified to long Rs.) --------
-        long balance = 1000;     // starting money (Rs.)
-        long loan = 0;
+        public long balance = 1000;     // starting money (Rs.)
+        public long loan = 0;
 
         // Gambling leaderboard stats (kept as personal stats; leaderboard UI removed)
-        int gamblesPlayed = 0;
-        int gamblesWon = 0;
-        int gamblesLost = 0;
-        long moneyWon = 0;       // gambling-only winnings credited (includes jackpot when won)
-        long moneyLost = 0;      // gambling-only bets deducted (net of pushes)
-        long lifetimeTotal = 0;  // TOTAL money handled across the whole game (ALL inflows/outflows)
+        public int gamblesPlayed = 0;
+        public int gamblesWon = 0;
+        public int gamblesLost = 0;
+        public long moneyWon = 0;       // gambling-only winnings credited (includes jackpot when won)
+        public long moneyLost = 0;      // gambling-only bets deducted (net of pushes)
+        public long lifetimeTotal = 0;  // TOTAL money handled across the whole game (ALL inflows/outflows)
 
         // Lottery stats
-        long biggestLotteryWin = 0;     // largest single lottery prize ever won
-        long lotteryContribution = 0;   // total money spent on lottery tickets
+        public long biggestLotteryWin = 0;     // largest single lottery prize ever won
+        public long lotteryContribution = 0;   // total money spent on lottery tickets
 
-        Person(String name) {
+        public Person(String name) {
             this.name = name;
             // small randomization
             intelligence += RNG.nextInt(21) - 10; // -10..+10
@@ -43,7 +43,7 @@ public class Person {
             clampAll();
         }
 
-        void clampAll() {
+        public void clampAll() {
             health = clamp(health);
             happiness = clamp(happiness);
             intelligence = clamp(intelligence);
@@ -51,11 +51,11 @@ public class Person {
             if (balance < 0) balance = 0;
         }
 
-        int clamp(int v) { return Math.max(0, Math.min(100, v)); }
+        public int clamp(int v) { return Math.max(0, Math.min(100, v)); }
 
         /* ===== Life simulator logic ===== */
 
-        void passYear(List<String> log) {
+        public void passYear(List<String> log) {
             if (!alive) return;
             age++;
 
@@ -82,7 +82,7 @@ public class Person {
             }
         }
 
-        long incomePerYear() {
+        public long incomePerYear() {
             switch (job) {
                 case "Unemployed": return 0;
                 case "Retail Worker": return 12000 + intelligence * 10L;
@@ -95,7 +95,7 @@ public class Person {
             }
         }
 
-        void doRandomEvent(List<String> log) {
+        public void doRandomEvent(List<String> log) {
             int roll = RNG.nextInt(100);
             if (roll < 8) {
                 int severity = 5 + RNG.nextInt(20);
@@ -127,22 +127,22 @@ public class Person {
 
         /* ===== Economy methods (from Code1, adapted to long) ===== */
 
-        void addFlow(long amount) { lifetimeTotal += Math.abs(amount); }
+        public void addFlow(long amount) { lifetimeTotal += Math.abs(amount); }
 
-        void showStatus() {
+        public void showStatus() {
             System.out.println("👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
                                " | Health: " + health + " | Happy: " + happiness +
                                " | Int: " + intelligence + " | Job: " + job);
         }
 
-        void deposit(long amount) {
+        public void deposit(long amount) {
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             balance += amount; addFlow(amount);
             System.out.println("✅ Deposited Rs." + amount);
         }
 
-        void withdraw(long amount) {
+        public void withdraw(long amount) {
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             if (amount <= balance) {
                 balance -= amount; addFlow(amount);
@@ -150,7 +150,7 @@ public class Person {
             } else System.out.println("❌ Not enough balance!");
         }
 
-        void takeLoan(long amount) {
+        public void takeLoan(long amount) {
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             // 10% interest
             long interest = Math.round(amount * 0.10);
@@ -159,7 +159,7 @@ public class Person {
             System.out.println("🏦 Loan granted: Rs." + amount + " (+10% interest added to payable: +" + interest + ")");
         }
 
-        void repayLoan(long amount) {
+        public void repayLoan(long amount) {
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             if (amount <= balance && amount <= loan) {
                 balance -= amount; loan -= amount; addFlow(amount);
@@ -167,7 +167,7 @@ public class Person {
             } else System.out.println("❌ Repayment not possible!");
         }
 
-        String brief() {
+        public String brief() {
             return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happy:%d | Int:%d | Job:%s",
                     name, age, balance, loan, health, happiness, intelligence, job);
         }
