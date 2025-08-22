@@ -2,15 +2,16 @@ package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import utility.*;
 
 public class StartCardPoll {
     // 🃏 Multiplayer Card Poll (now integrated with RummyModule)
     public static void startCardPoll(Player[] players, Scanner sc) {
         int yesVotes = 0;
         ArrayList<Player> consenting = new ArrayList<>();
-        System.out.println("\n🃏 A player has requested to start CARD GAMES!");
+        PrintMethods.pln("\n🃏 A player has requested to start CARD GAMES!");
         for (Player p : players) {
-            System.out.print(p.name + ", do you agree? (Y/N): ");
+            PrintMethods.p(p.name + ", do you agree? (Y/N): ");
             String vote = sc.next();
             if (vote.equalsIgnoreCase("yes") || vote.equalsIgnoreCase("y")) {
                 yesVotes++;
@@ -18,7 +19,7 @@ public class StartCardPoll {
             }
         }
         if (yesVotes > players.length / 2) {
-            System.out.println("✅ Majority agreed! Card games starting now...");
+            PrintMethods.pln("✅ Majority agreed! Card games starting now...");
             // Start interactive Rummy with consenting players only
             Player[] consentingArr = consenting.toArray(new Player[0]);
 
@@ -36,16 +37,16 @@ public class StartCardPoll {
                 if (originalIndex >= 0) {
                     players[originalIndex].balance += points;
                     players[originalIndex].addFlow(points);
-                    System.out.println("🎉 " + players[originalIndex].name + " received +" + points + " to balance. New balance: $" + players[originalIndex].balance);
+                    PrintMethods.pln("🎉 " + players[originalIndex].name + " received +" + points + " to balance. New balance: $" + players[originalIndex].balance);
                 } else {
                     // Fallback: credit by name match failure (shouldn't happen)
-                    System.out.println("⚠️ Winner found but couldn't map to original player list.");
+                    PrintMethods.pln("⚠️ Winner found but couldn't map to original player list.");
                 }
             } else {
-                System.out.println("No Rummy winner (game ended without a valid declaration).");
+                PrintMethods.pln("No Rummy winner (game ended without a valid declaration).");
             }
         } else {
-            System.out.println("❌ Not enough votes. Card games cancelled.");
+            PrintMethods.pln("❌ Not enough votes. Card games cancelled.");
         }
     }
 }

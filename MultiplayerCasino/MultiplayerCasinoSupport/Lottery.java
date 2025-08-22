@@ -1,6 +1,7 @@
 package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.*;
+import utility.*;
 
 import MultiplayerCasino.MultiplayerCasino;
 
@@ -9,10 +10,10 @@ public class Lottery {
     public static void lotterySystem(Player[] players, Scanner sc) {
         Random rand = new Random();
 
-        System.out.println("\n🎰 Welcome to the Lottery System!");
-        System.out.println("Each ticket costs $100. The more tickets you buy, the higher your chance of winning!");
-        System.out.println("💡 Winner takes 90% of the pot + the accumulated bonus pool (tax from previous rounds)!");
-        System.out.println("🎁 Current Bonus Pool: $" + MultiplayerCasino.lotteryBonusPool);
+        PrintMethods.pln("\n🎰 Welcome to the Lottery System!");
+        PrintMethods.pln("Each ticket costs $100. The more tickets you buy, the higher your chance of winning!");
+        PrintMethods.pln("💡 Winner takes 90% of the pot + the accumulated bonus pool (tax from previous rounds)!");
+        PrintMethods.pln("🎁 Current Bonus Pool: $" + MultiplayerCasino.lotteryBonusPool);
 
         double ticketPrice = 100.0;
         double totalPot = 0.0;
@@ -21,11 +22,11 @@ public class Lottery {
 
         // Each player chooses tickets
         for (Player p : players) {
-            System.out.println("\n" + p.name + ", your balance: $" + p.balance);
-            System.out.print("Enter number of tickets to buy (0 to skip): ");
+            PrintMethods.pln("\n" + p.name + ", your balance: $" + p.balance);
+            PrintMethods.p("Enter number of tickets to buy (0 to skip): ");
             int numTickets = sc.nextInt();
             if (numTickets < 0) {
-                System.out.println("❌ Invalid number of tickets.");
+                PrintMethods.pln("❌ Invalid number of tickets.");
                 continue;
             }
 
@@ -41,16 +42,16 @@ public class Lottery {
                     ticketPool.add(p);
                 }
 
-                System.out.println("✅ " + p.name + " bought " + numTickets + " tickets for $" + cost);
+                PrintMethods.pln("✅ " + p.name + " bought " + numTickets + " tickets for $" + cost);
             } else if (numTickets > 0) {
-                System.out.println("❌ Not enough balance! Skipped.");
+                PrintMethods.pln("❌ Not enough balance! Skipped.");
             } else {
-                System.out.println("⏭ " + p.name + " skipped the lottery.");
+                PrintMethods.pln("⏭ " + p.name + " skipped the lottery.");
             }
         }
 
         if (ticketPool.isEmpty()) {
-            System.out.println("\n⚠️ No tickets bought. Lottery cancelled.");
+            PrintMethods.pln("\n⚠️ No tickets bought. Lottery cancelled.");
             return;
         }
 
@@ -69,9 +70,9 @@ public class Lottery {
         // Grow the progressive pool by adding this round's tax
         MultiplayerCasino.lotteryBonusPool += tax;
 
-        System.out.println("\n🏆 Lottery Winner: " + winner.name + "!");
-        System.out.println("💰 Prize paid: $" + prize + " (includes previous bonus pool)");
-        System.out.println("📉 Tax collected this round: $" + tax + " → added to bonus pool.");
-        System.out.println("🎁 New Bonus Pool (for next round): $" + MultiplayerCasino.lotteryBonusPool);
+        PrintMethods.pln("\n🏆 Lottery Winner: " + winner.name + "!");
+        PrintMethods.pln("💰 Prize paid: $" + prize + " (includes previous bonus pool)");
+        PrintMethods.pln("📉 Tax collected this round: $" + tax + " → added to bonus pool.");
+        PrintMethods.pln("🎁 New Bonus Pool (for next round): $" + MultiplayerCasino.lotteryBonusPool);
     }
 }

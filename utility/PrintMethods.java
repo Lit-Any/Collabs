@@ -2,11 +2,11 @@ package utility;
 
 public class PrintMethods {
     public static void pln(Object message) {
-        System.out.println(message);
+        PrintMethods.pln(message);
     }
 
     public static void p(Object message) {
-        System.out.print(message);
+        PrintMethods.p(message);
     }
 
     public static void main(String[] args){

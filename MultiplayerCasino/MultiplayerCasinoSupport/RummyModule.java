@@ -1,6 +1,7 @@
 package MultiplayerCasino.MultiplayerCasinoSupport;
 
 import java.util.*;
+import utility.*;
 
 public class RummyModule {
 
@@ -100,19 +101,18 @@ public class RummyModule {
         void remove(Card c) { hand.remove(c); }
 
         void showPrivateHand(String wild) {
-            System.out.println("[" + name + " — Your Hand]");
+            PrintMethods.pln("[" + name + " — Your Hand]");
             for (Card c : hand) {
                 String tag = "";
                 if (c.isPrintedJoker()) tag = " (Printed Joker)";
                 else if (c.isWildJoker(wild)) tag = " (Wild Joker)";
-                System.out.println("  " + c.code + "  →  " + c.pretty() + tag);
+                PrintMethods.pln("  " + c.code + "  →  " + c.pretty() + tag);
             }
         }
 
         void showPublicCodes() {
-            System.out.print(name + "'s cards: ");
-            for (Card c : hand) System.out.print(c.code + " ");
-            System.out.println();
+            PrintMethods.p(name + "'s cards: ");
+            for (Card c : hand) PrintMethods.p(c.code + " ");;
         }
     }
 
@@ -243,7 +243,7 @@ public class RummyModule {
      */
     public static int[] runRummyGame(Scanner sc, Player[] electionPlayers) {
         if (electionPlayers == null || electionPlayers.length < 2) {
-            System.out.println("Need at least 2 consenting players to play Rummy.");
+            PrintMethods.pln("Need at least 2 consenting players to play Rummy.");
             return new int[]{-1,0};
         }
 
@@ -257,10 +257,10 @@ public class RummyModule {
         try { if (sc.hasNextLine()) sc.nextLine(); } catch (NoSuchElementException e) {}
 
         Deck deck = new Deck(2,2);
-        System.out.println("\n=== Starting 13-Card Rummy with players: ===");
-        for (RummyPlayer rp : rPlayers) System.out.println(" - " + rp.name);
-        System.out.println("Wild Joker Rank: " + deck.wildRank);
-        System.out.println("Discard starts with: " + deck.peekDiscard().pretty());
+        PrintMethods.pln("\n=== Starting 13-Card Rummy with players: ===");
+        for (RummyPlayer rp : rPlayers) PrintMethods.pln(" - " + rp.name);
+        PrintMethods.pln("Wild Joker Rank: " + deck.wildRank);
+        PrintMethods.pln("Discard starts with: " + deck.peekDiscard().pretty());
 
         // deal 13 each
         for (int i=0;i<13;i++) for (RummyPlayer p: rPlayers) p.add(deck.drawFromStock());
@@ -273,50 +273,50 @@ public class RummyModule {
 
         while (!over) {
             RummyPlayer cur = rPlayers[turn];
-            System.out.println("\n--- " + cur.name + "'s TURN ---");
+            PrintMethods.pln("\n--- " + cur.name + "'s TURN ---");
             cur.showPrivateHand(deck.wildRank);
-            System.out.println("Top of discard: " + deck.peekDiscard().pretty());
+            PrintMethods.pln("Top of discard: " + deck.peekDiscard().pretty());
 
-            System.out.print("Draw from (1) Stock or (2) Discard? ");
+            PrintMethods.p("Draw from (1) Stock or (2) Discard? ");
             String choiceLine = sc.nextLine().trim();
             int choice = 1;
             try { choice = Integer.parseInt(choiceLine); } catch (Exception e) { choice = 1; }
 
             Card drawn = (choice==2?deck.drawFromDiscard():deck.drawFromStock());
-            if (drawn==null) { System.out.println("No card to draw! (skipping)"); turn=(turn+1)%rPlayers.length; continue; }
+            if (drawn==null) { PrintMethods.pln("No card to draw! (skipping)"); turn=(turn+1)%rPlayers.length; continue; }
             cur.add(drawn);
-            System.out.println("You drew: " + drawn.pretty());
+            PrintMethods.pln("You drew: " + drawn.pretty());
 
-            System.out.print("Enter code to discard (or DECLARE to show hand): ");
+            PrintMethods.p("Enter code to discard (or DECLARE to show hand): ");
             String code = sc.nextLine().trim().toUpperCase();
 
             if (code.equals("DECLARE")) {
                 if (isValidRummyHand(cur.hand, deck.wildRank)) {
-                    System.out.println(cur.name+" declared and WON!");
+                    PrintMethods.pln(cur.name+" declared and WON!");
                     over = true;
                     winnerIdx = turn;
                     winnerPoints = computeScore(cur.hand);
                     break;
                 } else {
-                    System.out.println("Invalid declaration. You lose your turn.");
+                    PrintMethods.pln("Invalid declaration. You lose your turn.");
                 }
             } else {
                 Card discardCard = null;
                 for (Card c : new ArrayList<Card>(cur.hand)) if (c.code.equalsIgnoreCase(code)) discardCard = c;
-                if (discardCard == null) { System.out.println("Invalid code. Auto discard drawn."); discardCard = drawn; }
+                if (discardCard == null) { PrintMethods.pln("Invalid code. Auto discard drawn."); discardCard = drawn; }
                 cur.remove(discardCard);
                 deck.placeToDiscard(discardCard);
-                System.out.println(cur.name+" discarded "+discardCard.pretty());
+                PrintMethods.pln(cur.name+" discarded "+discardCard.pretty());
             }
 
             turn = (turn+1) % rPlayers.length;
         }
 
         if (winnerIdx >= 0) {
-            System.out.println("\n🏆 Rummy Winner: " + rPlayers[winnerIdx].name + " (points: " + winnerPoints + ")");
+            PrintMethods.pln("\n🏆 Rummy Winner: " + rPlayers[winnerIdx].name + " (points: " + winnerPoints + ")");
             return new int[]{winnerIdx, winnerPoints};
         } else {
-            System.out.println("No winner for Rummy.");
+            PrintMethods.pln("No winner for Rummy.");
             return new int[]{-1,0};
         }
     }
