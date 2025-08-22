@@ -21,7 +21,7 @@ public class Helpers {
         }
 
     
-    public    static void failJob(Person p, String job, List<String> log) {
+    public static void failJob(Person p, String job, List<String> log) {
         p.happiness -= 5;
         log.add(p.name+" failed job application: " + job);
         p.passYear(log);

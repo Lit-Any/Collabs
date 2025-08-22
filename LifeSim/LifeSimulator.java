@@ -18,24 +18,23 @@
 
 package LifeSim;
 
-import java.io.*;
 import java.util.*;
 import LifeSim.LifeSimSupport.*;
 
 public class LifeSimulator {
 
-    /* =========================
-       ========== CORE =========
-       ========================= */
-
     static final Scanner SC = new Scanner(System.in);
     static final Random RNG = new Random();
+
+    public static long lotteryBonusPool = 0L; // lottery: 10% tax accumulates across rounds
+    public static long jackpotPool = 0L;       // gambling: all lost bets accumulate here until next win
 
     /* ===============================
        ========== GAME LOOP ==========
        =============================== */
 
     public static void main(String[] args) {
+
         System.out.println("🏦 Welcome to the Unified Life & Economy Simulator!");
         System.out.print("Enter number of players: ");
         int n = Helpers.readInt();

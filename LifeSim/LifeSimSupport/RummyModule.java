@@ -2,8 +2,6 @@ package LifeSim.LifeSimSupport;
 
 import java.util.*;
 
-import LifeSim.LifeSimSupport.Economy.PlayerAdapter;
-
 public class RummyModule {
 
     // ===== Card Model =====
@@ -243,7 +241,7 @@ public class RummyModule {
      * Returns int[]{winnerIndexInElectionPlayersArray, pointsEarned}
      * or {-1,0} if no game/winner.
      */
-    public static int[] runRummyGame(Scanner sc, PlayerAdapter[] arr) {
+    public static int[] runRummyGame(Scanner sc, LifeSim.LifeSimSupport.Cards.PlayerAdapter[] arr) {
         if (arr == null || arr.length < 2) {
             System.out.println("Need at least 2 consenting players to play Rummy.");
             return new int[]{-1,0};
