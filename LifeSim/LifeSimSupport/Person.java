@@ -2,6 +2,8 @@ package LifeSim.LifeSimSupport;
 
 import java.util.*;
 
+import utility.PrintMethods;
+
 public class Person {
 
     Random RNG = new Random();
@@ -61,9 +63,11 @@ public class Person {
 
             // natural decline/gains
             health -= age / 50; // slow decline
-            long income = incomePerYear();
+            long revenue = incomePerYear();
+            long income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))); // 50-100% of income
             balance += income; addFlow(income);
-            if (income > 0) log.add(name + " earned salary Rs." + income + " this year.");
+            PrintMethods.pln("💼 " + name + " earned Rs." + income + " this year (before tax).");
+            if (income > 0) log.add(name + " earned salary Rs." + income + " this year (Taxed income).");
 
             // small random stat drift
             intelligence += RNG.nextInt(3) - 1;
