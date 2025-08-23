@@ -28,9 +28,11 @@ public class MultiplayerCasino {
         }
 
         Player[] players;
-        if (n == 1) {
+        if (n == 1 && enableCondition) {
             players = new Player[2];
-            players[0] = new Player("Human", 1000);
+            PrintMethods.pln("Single player mode: You will play against an AI.");
+            PrintMethods.p("Enter your name: ");
+            players[0] = new Player(sc.nextLine(), 1000);
             players[1] = new Player("AI", 1000);
             n = 2; // Now we have 2 players
         } else {
