@@ -2,34 +2,66 @@ package LifeSim.LifeSimSupport;
 
 import java.util.List;
 
+import utility.PrintMethods;
+
 public class LifeActions {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random RNG = new java.util.Random();
 
     public static void doStudyFor(Person p, List<String> log) {
+        
         System.out.println("\nStudy options:");
-        System.out.println("1) High School (+5 INT, -2 HAPPY; chance to complete HS if age>=16)");
+        System.out.println("1) High School (+5 INT, -2 HAPPY; Chance to complete HS if age>=16)");
         System.out.println("2) College (+8 INT, -3 HAPPY; requires HS; chance to complete)");
         System.out.println("3) Short Course (+3 INT, -Rs.2000)");
-        System.out.print("Choose: ");
+
+        System.out.print("\nChoose: ");
         int sel = Helpers.readInt();
+
         switch (sel) {
+
             case 1:
-                p.intelligence += 5; p.happiness -= 2;
-                if (p.age >= 16 && RNG.nextInt(100) < 30) { p.education = "HS"; log.add(p.name+" completed HS."); }
-                p.passYear(log);
+
+                Helpers.spend(p, 10000, log, "school fees");
+
+                if (p.loan == 0) {
+                    p.intelligence += 5; p.happiness -= 2;
+                    PrintMethods.pln(p.name+" spent 10000 on school fees.");
+                    if (p.age >= 16 && RNG.nextInt(100) < 30 && p.CountOfEducationAttempts<3) { p.education = "HS"; PrintMethods.pln(p.name+" completed HS."); log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0; }
+                    else PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;
+                    p.passYear(log);
+                }
+                
                 break;
             case 2:
+
+                Helpers.spend(p, 20000, log, "college fees");
+
+                if (p.loan == 0) {
                 if (!p.education.equals("HS")) { System.out.println("Need HS first."); return; }
                 p.intelligence += 8; p.happiness -= 3;
-                if (RNG.nextInt(100) < 40) { p.education = "College"; log.add(p.name+" graduated College."); }
+                PrintMethods.pln(p.name+" spent 20000 on college fees.");
+                if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) { p.education = "College"; PrintMethods.pln(p.name+" graduated college.");log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0; }
+                else PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;
                 p.passYear(log);
+                }
+
                 break;
+
             case 3:
-                p.intelligence += 3; long fee = 2000; Helpers.spend(p, fee, log, "short course fee");
+
+                long fee = 15000;
+                Helpers.spend(p, fee, log, "short course fee");
+
+                if (p.loan == 0) {
+                p.intelligence += 3;
+                PrintMethods.pln(p.name+" spent "+fee+" on a short course.");
                 p.passYear(log);
+                }
+                
                 break;
+
             default: System.out.println("Invalid."); break;
         }
     }
@@ -38,7 +70,7 @@ public class LifeActions {
         String[] jobs = {"Retail Worker","Teacher","Engineer","Doctor","Artist","Criminal","Keep current job","Quit job"};
         System.out.println("\nWork options:");
         for (int i=0;i<jobs.length;i++) System.out.println((i+1)+") "+jobs[i]);
-        System.out.print("Choose: ");
+        System.out.print("\nChoose: ");
         int sel = Helpers.readInt();
         if (sel < 1 || sel > jobs.length) { System.out.println("Invalid."); return; }
         String choice = jobs[sel-1];
@@ -52,7 +84,7 @@ public class LifeActions {
             else if (choice.equals("Retail Worker") && p.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
             else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
             // Criminal has no constraints
-            p.job = choice; p.happiness += 5; log.add(p.name+" got job: " + choice);
+            p.job = choice; p.happiness += 5; PrintMethods.pln(p.name+" got job: "+choice);log.add(p.name+" got job: " + choice);
             p.passYear(log);
         }
     }
@@ -62,7 +94,7 @@ public class LifeActions {
         System.out.println("1) Gym (+8 Health, +2 Happy, -Rs.2000)");
         System.out.println("2) Study Hard (+6 Int, -3 Happy, -Rs.1000)");
         System.out.println("3) Go on a Date (swingy)");
-        System.out.print("Choose: ");
+        System.out.print("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:
@@ -77,9 +109,11 @@ public class LifeActions {
                 if (RNG.nextBoolean()) {
                     p.happiness += 8; Helpers.spend(p, 3000, log, "date");
                     log.add(p.name+" had a great date.");
+                    PrintMethods.pln("Great date!");
                 } else {
                     p.happiness -= 5; Helpers.spend(p, 2000, log, "bad date");
                     log.add(p.name+" had a bad date.");
+                    PrintMethods.pln("Bad date.");
                 }
                 p.passYear(log);
                 break;
@@ -92,7 +126,7 @@ public class LifeActions {
         System.out.println("1) Life-side Gamble (quick)");
         System.out.println("2) Small Crime");
         System.out.println("3) Do Nothing");
-        System.out.print("Choose: ");
+        System.out.print("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:

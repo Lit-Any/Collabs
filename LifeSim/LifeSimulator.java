@@ -35,13 +35,13 @@ public class LifeSimulator {
 
     public static void main(String[] args) {
 
-        System.out.println("🏦 Welcome to the Life Simulator!");
-        System.out.print("Enter number of players: ");
+        System.out.println("\n🏦 Welcome to the Life Simulator!");
+        System.out.print("\nEnter number of players: ");
         int n = Helpers.readInt();
 
         List<Person> players = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            System.out.print("Enter player " + (i+1) + " name: ");
+            System.out.print("\nEnter player " + (i+1) + " name: ");
             String name = SC.nextLine().trim();
             if (name.isEmpty()) name = "Player_" + (i+1);
             players.add(new Person(name));
@@ -72,22 +72,23 @@ public class LifeSimulator {
                     "7) Show recent log\n" +
                     "8) Exit game"
                 );
-                System.out.print("Choose: ");
+                
+                System.out.print("\nChoose: ");
                 int choice = Helpers.readInt();
 
                 switch (choice) {
-                    case 1: p.passYear(log); break;
-                    case 2: LifeActions.doStudyFor(p, log); break;
-                    case 3: LifeActions.doWorkFor(p, log); break;
-                    case 4: LifeActions.doImproveFor(p, log); break;
-                    case 5: LifeActions.doRiskyFor(p, log); break;
-                    case 6: Economy.economicMenu(p, players); break;
-                    case 7: Helpers.showRecentLog(log); break;
+                    case 1: p.passYear(log); Helpers.CompoundLoan(p); break;
+                    case 2: LifeActions.doStudyFor(p, log); ; break;
+                    case 3: LifeActions.doWorkFor(p, log); Helpers.CompoundLoan(p); break;
+                    case 4: LifeActions.doImproveFor(p, log); Helpers.CompoundLoan(p); break;
+                    case 5: LifeActions.doRiskyFor(p, log); Helpers.CompoundLoan(p); break;
+                    case 6: Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
+                    case 7: Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
                     case 8:
                         running = false;
-                        System.out.println("👋 Game ended by " + p.name);
+                        System.out.println("\n👋 Game ended by " + p.name);
                         break;
-                    default: System.out.println("❌ Invalid choice!");
+                    default: System.out.println("\n❌ Invalid choice!");
                 }
 
                 if (!running) break;

@@ -22,6 +22,7 @@ public class Person {
         // -------- Economic framework fields (from Code1, unified to long Rs.) --------
         public long balance = 1000;     // starting money (Rs.)
         public long loan = 0;
+        public int AgeWhenLoanStarts = 0; // track age when loan was taken for interest compounding
 
         // Gambling leaderboard stats (kept as personal stats; leaderboard UI removed)
         public int gamblesPlayed = 0;
@@ -34,6 +35,9 @@ public class Person {
         // Lottery stats
         public long biggestLotteryWin = 0;     // largest single lottery prize ever won
         public long lotteryContribution = 0;   // total money spent on lottery tickets
+
+        //Education attempts
+        public int CountOfEducationAttempts = 0; // track attempts at education per player
 
         public Person(String name) {
             this.name = name;
@@ -64,10 +68,13 @@ public class Person {
             // natural decline/gains
             health -= age / 50; // slow decline
             long revenue = incomePerYear();
-            long income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))); // 50-100% of income
+            long income = 0;
+            if (revenue>0) {income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))); } // 50-100% of income
+            else {income = 0;}
             balance += income; addFlow(income);
-            PrintMethods.pln("💼 " + name + " earned Rs." + income + " this year (before tax).");
-            if (income > 0) log.add(name + " earned salary Rs." + income + " this year (Taxed income).");
+            PrintMethods.pln("\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
+            PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance.");
+            if (income > 0) log.add(name + " earned salary Rs." + income + "  at the age of "+age+" years (Income after taxes).");
 
             // small random stat drift
             intelligence += RNG.nextInt(3) - 1;
@@ -100,31 +107,50 @@ public class Person {
         }
 
         public void doRandomEvent(List<String> log) {
+
             int roll = RNG.nextInt(100);
+
             if (roll < 8) {
+                
                 int severity = 5 + RNG.nextInt(20);
                 health -= severity;
                 happiness -= severity / 2;
+                PrintMethods.pln("\n⚠️ " + name + " fell ill (-" + severity + " health).");
                 log.add(age + ": " + name + " fell ill (-" + severity + " health).");
+
             } else if (roll < 16) {
+
                 long amount = (RNG.nextInt(20) + 5) * 1000L;
                 balance += amount; addFlow(amount);
                 happiness += 5;
-                log.add(age + ": " + name + " received windfall Rs." + amount + ".");
+                PrintMethods.pln("\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)");
+                log.add(age + ": " + name + " received windfall Rs." + amount + " (Happiness +5).");
+
             } else if (roll < 28) {
+
                 if (RNG.nextBoolean()) {
+
                     happiness += 3;
-                    log.add(age + ": " + name + " made a great new friend.");
+                    PrintMethods.pln("\n😊 " + name + " made a great new friend (Happiness +3).");
+                    log.add(age + ": " + name + " made a great new friend (Happiness +3).");
+
                 } else {
+
                     happiness -= 4;
-                    log.add(age + ": " + name + " had a falling out with a friend.");
+                    PrintMethods.pln("\n😞 " + name + " had a falling out with a friend (Happiness -4).");
+                    log.add(age + ": " + name + " had a falling out with a friend (Happiness -4).");
+
                 }
+
             } else if (roll < 34) {
                 if (RNG.nextInt(100) < (100 - happiness)) {
+
                     long loss = 5000;
                     balance = Math.max(0, balance - loss); addFlow(loss);
                     health -= 5;
-                    log.add(age + ": " + name + " got into trouble (-Rs." + loss + ", -health).");
+                    PrintMethods.pln("\n🚨 " + name + " got into trouble and lost Rs." + loss + " (-5 health).");
+                    log.add(age + ": " + name + " got into trouble (-Rs." + loss + ", -5 health).");
+
                 }
             }
         }
@@ -134,45 +160,60 @@ public class Person {
         public void addFlow(long amount) { lifetimeTotal += Math.abs(amount); }
 
         public void showStatus() {
+
             System.out.println("👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
                                " | Health: " + health + " | Happiness: " + happiness +
                                " | Int: " + intelligence + " | Job: " + job);
+
         }
 
         public void deposit(long amount) {
+
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             balance += amount; addFlow(amount);
             System.out.println("✅ Deposited Rs." + amount);
+
         }
 
         public void withdraw(long amount) {
+
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             if (amount <= balance) {
                 balance -= amount; addFlow(amount);
                 System.out.println("✅ Withdrawn Rs." + amount);
             } else System.out.println("❌ Not enough balance!");
+
         }
 
         public void takeLoan(long amount) {
+
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
             // 10% interest
             long interest = Math.round(amount * 0.10);
             loan += amount + interest;
             balance += amount; addFlow(amount);
             System.out.println("🏦 Loan granted: Rs." + amount + " (+10% interest added to payable: +" + interest + ")");
+
         }
 
         public void repayLoan(long amount) {
+            
             if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+
             if (amount <= balance && amount <= loan) {
+
                 balance -= amount; loan -= amount; addFlow(amount);
                 System.out.println("✅ Repaid Rs." + amount);
+
             } else System.out.println("❌ Repayment not possible!");
+
         }
 
         public String brief() {
-            return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happiness:%d | Intelligence:%d | Job:%s",
-                    name, age, balance, loan, health, happiness, intelligence, job);
+
+            return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happiness:%d | Intelligence:%d | Job:%s | Looks:%d",
+                    name, age, balance, loan, health, happiness, intelligence, job, looks);
+
         }
     }
