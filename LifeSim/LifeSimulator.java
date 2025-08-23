@@ -35,10 +35,9 @@ public class LifeSimulator {
 
     public static void main(String[] args) {
 
-        System.out.println("🏦 Welcome to the Unified Life & Economy Simulator!");
+        System.out.println("🏦 Welcome to the Life Simulator!");
         System.out.print("Enter number of players: ");
         int n = Helpers.readInt();
-        SC.nextLine(); // consume endline
 
         List<Person> players = new ArrayList<>();
         for (int i = 0; i < n; i++) {

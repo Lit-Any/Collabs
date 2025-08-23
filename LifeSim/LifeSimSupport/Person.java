@@ -132,7 +132,7 @@ public class Person {
         public void showStatus() {
             System.out.println("👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
-                               " | Health: " + health + " | Happy: " + happiness +
+                               " | Health: " + health + " | Happiness: " + happiness +
                                " | Int: " + intelligence + " | Job: " + job);
         }
 
