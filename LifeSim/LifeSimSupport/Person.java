@@ -168,7 +168,7 @@ public class Person {
         }
 
         public String brief() {
-            return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happy:%d | Int:%d | Job:%s",
+            return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happiness:%d | Intelligence:%d | Job:%s",
                     name, age, balance, loan, health, happiness, intelligence, job);
         }
     }
