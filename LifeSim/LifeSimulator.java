@@ -52,7 +52,11 @@ public class LifeSimulator {
 
         while (running) {
             for (Person p : players) {
-                if (!p.alive) { System.out.println("\n--- " + p.name + " is deceased. Skipping turn. ---"); continue; }
+                if (!p.alive) {
+                    System.out.println("\n--- " + p.name + " is deceased. Skipping turn. ---");
+                    if (n == 1) { System.out.println("\nAll players deceased. Terminating program. \n==============================\n"); System.exit(0); }  // single-player auto-exit
+                    continue;
+                }
 
                 System.out.println("\n==============================");
                 System.out.println("Turn — " + p.name);
