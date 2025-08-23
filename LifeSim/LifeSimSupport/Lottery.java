@@ -2,7 +2,6 @@ package LifeSim.LifeSimSupport;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import LifeSim.LifeSimulator;
 
 public class Lottery {
