@@ -55,7 +55,7 @@ public class Helpers {
             p.passYear(log);
         }
 
-        PrintMethods.pln(p.name+" failed job application: " + job);
+        PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" failed job application: " + job + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
     }
 
     public static void showRecentLog(List<String> log) {

@@ -25,8 +25,10 @@ public class LifeActions {
 
                 if (p.loan == 0) {
                     p.intelligence += 5; p.happiness -= 2;
-                    if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) { p.education = "HS"; PrintMethods.pln(p.name+" completed HS."); log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0; }
-                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET); p.CountOfEducationAttempts++;}
+                    if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
+                        p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0;
+                    } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -42,8 +44,11 @@ public class LifeActions {
                 if (p.loan == 0) {
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     p.intelligence += 8; p.happiness -= 3;
-                    if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) { p.education = "College"; PrintMethods.pln(p.name+" graduated college.");log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0; }
-                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET); p.CountOfEducationAttempts++;}
+                    if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
+                        p.education = "College"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" graduated college." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0;
+                    }
+                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                         p.passNightmareYear(log);
                     } else {
@@ -133,7 +138,7 @@ public class LifeActions {
                 else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
                 // Criminal has no constraints
 
-                p.job = choice; p.happiness += 5; PrintMethods.pln(p.name+" got job: "+choice);
+                p.job = choice; p.happiness += 5; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" got job: "+choice + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(p.name+" got job: " + choice);
 
                 if (p.nightmareMode) {
