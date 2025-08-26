@@ -154,6 +154,7 @@ public class ConsoleColors {
         public static final String ULTRA_WHITE_ON_BLACK  = ULTRA.WHITE + BG.BLACK;
         public static final String ULTRA_BLACK_ON_WHITE  = ULTRA.BLACK + BG.WHITE;
         public static final String ULTRA_BLACK_ON_RED   = ULTRA.BLACK + BG.RED;
+        public static final String ULTRA_WHITE_ON_RED  = ULTRA.WHITE + BG.RED;
         public static final String ULTRA_BLACK_ON_GREEN  = ULTRA.BLACK + BG.GREEN;
         public static final String ULTRA_BLACK_ON_YELLOW  = ULTRA.BLACK + BG.YELLOW;
         public static final String ULTRA_BLACK_ON_BLUE  = ULTRA.BLACK + BG.BLUE;
