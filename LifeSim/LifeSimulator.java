@@ -122,9 +122,6 @@ public class LifeSimulator {
                         }
                         LifeActions.doStudyFor(p, log); ; break;
                     case 3:
-                        if (Helpers.ForceEmploymentIfInDebt(p)) {
-                            break;
-                        }
                         if (p.nightmareMode) {
                             PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Job locked to Retail Worker" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                             break;
