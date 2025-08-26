@@ -26,8 +26,11 @@ public class LifeActions {
 
                     p.intelligence += 5; p.happiness -= 2;
                     if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
+
                         p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0;
+                        p.education = "HS";
+
                     } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                             p.passNightmareYear(log);
@@ -45,6 +48,7 @@ public class LifeActions {
                     if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
                         p.education = "College"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" graduated college." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0;
+                        p.education = "College";
                     }
                     else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {

@@ -12,18 +12,18 @@ public class Helpers {
         if (p.balance >= amt) {
 
             if (p.loan > 0) {
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\nTransaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 return;
             } else {
                 p.balance -= amt;
                 log.add(p.name + " spent Rs." + amt + " on " + what);
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " spent Rs." + amt + " on " + what + "." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n" + p.name + " spent Rs." + amt + " on " + what + "." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             }
 
         } else {
 
             if (p.loan > 0) {
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\nTransaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 return;
             }
 
@@ -31,7 +31,7 @@ public class Helpers {
             p.balance = 0;
             p.loan += deficit;
             log.add(p.name + " took a loan of Rs." + deficit + " for " + what);
-            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " took a loan of Rs." + deficit + " for " + what + "."+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n" + p.name + " took a loan of Rs." + deficit + " for " + what + "."+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             p.AgeWhenLoanStarts = p.age;
 
         }
@@ -55,7 +55,7 @@ public class Helpers {
             p.passYear(log);
         }
 
-        PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" failed job application: " + job + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+        PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "\n" + p.name+" failed job application: " + job + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
     }
 
     public static void showRecentLog(List<String> log) {
