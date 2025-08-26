@@ -57,7 +57,7 @@ public class LifeSimulator {
 
         while (running) {
             for (Person p : players) {
-                
+
                 if (!p.alive) {
                     PrintMethods.pln("\n--- " + p.name + " is deceased. Skipping turn. ---");
                     if (n == 1) { PrintMethods.pln("\nAll players deceased.");   // single-player auto-exit
@@ -102,6 +102,9 @@ public class LifeSimulator {
                 switch (choice) {
                     case 1:
 
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
                         if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -110,12 +113,18 @@ public class LifeSimulator {
 
                         break;
                     case 2: 
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
                         if (p.nightmareMode) {
                             PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Studying is disabled!" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                             break;
                         }
                         LifeActions.doStudyFor(p, log); ; break;
-                    case 3: 
+                    case 3:
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
                         if (p.nightmareMode) {
                             PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Job locked to Retail Worker" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                             break;
@@ -123,10 +132,26 @@ public class LifeSimulator {
                         LifeActions.doWorkFor(p, log);
                         Helpers.CompoundLoan(p);
                         break;
-                    case 4: LifeActions.doImproveFor(p, log); Helpers.CompoundLoan(p); break;
-                    case 5: LifeActions.doRiskyFor(p, log); Helpers.CompoundLoan(p); break;
-                    case 6: Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
-                    case 7: Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
+                    case 4: 
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
+                        LifeActions.doImproveFor(p, log); Helpers.CompoundLoan(p); break;
+                    case 5:
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
+                        LifeActions.doRiskyFor(p, log); Helpers.CompoundLoan(p); break;
+                    case 6:
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
+                        Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
+                    case 7:
+                        if (Helpers.ForceEmploymentIfInDebt(p)) {
+                            break;
+                        }
+                        Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
                     case 8:
                         running = false;
                         PrintMethods.pln("\n👋 Game ended by " + p.name);
@@ -158,7 +183,7 @@ public class LifeSimulator {
                         }
 
                         break;
-                    default: PrintMethods.pln("\n❌ Invalid choice!");
+                    default: PrintMethods.pln(ConsoleColors.WARNING + "\n❌ Invalid choice!" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 }
 
                 if (!running) break;

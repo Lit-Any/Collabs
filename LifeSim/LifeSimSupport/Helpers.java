@@ -88,4 +88,13 @@ public class Helpers {
             PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (10% of outstanding loan)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
         }
     }
+
+    public static boolean ForceEmploymentIfInDebt(Person p) {
+        if (p.loan > 0 && p.job == "Unemployed") {
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 You have an outstanding loan and must find a job to repay it." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
