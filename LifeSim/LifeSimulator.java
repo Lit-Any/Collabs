@@ -145,9 +145,6 @@ public class LifeSimulator {
                         }
                         Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
                     case 7:
-                        if (Helpers.ForceEmploymentIfInDebt(p)) {
-                            break;
-                        }
                         Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
                     case 8:
                         running = false;
@@ -165,7 +162,8 @@ public class LifeSimulator {
                                 break;
                             case 3:
                                 PrintMethods.pln(ConsoleColors.WARNING + "Very well then." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
-                                PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "\nN I G H T M A R E   M O D E   A C T I V A T E D" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                                PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "\nN I G H T M A R E   M O D E   A C T I V A T E D" 
+                                                + "\nHint: The only way to survive now is through lucky gambles...good luck."+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                                 p.job = "Retail Worker"; // nightmare mode job lock
                                 p.education = "None"; // nightmare mode education lock
                                 p.nightmareMode = true;

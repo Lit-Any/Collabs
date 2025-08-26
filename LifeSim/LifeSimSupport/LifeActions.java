@@ -2,7 +2,6 @@ package LifeSim.LifeSimSupport;
 
 import java.util.List;
 import utility.*;
-
 public class LifeActions {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
@@ -27,7 +26,7 @@ public class LifeActions {
                 if (p.loan == 0) {
                     p.intelligence += 5; p.happiness -= 2;
                     if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) { p.education = "HS"; PrintMethods.pln(p.name+" completed HS."); log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0; }
-                    else {PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;}
+                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -43,9 +42,8 @@ public class LifeActions {
                 if (p.loan == 0) {
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     p.intelligence += 8; p.happiness -= 3;
-                    PrintMethods.pln(p.name+" spent 20000 on college fees.");
                     if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) { p.education = "College"; PrintMethods.pln(p.name+" graduated college.");log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0; }
-                    else PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;
+                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                         p.passNightmareYear(log);
                     } else {
@@ -58,11 +56,10 @@ public class LifeActions {
             case 3:
 
                 long fee = 15000;
-                Helpers.spend(p, fee, log, "short course fee");
+                Helpers.spend(p, fee, log, "short course");
 
                 if (p.loan == 0) {
                 p.intelligence += 3;
-                PrintMethods.pln(p.name+" spent "+fee+" on a short course.");
                 if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -77,41 +74,75 @@ public class LifeActions {
     }
 
     public static void doWorkFor(Person p, List<String> log) {
+
         String[] jobs = {"Retail Worker","Teacher","Engineer","Doctor","Artist","Criminal","Keep current job","Quit job"};
+
         PrintMethods.pln("\nWork options:");
-        for (int i=0;i<jobs.length;i++) PrintMethods.pln((i+1)+") "+jobs[i]);
+
+        for (int i=0;i<jobs.length;i++) {
+            PrintMethods.pln((i+1)+") "+jobs[i]);
+        }
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
-        if (sel < 1 || sel > jobs.length) { PrintMethods.pln("Invalid."); return; }
-        String choice = jobs[sel-1];
-        if (choice.equals("Keep current job")) { p.happiness -= 1; 
-            if (p.nightmareMode) {
-            p.passNightmareYear(log);
-            } else {
-                p.passYear(log);
-            }
-        } else if (choice.equals("Quit job")) { p.job = "Unemployed"; p.happiness += 5; if (p.nightmareMode) {
-            p.passNightmareYear(log);
-        } else {
-            p.passYear(log);
+
+        if (sel < 1 || sel > jobs.length) {
+            PrintMethods.pln("Invalid.");
+            return;
         }
-    }
-        else {
-            // requirements (roughly matching Code2)
-            if (choice.equals("Teacher") && (p.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
-            else if (choice.equals("Engineer") && (p.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
-            else if (choice.equals("Doctor") && (p.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
-            else if (choice.equals("Retail Worker") && p.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
-            else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
-            // Criminal has no constraints
-            p.job = choice; p.happiness += 5; PrintMethods.pln(p.name+" got job: "+choice);log.add(p.name+" got job: " + choice);
+
+        String choice = jobs[sel-1];
+
+        if (choice.equals("Keep current job")) {
+
+            p.happiness -= 1; 
             if (p.nightmareMode) {
                 p.passNightmareYear(log);
             } else {
                 p.passYear(log);
             }
+
+        } else if (choice.equals("Quit job") && !p.job.equals("Unemployed")) {
+
+            PrintMethods.pln(p.name+" quit their job: "+p.job);
+            log.add(p.name+" quit their job: "+p.job);
+            p.job = "Unemployed"; p.happiness += 5;
+
+            if (p.nightmareMode) {
+                p.passNightmareYear(log);
+
+            }
         }
-    }
+
+            if (p.job.equals("Unemployed") && choice.equals("Quit job")) {
+
+                PrintMethods.pln("You are already unemployed.");
+
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+
+            } else {
+
+                // requirements (roughly matching Code2)
+                if (choice.equals("Teacher") && (p.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Engineer") && (p.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Doctor") && (p.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Retail Worker") && p.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
+                // Criminal has no constraints
+
+                p.job = choice; p.happiness += 5; PrintMethods.pln(p.name+" got job: "+choice);
+                log.add(p.name+" got job: " + choice);
+
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+            }
+        }
 
     public static void doImproveFor(Person p, List<String> log) {
         PrintMethods.pln("\nImprove options:");
@@ -194,9 +225,9 @@ public class LifeActions {
                 }
                 if (p.nightmareMode) {
                             p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                } else {
+                    p.passYear(log);
+                }
                 break;
             case 3:
                 // no passYear here—staying idle in risky panel; let user decide separate Live Year if desired
