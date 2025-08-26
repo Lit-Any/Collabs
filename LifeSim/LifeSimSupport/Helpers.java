@@ -2,6 +2,7 @@ package LifeSim.LifeSimSupport;
 
 import java.util.List;
 
+import LifeSim.LifeSimulator;
 import utility.PrintMethods;
 
 public class Helpers {
@@ -48,7 +49,13 @@ public class Helpers {
     public static void failJob(Person p, String job, List<String> log) {
         p.happiness -= 5;
         log.add(p.name+" failed job application: " + job);
-        p.passYear(log);
+
+        if (LifeSimulator.nightmareMode) {
+            p.passNightmareYear(log);
+        } else {
+            p.passYear(log);
+        }
+
         PrintMethods.pln(p.name+" failed job application: " + job);
     }
 

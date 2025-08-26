@@ -1,7 +1,7 @@
 package LifeSim.LifeSimSupport;
 
 import java.util.*;
-
+import utility.ConsoleColors;
 import utility.PrintMethods;
 
 public class Person {
@@ -72,9 +72,11 @@ public class Person {
             if (revenue>0) {income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))); } // 50-100% of income
             else {income = 0;}
             balance += income; addFlow(income);
-            PrintMethods.pln("\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
-            PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance.");
-            if (income > 0) log.add(name + " earned salary Rs." + income + "  at the age of "+age+" years (Income after taxes).");
+            if (income > 0) {
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.GREEN + "\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
+                PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance." + ConsoleColors.RESET);
+                log.add(name + " earned salary Rs." + income + "  at the age of "+age+" years (Income after taxes).");
+            }
 
             // small random stat drift
             intelligence += RNG.nextInt(3) - 1;
@@ -90,6 +92,42 @@ public class Person {
             if (health <= 0 || (age >= 100 && RNG.nextInt(100) < 50)) {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
+            }
+        }
+
+        public void passNightmareYear(List<String> log) {
+            if (!alive) return;
+
+            age++;
+
+            // accelerated decline/gains
+            health -= age / 30; // faster decline
+            long revenue = incomePerYear();
+            long income = 0;
+            if (revenue>0) {income = revenue/4 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/4*3))); } // 25-75% of income
+            else {income = 0;}
+            balance += income; addFlow(income);
+            loan += revenue;
+            PrintMethods.pln("\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
+            PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance.");
+            if (income > 0) log.add(name + " earned salary Rs." + income + "  at the age of " + age + " years (Income after taxes).");
+
+            // larger random stat drift
+            intelligence += RNG.nextInt(5) - 2;
+            looks += RNG.nextInt(5) - 2;
+            happiness += RNG.nextInt(7) - 3;
+
+            // more frequent random events
+            doRandomNightmareEvent(log);
+            doRandomNightmareEvent(log);
+
+            clampAll();
+
+            // death checks
+            if (health <= 0 || (age >= 90 && RNG.nextInt(100) < 70)) {
+                alive = false;
+                log.add(age + ": " + name + " has died.");
+                PrintMethods.pln(ConsoleColors.ERROR + log.get(log.size()-1) + ConsoleColors.RESET);
             }
         }
 
@@ -115,7 +153,7 @@ public class Person {
                 int severity = 5 + RNG.nextInt(20);
                 health -= severity;
                 happiness -= severity / 2;
-                PrintMethods.pln("\n⚠️ " + name + " fell ill (-" + severity + " health).");
+                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " fell ill (-" + severity + " health)." + ConsoleColors.RESET);
                 log.add(age + ": " + name + " fell ill (-" + severity + " health).");
 
             } else if (roll < 16) {
@@ -123,7 +161,7 @@ public class Person {
                 long amount = (RNG.nextInt(20) + 5) * 1000L;
                 balance += amount; addFlow(amount);
                 happiness += 5;
-                PrintMethods.pln("\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)");
+                PrintMethods.pln(ConsoleColors.SUCCESS + "\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)" + ConsoleColors.RESET);
                 log.add(age + ": " + name + " received windfall Rs." + amount + " (Happiness +5).");
 
             } else if (roll < 28) {
@@ -131,13 +169,13 @@ public class Person {
                 if (RNG.nextBoolean()) {
 
                     happiness += 3;
-                    PrintMethods.pln("\n😊 " + name + " made a great new friend (Happiness +3).");
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.CYAN + "\n😊 " + name + " made a great new friend (Happiness +3)." + ConsoleColors.RESET);
                     log.add(age + ": " + name + " made a great new friend (Happiness +3).");
 
                 } else {
 
                     happiness -= 4;
-                    PrintMethods.pln("\n😞 " + name + " had a falling out with a friend (Happiness -4).");
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -4)." + ConsoleColors.RESET);
                     log.add(age + ": " + name + " had a falling out with a friend (Happiness -4).");
 
                 }
@@ -148,10 +186,61 @@ public class Person {
                     long loss = 5000;
                     balance = Math.max(0, balance - loss); addFlow(loss);
                     health -= 5;
-                    PrintMethods.pln("\n🚨 " + name + " got into trouble and lost Rs." + loss + " (-5 health).");
+                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into trouble and lost Rs." + loss + " (-5 health)." + ConsoleColors.RESET);
                     log.add(age + ": " + name + " got into trouble (-Rs." + loss + ", -5 health).");
 
                 }
+            }
+        }
+
+        public void doRandomNightmareEvent(List<String> log) {
+
+            int roll = RNG.nextInt(100);
+
+            if (roll < 15) {
+                
+                int severity = 10 + RNG.nextInt(30);
+                health -= severity;
+                happiness -= severity / 2;
+                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " suffered a severe illness (-" + severity + " health)." + ConsoleColors.RESET);
+                log.add(age + ": " + name + " suffered a severe illness (-" + severity + " health).");
+
+            } else if (roll < 50) {
+
+                happiness -= 7;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET);
+                log.add(age + ": " + name + " had a falling out with a friend (Happiness -7).");
+
+            } else if (roll < 65) {
+                if (RNG.nextInt(100) < (100 - happiness)) {
+
+                    long loss = 10000;
+                    balance = Math.max(0, balance - loss); addFlow(loss);
+                    happiness -= 10;
+                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into serious trouble and lost Rs." + loss + " (-10 happiness)." + ConsoleColors.RESET);
+                    log.add(age + ": " + name + " got into serious trouble (-Rs." + loss + ", -10 health).");
+                }
+            } else if (roll < 75) {
+
+                int severity = 10 + RNG.nextInt(20);
+                health -= severity;
+                happiness -= severity;
+                PrintMethods.pln(ConsoleColors.ERROR + "\n💀 " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness)." + ConsoleColors.RESET);
+                log.add(age + ": " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness).");
+
+            } else if (roll < 85) {
+
+                long loss = (RNG.nextInt(50) + 20) * 1000L;
+                balance = Math.max(0, balance - loss); addFlow(loss);
+                happiness -= 10;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.ORANGE + "\n💸 " + name + " suffered a major financial loss (-Rs." + loss + ", -10 happiness)." + ConsoleColors.RESET);
+                log.add(age + ": " + name + " suffered a major financial loss (-Rs." + loss + ", -10 happiness).");
+
+            } else {
+                log.add("Unfortunately, " + name + " died.");
+                alive = false;
+                PrintMethods.pln(ConsoleColors.ERROR + "\n☠️ " + log.get(log.size()-1) + ConsoleColors.RESET);
+                return;
             }
         }
 
