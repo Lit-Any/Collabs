@@ -19,7 +19,7 @@ public class Person {
         public String job = "Unemployed";
         public boolean alive = true;
         public boolean nightmareMode = false; // nightmare mode flag
-        public int counterToNightmareMode = 0;
+        public int counterToNightmareMode = 0; // counter to track triggers until nightmare mode activates
 
         // -------- Economic framework fields (from Code1, unified to long Rs.) --------
         public long balance = 1000;     // starting money (Rs.)
@@ -59,7 +59,7 @@ public class Person {
             if (balance < 0) balance = 0;
         }
 
-        public int clamp(int v) { return Math.max(0, Math.min(100, v)); }
+        public int clamp(int v) { return Math.max(0, Math.min(100, v)); } // clamp to 0-100
 
         /* ===== Life simulator logic ===== */
 
@@ -70,14 +70,21 @@ public class Person {
             // natural decline/gains
             health -= age / 50; // slow decline
             long revenue = incomePerYear();
+            long livingExpenses = (revenue/4 > 5000) ? revenue/4 : 5000; // minimum living expenses of Rs.5000
             long income = 0;
-            if (revenue>0) {income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))); } // 50-100% of income
-            else {income = 0;}
+            if (revenue>0) {income = revenue/2 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/2))) - livingExpenses; } // 50-100% of income
+            else {income = 0-livingExpenses;}
+            if (livingExpenses > 0) PrintMethods.pln(ConsoleColors.ULTRA_BOLD.ORANGE + "\n🏠 " + name + " paid living expenses of Rs." + livingExpenses + "." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             balance += income; addFlow(income);
+            if (balance<0) {
+                loan += -balance;
+                balance = 0;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 " + name + " went into overdraft! Rs." + loan + ".");
+            }
             if (income > 0) {
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.GREEN + "\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
-                PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance." + ConsoleColors.RESET);
-                log.add(name + " earned salary Rs." + income + "  at the age of "+age+" years (Income after taxes).");
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.GREEN + "\n💼 " + name + " earned Rs." + revenue + " this year (before tax and living expenses).");
+                PrintMethods.pln("💰 After tax and living expenses, Rs." + income + " credited to balance." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                log.add(name + " earned salary Rs." + income + "  at the age of "+ age +" years (Income after taxes and living expenses).");
             }
 
             // small random stat drift
@@ -92,7 +99,7 @@ public class Person {
             if (loan > 0 && age > AgeWhenLoanStarts) {
                 long interest = Math.round(loan * 0.10);
                 loan += interest;
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (+10% of outstanding loan)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (10% of outstanding loan)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             }
 
             clampAll();
@@ -113,14 +120,23 @@ public class Person {
             // accelerated decline/gains
             health -= age / 30; // faster decline
             long revenue = incomePerYear();
+            long livingExpenses = (revenue/4 > 10000) ? revenue/4 : 10000; // minimum living expenses of Rs. 10000
             long income = 0;
-            if (revenue>0) {income = revenue/4 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/4*3))); } // 25-75% of income
-            else {income = 0;}
+            if (revenue>0) {income = revenue/4 + RNG.nextInt(Integer.valueOf(String.valueOf(revenue/4*2))) - livingExpenses; } // 25-50% of income
+            else {income = 0-livingExpenses;}
+            if (livingExpenses > 0) PrintMethods.pln(ConsoleColors.ULTRA_BOLD.ORANGE + "\n🏠 " + name + " paid living expenses of Rs." + livingExpenses + ".");
             balance += income; addFlow(income);
             loan += revenue;
-            PrintMethods.pln("\n💼 " + name + " earned Rs." + revenue + " this year (before tax).");
-            PrintMethods.pln("💰 After tax, Rs." + income + " credited to balance.");
-            if (income > 0) log.add(name + " earned salary Rs." + income + "  at the age of " + age + " years (Income after taxes).");
+            if (balance<0) {
+                loan += -balance;
+                balance = 0;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 " + name + " went into overdraft! Rs." + loan + ".");
+            }
+            if (income > 0) {
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.GREEN + "\n💼 " + name + " earned Rs." + revenue + " this year (before tax and living expenses).");
+                PrintMethods.pln("💰 After tax and living expenses, Rs." + income + " credited to balance." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                log.add(name + " earned salary Rs." + income + "  at the age of "+ age +" years (Income after taxes and living expenses).");
+            }
 
             // larger random stat drift
             intelligence += RNG.nextInt(5) - 2;
@@ -135,7 +151,7 @@ public class Person {
             if (loan > 0 && age > AgeWhenLoanStarts) {
                 long interest = Math.round(loan * 0.10);
                 loan += interest;
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (+10% of outstanding loan)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (+10% of outstanding loan)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             }
 
             clampAll();
@@ -144,7 +160,7 @@ public class Person {
             if (health <= 0 || (age >= 90 && RNG.nextInt(100) < 70)) {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
-                PrintMethods.pln(ConsoleColors.ERROR + log.get(log.size()-1) + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ERROR + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 Helpers.showRecentLog(log);
             }
         }
@@ -171,7 +187,7 @@ public class Person {
                 int severity = 5 + RNG.nextInt(20);
                 health -= severity;
                 happiness -= severity / 2;
-                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " fell ill (-" + severity + " health)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " fell ill (-" + severity + " health)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " fell ill (-" + severity + " health).");
 
             } else if (roll < 16) {
@@ -179,7 +195,7 @@ public class Person {
                 long amount = (RNG.nextInt(20) + 5) * 1000L;
                 balance += amount; addFlow(amount);
                 happiness += 5;
-                PrintMethods.pln(ConsoleColors.SUCCESS + "\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)" + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.SUCCESS + "\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " received windfall Rs." + amount + " (Happiness +5).");
 
             } else if (roll < 28) {
@@ -187,13 +203,13 @@ public class Person {
                 if (RNG.nextBoolean()) {
 
                     happiness += 3;
-                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.CYAN + "\n😊 " + name + " made a great new friend (Happiness +3)." + ConsoleColors.RESET);
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.CYAN + "\n😊 " + name + " made a great new friend (Happiness +3)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(age + ": " + name + " made a great new friend (Happiness +3).");
 
                 } else {
 
                     happiness -= 4;
-                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -4)." + ConsoleColors.RESET);
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -4)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(age + ": " + name + " had a falling out with a friend (Happiness -4).");
 
                 }
@@ -204,7 +220,7 @@ public class Person {
                     long loss = 5000;
                     balance = Math.max(0, balance - loss); addFlow(loss);
                     health -= 5;
-                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into trouble and lost Rs." + loss + " (-5 health)." + ConsoleColors.RESET);
+                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into trouble and lost Rs." + loss + " (-5 health)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(age + ": " + name + " got into trouble (-Rs." + loss + ", -5 health).");
 
                 }
@@ -220,13 +236,13 @@ public class Person {
                 int severity = 10 + RNG.nextInt(30);
                 health -= severity;
                 happiness -= severity / 2;
-                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " suffered a severe illness (-" + severity + " health)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " suffered a severe illness (-" + severity + " health)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " suffered a severe illness (-" + severity + " health).");
 
             } else if (roll < 50) {
 
                 happiness -= 7;
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " had a falling out with a friend (Happiness -7).");
 
             } else if (roll < 65) {
@@ -235,7 +251,7 @@ public class Person {
                     long loss = 10000;
                     balance = Math.max(0, balance - loss); addFlow(loss);
                     happiness -= 10;
-                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into serious trouble and lost Rs." + loss + " (-10 happiness)." + ConsoleColors.RESET);
+                    PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into serious trouble and lost Rs." + loss + " (-10 happiness)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(age + ": " + name + " got into serious trouble (-Rs." + loss + ", -10 health).");
                 }
             } else if (roll < 75) {
@@ -243,7 +259,7 @@ public class Person {
                 int severity = 10 + RNG.nextInt(20);
                 health -= severity;
                 happiness -= severity;
-                PrintMethods.pln(ConsoleColors.ERROR + "\n💀 " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ERROR + "\n💀 " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness).");
 
             } else if (roll < 85) {
@@ -251,13 +267,13 @@ public class Person {
                 long loss = (RNG.nextInt(50) + 20) * 1000L;
                 balance = Math.max(0, balance - loss); addFlow(loss);
                 happiness -= 10;
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.ORANGE + "\n💸 " + name + " suffered a major financial loss (-Rs." + loss + ", -10 happiness)." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.ORANGE + "\n💸 " + name + " suffered a major financial loss (-Rs." + loss + ", -10 happiness)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " suffered a major financial loss (-Rs." + loss + ", -10 happiness).");
 
             } else {
                 log.add("Unfortunately, " + name + " died.");
                 alive = false;
-                PrintMethods.pln(ConsoleColors.ERROR + "\n☠️ " + log.get(log.size()-1) + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ERROR + "\n☠️ " + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 Helpers.showRecentLog(log);
                 return;
             }
@@ -269,7 +285,7 @@ public class Person {
 
         public void showStatus() {
 
-            PrintMethods.pln("👤 " + name + " | Age: " + age +
+            PrintMethods.pln("\n👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
                                " | Health: " + health + " | Happiness: " + happiness +
                                " | Int: " + intelligence + " | Job: " + job);

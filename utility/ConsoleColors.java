@@ -144,23 +144,23 @@ public class ConsoleColors {
 
     public class ULTRA_FG {
         // Background + Ultra foreground combinations
-        public static final String ULTRA_RED_ON_BLACK   = ULTRA.RED + BG.BLACK;
-        public static final String ULTRA_GREEN_ON_BLACK   = ULTRA.GREEN + BG.BLACK;
-        public static final String ULTRA_BLUE_ON_BLACK   = ULTRA.BLUE + BG.BLACK;
-        public static final String ULTRA_YELLOW_ON_BLACK   = ULTRA.YELLOW + BG.BLACK;
-        public static final String ULTRA_MAGENTA_ON_BLACK   = ULTRA.MAGENTA + BG.BLACK;
-        public static final String ULTRA_CYAN_ON_BLACK   = ULTRA.CYAN + BG.BLACK;
-        public static final String ULTRA_ORANGE_ON_BLACK   = ULTRA.ORANGE + BG.BLACK;
-        public static final String ULTRA_WHITE_ON_BLACK  = ULTRA.WHITE + BG.BLACK;
-        public static final String ULTRA_BLACK_ON_WHITE  = ULTRA.BLACK + BG.WHITE;
-        public static final String ULTRA_BLACK_ON_RED   = ULTRA.BLACK + BG.RED;
-        public static final String ULTRA_WHITE_ON_RED  = ULTRA.WHITE + BG.RED;
-        public static final String ULTRA_BLACK_ON_GREEN  = ULTRA.BLACK + BG.GREEN;
-        public static final String ULTRA_BLACK_ON_YELLOW  = ULTRA.BLACK + BG.YELLOW;
-        public static final String ULTRA_BLACK_ON_BLUE  = ULTRA.BLACK + BG.BLUE;
-        public static final String ULTRA_BLACK_ON_CYAN  = ULTRA.BLACK + BG.CYAN;
-        public static final String ULTRA_BLACK_ON_MAGENTA  = ULTRA.BLACK + BG.PURPLE;
-        public static final String ULTRA_BLACK_ON_ORANGE  = ULTRA.BLACK + ULTRA_BG.ORANGE;
+        public static final String ULTRA_RED_ON_BLACK = ULTRA.RED + BG.BLACK;
+        public static final String ULTRA_GREEN_ON_BLACK = ULTRA.GREEN + BG.BLACK;
+        public static final String ULTRA_BLUE_ON_BLACK = ULTRA.BLUE + BG.BLACK;
+        public static final String ULTRA_YELLOW_ON_BLACK = ULTRA.YELLOW + BG.BLACK;
+        public static final String ULTRA_MAGENTA_ON_BLACK = ULTRA.MAGENTA + BG.BLACK;
+        public static final String ULTRA_CYAN_ON_BLACK = ULTRA.CYAN + BG.BLACK;
+        public static final String ULTRA_ORANGE_ON_BLACK = ULTRA.ORANGE + BG.BLACK;
+        public static final String ULTRA_WHITE_ON_BLACK = ULTRA.WHITE + BG.BLACK;
+        public static final String ULTRA_BLACK_ON_WHITE = ULTRA.BLACK + BG.WHITE;
+        public static final String ULTRA_BLACK_ON_RED = ULTRA.BLACK + BG.RED;
+        public static final String ULTRA_WHITE_ON_RED = ULTRA.WHITE + BG.RED;
+        public static final String ULTRA_BLACK_ON_GREEN = ULTRA.BLACK + BG.GREEN;
+        public static final String ULTRA_BLACK_ON_YELLOW = ULTRA.BLACK + BG.YELLOW;
+        public static final String ULTRA_BLACK_ON_BLUE = ULTRA.BLACK + BG.BLUE;
+        public static final String ULTRA_BLACK_ON_CYAN = ULTRA.BLACK + BG.CYAN;
+        public static final String ULTRA_BLACK_ON_MAGENTA = ULTRA.BLACK + BG.PURPLE;
+        public static final String ULTRA_BLACK_ON_ORANGE = ULTRA.BLACK + ULTRA_BG.ORANGE;
     }
 
     // ========== THEMES ==========

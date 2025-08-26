@@ -12,18 +12,18 @@ public class Helpers {
         if (p.balance >= amt) {
 
             if (p.loan > 0) {
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 return;
             } else {
                 p.balance -= amt;
                 log.add(p.name + " spent Rs." + amt + " on " + what);
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " spent Rs." + amt + " on " + what + "." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " spent Rs." + amt + " on " + what + "." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             }
 
         } else {
 
             if (p.loan > 0) {
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 return;
             }
 
@@ -31,7 +31,7 @@ public class Helpers {
             p.balance = 0;
             p.loan += deficit;
             log.add(p.name + " took a loan of Rs." + deficit + " for " + what);
-            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " took a loan of Rs." + deficit + " for " + what + "."+ ConsoleColors.RESET);
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " took a loan of Rs." + deficit + " for " + what + "."+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             p.AgeWhenLoanStarts = p.age;
 
         }
@@ -85,7 +85,7 @@ public class Helpers {
         if (p.loan > 0 && p.age > p.AgeWhenLoanStarts) {
             long interest = Math.round(p.loan * 0.10);
             p.loan += interest;
-            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (10% of outstanding loan)." + ConsoleColors.RESET);
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (10% of outstanding loan)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
         }
     }
 }
