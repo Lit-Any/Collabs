@@ -23,7 +23,7 @@ public class LifeActions {
 
                 Helpers.spend(p, 10000, log, "school fees");
 
-                if (p.loan == 0) {
+
                     p.intelligence += 5; p.happiness -= 2;
                     if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
                         p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
@@ -34,14 +34,12 @@ public class LifeActions {
                         } else {
                             p.passYear(log);
                         };
-                }
                 
                 break;
             case 2:
 
                 Helpers.spend(p, 20000, log, "college fees");
 
-                if (p.loan == 0) {
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     p.intelligence += 8; p.happiness -= 3;
                     if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
@@ -54,7 +52,6 @@ public class LifeActions {
                     } else {
                         p.passYear(log);
                     }
-                }
 
                 break;
 
@@ -63,13 +60,11 @@ public class LifeActions {
                 long fee = 15000;
                 Helpers.spend(p, fee, log, "short course");
 
-                if (p.loan == 0) {
                 p.intelligence += 3;
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
                 }
                 
                 break;
