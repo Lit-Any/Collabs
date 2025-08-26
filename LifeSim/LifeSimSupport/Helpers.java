@@ -1,9 +1,7 @@
 package LifeSim.LifeSimSupport;
 
 import java.util.List;
-
-import LifeSim.LifeSimulator;
-import utility.PrintMethods;
+import utility.*;
 
 public class Helpers {
 
@@ -14,18 +12,18 @@ public class Helpers {
         if (p.balance >= amt) {
 
             if (p.loan > 0) {
-                System.out.println("Transaction blocked - cannot spend while having a loan. Repay first.");
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET);
                 return;
             } else {
                 p.balance -= amt;
                 log.add(p.name + " spent Rs." + amt + " on " + what);
-                PrintMethods.pln(p.name + " spent Rs." + amt + " on " + what);
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " spent Rs." + amt + " on " + what + "." + ConsoleColors.RESET);
             }
 
         } else {
 
             if (p.loan > 0) {
-                System.out.println("Transaction blocked - cannot spend while having a loan. Repay first.");
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "Transaction blocked - cannot spend while having a loan. Repay first." + ConsoleColors.RESET);
                 return;
             }
 
@@ -33,6 +31,7 @@ public class Helpers {
             p.balance = 0;
             p.loan += deficit;
             log.add(p.name + " took a loan of Rs." + deficit + " for " + what);
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + p.name + " took a loan of Rs." + deficit + " for " + what + "."+ ConsoleColors.RESET);
             p.AgeWhenLoanStarts = p.age;
 
         }
@@ -50,7 +49,7 @@ public class Helpers {
         p.happiness -= 5;
         log.add(p.name+" failed job application: " + job);
 
-        if (LifeSimulator.nightmareMode) {
+        if (p.nightmareMode) {
             p.passNightmareYear(log);
         } else {
             p.passYear(log);
@@ -60,24 +59,24 @@ public class Helpers {
     }
 
     public static void showRecentLog(List<String> log) {
-        System.out.println("\n----- Recent Log -----");
+        PrintMethods.pln("\n----- Recent Log -----");
         int start = Math.max(0, log.size() - 30);
-        for (int i=start; i<log.size(); i++) System.out.println("• " + log.get(i));
-        if (log.isEmpty()) System.out.println("(empty)");
-        System.out.println("----------------------");
+        for (int i=start; i<log.size(); i++) PrintMethods.pln("• " + log.get(i));
+        if (log.isEmpty()) PrintMethods.pln("(empty)");
+        PrintMethods.pln("----------------------");
     }
 
     public static int readInt() {
         while (true) {
             try { return Integer.parseInt(SC.next()); }
-            catch (Exception e) { System.out.print("Enter a number: "); }
+            catch (Exception e) { PrintMethods.p("Enter a number: "); }
         }
     }
 
     public static long readLong() {
         while (true) {
             try { return Long.parseLong(SC.next()); }
-            catch (Exception e) { System.out.print("Enter a whole amount: "); }
+            catch (Exception e) { PrintMethods.p("Enter a whole amount: "); }
         }
     }
 

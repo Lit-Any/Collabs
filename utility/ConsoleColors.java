@@ -189,7 +189,7 @@ public class ConsoleColors {
      * @param colorCode Color code to apply
      */
     public static void printColor(String text, String colorCode) {
-        System.out.print(colorize(text, colorCode));
+        PrintMethods.p(colorize(text, colorCode));
     }
 
     /**
@@ -198,7 +198,7 @@ public class ConsoleColors {
      * @param colorCode Color code to apply
      */
     public static void printlnColor(String text, String colorCode) {
-        System.out.println(colorize(text, colorCode));
+        PrintMethods.pln(colorize(text, colorCode));
     }
 
     // ========== CUSTOM COLOR METHODS ==========

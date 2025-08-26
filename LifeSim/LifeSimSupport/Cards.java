@@ -1,7 +1,7 @@
 package LifeSim.LifeSimSupport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import utility.*;
 
 public class Cards {
     
@@ -12,9 +12,9 @@ public class Cards {
     static void startCardPoll(List<Person> players) {
         int yesVotes = 0;
         ArrayList<Person> consenting = new ArrayList<>();
-        System.out.println("\n🃏 A player has requested to start CARD GAMES!");
+        PrintMethods.pln("\n🃏 A player has requested to start CARD GAMES!");
         for (Person p : players) {
-            System.out.print(p.name + ", do you agree? (yes/no): ");
+            PrintMethods.p(p.name + ", do you agree? (yes/no): ");
             String vote = SC.next();
             if (vote.equalsIgnoreCase("yes")) {
                 yesVotes++;
@@ -22,7 +22,7 @@ public class Cards {
             }
         }
         if (yesVotes > players.size() / 2) {
-            System.out.println("✅ Majority agreed! Card games starting now...");
+            PrintMethods.pln("✅ Majority agreed! Card games starting now...");
             // Map consenting persons to lightweight PlayerAdapter for Rummy
             PlayerAdapter[] arr = new PlayerAdapter[consenting.size()];
             for (int i=0;i<consenting.size();i++) arr[i] = new PlayerAdapter(consenting.get(i).name);
@@ -32,12 +32,12 @@ public class Cards {
                 Person winner = consenting.get(result[0]);
                 int points = result[1];
                 winner.balance += points; winner.addFlow(points);
-                System.out.println("🎉 " + winner.name + " received +" + points + " to balance. New balance: Rs." + winner.balance);
+                PrintMethods.pln("🎉 " + winner.name + " received +" + points + " to balance. New balance: Rs." + winner.balance);
             } else {
-                System.out.println("No Rummy winner.");
+                PrintMethods.pln("No Rummy winner.");
             }
         } else {
-            System.out.println("❌ Not enough votes. Card games cancelled.");
+            PrintMethods.pln("❌ Not enough votes. Card games cancelled.");
         }
     }
 

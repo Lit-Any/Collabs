@@ -1,9 +1,7 @@
 package LifeSim.LifeSimSupport;
 
 import java.util.List;
-
-import LifeSim.LifeSimulator;
-import utility.PrintMethods;
+import utility.*;
 
 public class LifeActions {
 
@@ -12,12 +10,12 @@ public class LifeActions {
 
     public static void doStudyFor(Person p, List<String> log) {
         
-        System.out.println("\nStudy options:");
-        System.out.println("1) High School (+5 INT, -2 HAPPY; Chance to complete HS if age>=16)");
-        System.out.println("2) College (+8 INT, -3 HAPPY; requires HS; chance to complete)");
-        System.out.println("3) Short Course (+3 INT, -Rs.2000)");
+        PrintMethods.pln("\nStudy options:");
+        PrintMethods.pln("1) High School (+5 INT, -2 HAPPY; Chance to complete HS if age>=16)");
+        PrintMethods.pln("2) College (+8 INT, -3 HAPPY; requires HS; chance to complete)");
+        PrintMethods.pln("3) Short Course (+3 INT, -Rs.2000)");
 
-        System.out.print("\nChoose: ");
+        PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
 
         switch (sel) {
@@ -28,10 +26,9 @@ public class LifeActions {
 
                 if (p.loan == 0) {
                     p.intelligence += 5; p.happiness -= 2;
-                    PrintMethods.pln(p.name+" spent 10000 on school fees.");
-                    if (p.age >= 16 && RNG.nextInt(100) < 30 && p.CountOfEducationAttempts<3) { p.education = "HS"; PrintMethods.pln(p.name+" completed HS."); log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0; }
-                    else PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;
-                    if (LifeSimulator.nightmareMode) {
+                    if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) { p.education = "HS"; PrintMethods.pln(p.name+" completed HS."); log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0; }
+                    else {PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;}
+                    if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -44,12 +41,12 @@ public class LifeActions {
                 Helpers.spend(p, 20000, log, "college fees");
 
                 if (p.loan == 0) {
-                    if (!p.education.equals("HS")) { System.out.println("Need HS first."); return; }
+                    if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     p.intelligence += 8; p.happiness -= 3;
                     PrintMethods.pln(p.name+" spent 20000 on college fees.");
                     if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) { p.education = "College"; PrintMethods.pln(p.name+" graduated college.");log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0; }
                     else PrintMethods.pln("No graduation this year."); p.CountOfEducationAttempts++;
-                    if (LifeSimulator.nightmareMode) {
+                    if (p.nightmareMode) {
                         p.passNightmareYear(log);
                     } else {
                         p.passYear(log);
@@ -66,7 +63,7 @@ public class LifeActions {
                 if (p.loan == 0) {
                 p.intelligence += 3;
                 PrintMethods.pln(p.name+" spent "+fee+" on a short course.");
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -75,25 +72,25 @@ public class LifeActions {
                 
                 break;
 
-            default: System.out.println("Invalid."); break;
+            default: PrintMethods.pln("Invalid."); break;
         }
     }
 
     public static void doWorkFor(Person p, List<String> log) {
         String[] jobs = {"Retail Worker","Teacher","Engineer","Doctor","Artist","Criminal","Keep current job","Quit job"};
-        System.out.println("\nWork options:");
-        for (int i=0;i<jobs.length;i++) System.out.println((i+1)+") "+jobs[i]);
-        System.out.print("\nChoose: ");
+        PrintMethods.pln("\nWork options:");
+        for (int i=0;i<jobs.length;i++) PrintMethods.pln((i+1)+") "+jobs[i]);
+        PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
-        if (sel < 1 || sel > jobs.length) { System.out.println("Invalid."); return; }
+        if (sel < 1 || sel > jobs.length) { PrintMethods.pln("Invalid."); return; }
         String choice = jobs[sel-1];
         if (choice.equals("Keep current job")) { p.happiness -= 1; 
-            if (LifeSimulator.nightmareMode) {
+            if (p.nightmareMode) {
             p.passNightmareYear(log);
             } else {
                 p.passYear(log);
             }
-        } else if (choice.equals("Quit job")) { p.job = "Unemployed"; p.happiness += 5; if (LifeSimulator.nightmareMode) {
+        } else if (choice.equals("Quit job")) { p.job = "Unemployed"; p.happiness += 5; if (p.nightmareMode) {
             p.passNightmareYear(log);
         } else {
             p.passYear(log);
@@ -108,7 +105,7 @@ public class LifeActions {
             else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
             // Criminal has no constraints
             p.job = choice; p.happiness += 5; PrintMethods.pln(p.name+" got job: "+choice);log.add(p.name+" got job: " + choice);
-            if (LifeSimulator.nightmareMode) {
+            if (p.nightmareMode) {
                 p.passNightmareYear(log);
             } else {
                 p.passYear(log);
@@ -117,16 +114,16 @@ public class LifeActions {
     }
 
     public static void doImproveFor(Person p, List<String> log) {
-        System.out.println("\nImprove options:");
-        System.out.println("1) Gym (+8 Health, +2 Happy, -Rs.2000)");
-        System.out.println("2) Study Hard (+6 Int, -3 Happy, -Rs.1000)");
-        System.out.println("3) Go on a Date (swingy)");
-        System.out.print("\nChoose: ");
+        PrintMethods.pln("\nImprove options:");
+        PrintMethods.pln("1) Gym (+8 Health, +2 Happy, -Rs.2000)");
+        PrintMethods.pln("2) Study Hard (+6 Int, -3 Happy, -Rs.1000)");
+        PrintMethods.pln("3) Go on a Date (swingy)");
+        PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:
                 p.health += 8; p.happiness += 2; Helpers.spend(p, 2000, log, "gym");
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -134,7 +131,7 @@ public class LifeActions {
                 break;
             case 2:
                 p.intelligence += 6; p.happiness -= 3; Helpers.spend(p, 1000, log, "study materials");
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -150,22 +147,22 @@ public class LifeActions {
                     log.add(p.name+" had a bad date.");
                     PrintMethods.pln("Bad date.");
                 }
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
                         };
                 break;
-            default: System.out.println("Invalid.");
+            default: PrintMethods.pln("Invalid.");
         }
     }
 
     public static void doRiskyFor(Person p, List<String> log) {
-        System.out.println("\nRisky options:");
-        System.out.println("1) Life-side Gamble (quick)");
-        System.out.println("2) Small Crime");
-        System.out.println("3) Do Nothing");
-        System.out.print("\nChoose: ");
+        PrintMethods.pln("\nRisky options:");
+        PrintMethods.pln("1) Life-side Gamble (quick)");
+        PrintMethods.pln("2) Small Crime");
+        PrintMethods.pln("3) Do Nothing");
+        PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:
@@ -179,7 +176,7 @@ public class LifeActions {
                     p.balance -= lose; p.addFlow(lose); p.happiness -= 10;
                     log.add(p.name+" lost gamble Rs."+lose);
                 }
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -195,7 +192,7 @@ public class LifeActions {
                     p.balance -= fine; p.addFlow(fine); p.health -= 10; p.happiness -= 20;
                     log.add(p.name+" was caught committing crime.");
                 }
-                if (LifeSimulator.nightmareMode) {
+                if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -204,7 +201,7 @@ public class LifeActions {
             case 3:
                 // no passYear here—staying idle in risky panel; let user decide separate Live Year if desired
                 break;
-            default: System.out.println("Invalid.");
+            default: PrintMethods.pln("Invalid.");
         }
     }
 }

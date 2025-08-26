@@ -29,7 +29,6 @@ public class LifeSimulator {
 
     public static long lotteryBonusPool = 0L; // lottery: 10% tax accumulates across rounds
     public static long jackpotPool = 0L;       // gambling: all lost bets accumulate here until next win
-    public static boolean nightmareMode = false; // nightmare mode flag
 
     /* ===============================
        ========== GAME LOOP ==========
@@ -37,17 +36,17 @@ public class LifeSimulator {
 
     public static void main(String[] args) {
 
-        int counterToNightmareMode = 0;
         String[] elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{};:'\\\",.<>?/|`~".split("");
         String[] randomText = new String[30];
+        int livePlayers = 0;
 
-        System.out.println("\n🏦 Welcome to the Life Simulator!");
-        System.out.print("\nEnter number of players: ");
+        PrintMethods.pln("\n🏦 Welcome to the Life Simulator!");
+        PrintMethods.p("\nEnter number of players: ");
         int n = Helpers.readInt();
 
         List<Person> players = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            System.out.print("\nEnter player " + (i+1) + " name: ");
+            PrintMethods.p("\nEnter player " + (i+1) + " name: ");
             String name = SC.nextLine().trim();
             if (name.isEmpty()) name = "Player_" + (i+1);
             players.add(new Person(name));
@@ -59,17 +58,32 @@ public class LifeSimulator {
         while (running) {
             for (Person p : players) {
                 if (!p.alive) {
-                    System.out.println("\n--- " + p.name + " is deceased. Skipping turn. ---");
-                    if (n == 1) { System.out.println("\nAll players deceased."); }  // single-player auto-exit
-                    running = false;
+                    PrintMethods.pln("\n--- " + p.name + " is deceased. Skipping turn. ---");
+                    if (n == 1) { PrintMethods.pln("\nAll players deceased.");   // single-player auto-exit
+                    running = false; }
+                    else {
+                        for (Person pp : players) {
+                            if (pp.alive) {
+                                livePlayers++;
+                            }
+                        }
+                        
+                        if (livePlayers == 0) {
+                            PrintMethods.pln("\nAll players deceased.");
+                            running = false; // all players dead, end game
+                        }
+                        livePlayers = 0;
+                    }
                     continue;
                 }
+                
+                
 
-                System.out.println("\n==============================");
-                System.out.println("Turn — " + p.name);
+                PrintMethods.pln("\n==============================");
+                PrintMethods.pln("Turn — " + p.name);
                 p.showStatus();
-                System.out.println("------------------------------");
-                System.out.println(
+                PrintMethods.pln("------------------------------");
+                PrintMethods.pln(
                     "1) Live year (auto)\n" +
                     "2) Study\n" +
                     "3) Work\n" +
@@ -81,13 +95,13 @@ public class LifeSimulator {
                     ConsoleColors.ULTRA_BOLD.RED + "9) " + ConsoleColors.RESET
                 );
                 
-                System.out.print("\nChoose: ");
+                PrintMethods.p("\nChoose: ");
                 int choice = Helpers.readInt();
 
                 switch (choice) {
                     case 1:
 
-                        if (nightmareMode) {
+                        if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
                             p.passYear(log);
@@ -97,14 +111,14 @@ public class LifeSimulator {
                         break;
 
                     case 2: 
-                        if (nightmareMode) {
-                            System.out.println(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Studying is disabled!" + ConsoleColors.RESET);
+                        if (p.nightmareMode) {
+                            PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Studying is disabled!" + ConsoleColors.RESET);
                             break;
                         }
                         LifeActions.doStudyFor(p, log); ; break;
                     case 3: 
-                        if (nightmareMode) {
-                            System.out.println(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Job locked to Retail Worker" + ConsoleColors.RESET);
+                        if (p.nightmareMode) {
+                            PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Job locked to Retail Worker" + ConsoleColors.RESET);
                             break;
                         }
                         LifeActions.doWorkFor(p, log);
@@ -116,24 +130,24 @@ public class LifeSimulator {
                     case 7: Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
                     case 8:
                         running = false;
-                        System.out.println("\n👋 Game ended by " + p.name);
+                        PrintMethods.pln("\n👋 Game ended by " + p.name);
                         break;
                     case 9:
-                        counterToNightmareMode++;
+                        p.counterToNightmareMode++;
 
-                        switch (counterToNightmareMode) {
+                        switch (p.counterToNightmareMode) {
                             case 1:
-                                System.out.println(ConsoleColors.WARNING + "Oops! You weren't supposed to do that." + ConsoleColors.RESET);
+                                PrintMethods.pln(ConsoleColors.WARNING + "Oops! You weren't supposed to do that." + ConsoleColors.RESET);
                                 break;
                             case 2:
-                                System.out.println(ConsoleColors.WARNING + "I said, DO NOT do that." + ConsoleColors.RESET);
+                                PrintMethods.pln(ConsoleColors.WARNING + "I said, DO NOT do that." + ConsoleColors.RESET);
                                 break;
                             case 3:
-                                System.out.println(ConsoleColors.WARNING + "Very well then." + ConsoleColors.RESET);
+                                PrintMethods.pln(ConsoleColors.WARNING + "Very well then." + ConsoleColors.RESET);
                                 PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "\nN I G H T M A R E   M O D E   A C T I V A T E D" + ConsoleColors.RESET);
                                 p.job = "Retail Worker"; // nightmare mode job lock
                                 p.education = "None"; // nightmare mode education lock
-                                nightmareMode = true;
+                                p.nightmareMode = true;
                                 break;
                             default:
 
@@ -141,11 +155,11 @@ public class LifeSimulator {
                                     randomText[i] = elements[RNG.nextInt(elements.length)];
                                 }
 
-                                System.out.println(ConsoleColors.ERROR + randomText + ConsoleColors.RESET);
+                                PrintMethods.pln(ConsoleColors.ERROR + randomText + ConsoleColors.RESET);
                         }
 
                         break;
-                    default: System.out.println("\n❌ Invalid choice!");
+                    default: PrintMethods.pln("\n❌ Invalid choice!");
                 }
 
                 if (!running) break;
@@ -153,13 +167,13 @@ public class LifeSimulator {
         }
 
         // Final Results
-        System.out.println("\n📊 Final Results:");
+        PrintMethods.pln("\n📊 Final Results:");
         for (Person p : players) {
             p.showStatus();
-            System.out.println("   Gambles: played " + p.gamblesPlayed + ", won " + p.gamblesWon + ", lost " + p.gamblesLost);
-            System.out.println("   Money Won: Rs." + p.moneyWon + " | Money Lost: Rs." + p.moneyLost + " | Lifetime Flows: Rs." + p.lifetimeTotal);
-            System.out.println("   Biggest Lottery Win: Rs." + p.biggestLotteryWin + " | Lottery Contribution: Rs." + p.lotteryContribution);
-            System.out.println("-------------------------------");
+            PrintMethods.pln("   Gambles: played " + p.gamblesPlayed + ", won " + p.gamblesWon + ", lost " + p.gamblesLost);
+            PrintMethods.pln("   Money Won: Rs." + p.moneyWon + " | Money Lost: Rs." + p.moneyLost + " | Lifetime Flows: Rs." + p.lifetimeTotal);
+            PrintMethods.pln("   Biggest Lottery Win: Rs." + p.biggestLotteryWin + " | Lottery Contribution: Rs." + p.lotteryContribution);
+            PrintMethods.pln("-------------------------------");
         }
     }
 }

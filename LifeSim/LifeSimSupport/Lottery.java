@@ -1,7 +1,7 @@
 package LifeSim.LifeSimSupport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import utility.*;
 import LifeSim.LifeSimulator;
 
 public class Lottery {
@@ -10,9 +10,9 @@ public class Lottery {
 
         /* ---- Lottery (with accumulating bonus pool) ---- */
     static void lotterySystem(List<Person> players) {
-        System.out.println("\n🎰 Lottery System — Each ticket costs Rs.100");
-        System.out.println("💡 Winner takes 90% of the pot + accumulated bonus pool!");
-        System.out.println("🎁 Current Bonus Pool: Rs." + LifeSimulator.lotteryBonusPool);
+        PrintMethods.pln("\n🎰 Lottery System — Each ticket costs Rs.100");
+        PrintMethods.pln("💡 Winner takes 90% of the pot + accumulated bonus pool!");
+        PrintMethods.pln("🎁 Current Bonus Pool: Rs." + LifeSimulator.lotteryBonusPool);
 
         long ticketPrice = 100L;
         long totalPot = 0L;
@@ -20,25 +20,25 @@ public class Lottery {
         ArrayList<Person> ticketPool = new ArrayList<>();
 
         for (Person p : players) {
-            System.out.println("\n" + p.name + ", your balance: Rs." + p.balance);
-            System.out.print("Enter number of tickets to buy (0 to skip): ");
+            PrintMethods.pln("\n" + p.name + ", your balance: Rs." + p.balance);
+            PrintMethods.p("Enter number of tickets to buy (0 to skip): ");
             int numTickets = Helpers.readInt();
-            if (numTickets < 0) { System.out.println("❌ Invalid number."); continue; }
+            if (numTickets < 0) { PrintMethods.pln("❌ Invalid number."); continue; }
             long cost = numTickets * ticketPrice;
             if (numTickets > 0 && cost <= p.balance) {
                 p.balance -= cost; p.addFlow(cost);
                 totalPot += cost;
                 p.lotteryContribution += cost;
                 for (int t=0;t<numTickets;t++) ticketPool.add(p);
-                System.out.println("✅ " + p.name + " bought " + numTickets + " tickets for Rs." + cost);
+                PrintMethods.pln("✅ " + p.name + " bought " + numTickets + " tickets for Rs." + cost);
             } else if (numTickets > 0) {
-                System.out.println("❌ Not enough balance! Skipped.");
+                PrintMethods.pln("❌ Not enough balance! Skipped.");
             } else {
-                System.out.println("⏭ " + p.name + " skipped the lottery.");
+                PrintMethods.pln("⏭ " + p.name + " skipped the lottery.");
             }
         }
 
-        if (ticketPool.isEmpty()) { System.out.println("\n⚠️ No tickets bought. Lottery cancelled."); return; }
+        if (ticketPool.isEmpty()) { PrintMethods.pln("\n⚠️ No tickets bought. Lottery cancelled."); return; }
 
         // Draw winner
         Person winner = ticketPool.get(rand.nextInt(ticketPool.size()));
@@ -52,9 +52,9 @@ public class Lottery {
         // Grow the progressive pool by adding this round's tax
         LifeSimulator.lotteryBonusPool += tax;
 
-        System.out.println("\n🏆 Lottery Winner: " + winner.name + "!");
-        System.out.println("💰 Prize paid: Rs." + prize + " (includes previous bonus pool)");
-        System.out.println("📉 Tax collected this round: Rs." + tax + " → added to bonus pool.");
-        System.out.println("🎁 New Bonus Pool (for next round): Rs." + LifeSimulator.lotteryBonusPool);
+        PrintMethods.pln("\n🏆 Lottery Winner: " + winner.name + "!");
+        PrintMethods.pln("💰 Prize paid: Rs." + prize + " (includes previous bonus pool)");
+        PrintMethods.pln("📉 Tax collected this round: Rs." + tax + " → added to bonus pool.");
+        PrintMethods.pln("🎁 New Bonus Pool (for next round): Rs." + LifeSimulator.lotteryBonusPool);
     }
 }

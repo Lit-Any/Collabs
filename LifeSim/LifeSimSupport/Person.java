@@ -18,6 +18,8 @@ public class Person {
         public String education = "None"; // None, HS, College, Masters
         public String job = "Unemployed";
         public boolean alive = true;
+        public boolean nightmareMode = false; // nightmare mode flag
+        public int counterToNightmareMode = 0;
 
         // -------- Economic framework fields (from Code1, unified to long Rs.) --------
         public long balance = 1000;     // starting money (Rs.)
@@ -92,6 +94,7 @@ public class Person {
             if (health <= 0 || (age >= 100 && RNG.nextInt(100) < 50)) {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
+                Helpers.showRecentLog(log);
             }
         }
 
@@ -128,6 +131,7 @@ public class Person {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
                 PrintMethods.pln(ConsoleColors.ERROR + log.get(log.size()-1) + ConsoleColors.RESET);
+                Helpers.showRecentLog(log);
             }
         }
 
@@ -240,6 +244,7 @@ public class Person {
                 log.add("Unfortunately, " + name + " died.");
                 alive = false;
                 PrintMethods.pln(ConsoleColors.ERROR + "\n☠️ " + log.get(log.size()-1) + ConsoleColors.RESET);
+                Helpers.showRecentLog(log);
                 return;
             }
         }
@@ -250,7 +255,7 @@ public class Person {
 
         public void showStatus() {
 
-            System.out.println("👤 " + name + " | Age: " + age +
+            PrintMethods.pln("👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
                                " | Health: " + health + " | Happiness: " + happiness +
                                " | Int: " + intelligence + " | Job: " + job);
@@ -259,43 +264,43 @@ public class Person {
 
         public void deposit(long amount) {
 
-            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
             balance += amount; addFlow(amount);
-            System.out.println("✅ Deposited Rs." + amount);
+            PrintMethods.pln("✅ Deposited Rs." + amount);
 
         }
 
         public void withdraw(long amount) {
 
-            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
             if (amount <= balance) {
                 balance -= amount; addFlow(amount);
-                System.out.println("✅ Withdrawn Rs." + amount);
-            } else System.out.println("❌ Not enough balance!");
+                PrintMethods.pln("✅ Withdrawn Rs." + amount);
+            } else PrintMethods.pln("❌ Not enough balance!");
 
         }
 
         public void takeLoan(long amount) {
 
-            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
             // 10% interest
             long interest = Math.round(amount * 0.10);
             loan += amount + interest;
             balance += amount; addFlow(amount);
-            System.out.println("🏦 Loan granted: Rs." + amount + " (+10% interest added to payable: +" + interest + ")");
+            PrintMethods.pln("🏦 Loan granted: Rs." + amount + " (+10% interest added to payable: +" + interest + ")");
 
         }
 
         public void repayLoan(long amount) {
             
-            if (amount <= 0) { System.out.println("❌ Amount must be positive."); return; }
+            if (amount <= 0) { PrintMethods.pln("❌ Amount must be positive."); return; }
 
             if (amount <= balance && amount <= loan) {
 
                 balance -= amount; loan -= amount; addFlow(amount);
-                System.out.println("✅ Repaid Rs." + amount);
+                PrintMethods.pln("✅ Repaid Rs." + amount);
 
-            } else System.out.println("❌ Repayment not possible!");
+            } else PrintMethods.pln("❌ Repayment not possible!");
 
         }
 
