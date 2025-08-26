@@ -88,6 +88,13 @@ public class Person {
             // simple random events
             doRandomEvent(log);
 
+            // Compound loan
+            if (loan > 0 && age > AgeWhenLoanStarts) {
+                long interest = Math.round(loan * 0.10);
+                loan += interest;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (+10% of outstanding loan)." + ConsoleColors.RESET);
+            }
+
             clampAll();
 
             // death checks
@@ -123,6 +130,13 @@ public class Person {
             // more frequent random events
             doRandomNightmareEvent(log);
             doRandomNightmareEvent(log);
+
+            // Compound loan
+            if (loan > 0 && age > AgeWhenLoanStarts) {
+                long interest = Math.round(loan * 0.10);
+                loan += interest;
+                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (+10% of outstanding loan)." + ConsoleColors.RESET);
+            }
 
             clampAll();
 

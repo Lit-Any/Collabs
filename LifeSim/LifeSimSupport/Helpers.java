@@ -81,10 +81,11 @@ public class Helpers {
     }
 
     public static void CompoundLoan(Person p){
-
-        if (p.age > p.AgeWhenLoanStarts && p.loan > 0) {
-        p.loan += Math.rint(p.loan * 0.1);
+        // Compound loan
+        if (p.loan > 0 && p.age > p.AgeWhenLoanStarts) {
+            long interest = Math.round(p.loan * 0.10);
+            p.loan += interest;
+            PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 Loan interest accrued: Rs." + interest + " (10% of outstanding loan)." + ConsoleColors.RESET);
         }
-        
     }
 }

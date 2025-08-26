@@ -92,7 +92,7 @@ public class LifeSimulator {
                     "6) Economic Actions (bank, gamble, lottery, rummy)\n" +
                     "7) Show recent log\n" +
                     "8) Exit game\n" +
-                    ConsoleColors.ULTRA_BOLD.RED + "9) " + ConsoleColors.RESET
+                    ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "9) " + ConsoleColors.RESET
                 );
                 
                 PrintMethods.p("\nChoose: ");
