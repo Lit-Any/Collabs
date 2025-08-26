@@ -46,7 +46,7 @@ public class LifeSimulator {
 
         List<Person> players = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            PrintMethods.p("\nEnter player " + (i+1) + " name: ");
+            PrintMethods.p("\nEnter player " + (i+1) + "'s' name: ");
             String name = SC.nextLine().trim();
             if (name.isEmpty()) name = "Player_" + (i+1);
             players.add(new Person(name));
