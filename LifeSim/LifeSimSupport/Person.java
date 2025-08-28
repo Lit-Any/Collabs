@@ -17,9 +17,33 @@ public class Person {
         public static int looks = 50;        // 0-100
         public String education = "None"; // None, HS, College, Masters
         public static String job = "Unemployed";
+        public static int stress = jobStress(job);       // 0-100, affected by job, events, causes health/happiness decline
+        public static String Accomodation = "Shack"; // Shack, Apartment, House, Mansion
+        public static String Vehicle = "None"; // None, Bicycle, Motorbike, Car, Luxury Car
+        public static int comfort = comfort();     // 0-100, affected by accomodations and vehicle, offsets stress
         public boolean alive = true;
         public boolean nightmareMode = false; // nightmare mode flag
         public int counterToNightmareMode = 0; // counter to track triggers until nightmare mode activates
+
+        // Vars to track changes in attributes
+        public int InitialHealth = health;
+        public int InitialHappiness = happiness;
+        public int InitialIntelligence = intelligence;
+        public int InitialLooks = looks;
+        public int InitialStress = stress;
+        public int InitialComfort = comfort;
+        public int InitialBalance = 0;
+        public int InitialLoan = 0;
+
+        public int healthChange = 0;
+        public int happinessChange = 0;
+        public int intelligenceChange = 0;
+        public int looksChange = 0;
+        public int stressChange = 0;
+        public int comfortChange = 0;
+        public int balanceChange = 0;
+        public int loanChange = 0;
+        public static List<String> statLog = new ArrayList<>(); // log to track yearly stats
 
         // -------- Economic framework fields (from Code1, unified to long Rs.) --------
         public long balance = 1000;     // starting money (Rs.)
@@ -56,6 +80,8 @@ public class Person {
             happiness = clamp(happiness);
             intelligence = clamp(intelligence);
             looks = clamp(looks);
+            stress = clamp(stress);
+            comfort = clamp(comfort);
             if (balance < 0) balance = 0;
         }
 
@@ -67,8 +93,18 @@ public class Person {
             if (!alive) return;
             age++;
 
+            InitialHealth = health;
+            InitialHappiness = happiness;
+            InitialIntelligence = intelligence;
+            InitialLooks = looks;
+            InitialStress = stress;
+            InitialComfort = comfort;
+            InitialBalance = (int) balance;
+            InitialLoan = (int) loan;
+            comfort = comfort(); // auto-adjust comfort based on current accomodations/vehicle
+
             // natural decline/gains
-            health -= age / 50; // slow decline
+            health -= age / 50 + (stress-comfort/20); // slow decline
             long revenue = incomePerYear();
             long livingExpenses = (revenue/4 > 5000) ? revenue/4 : 5000; // minimum living expenses of Rs.5000
             long income = 0;
@@ -104,10 +140,21 @@ public class Person {
 
             clampAll();
 
+            // Track changes in attributes
+            healthChange = health - InitialHealth;
+            happinessChange = happiness - InitialHappiness;
+            intelligenceChange = intelligence - InitialIntelligence;
+            looksChange = looks - InitialLooks;
+            stressChange = stress - InitialStress;
+            comfortChange = comfort - InitialComfort;
+            balanceChange = (int) balance - InitialBalance;
+            loanChange = (int) loan - InitialLoan;
+
             // death checks
             if (health <= 0 || (age >= 100 && RNG.nextInt(100) < 50)) {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
+                PrintMethods.pln(ConsoleColors.ERROR + "\n" + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 Helpers.showRecentLog(log);
             }
         }
@@ -117,8 +164,18 @@ public class Person {
 
             age++;
 
+            InitialHealth = health;
+            InitialHappiness = happiness;
+            InitialIntelligence = intelligence;
+            InitialLooks = looks;
+            InitialStress = stress;
+            InitialComfort = comfort;
+            InitialBalance = (int) balance;
+            InitialLoan = (int) loan;
+            comfort = comfort(); // auto-adjust comfort based on current accomodations/vehicle
+
             // accelerated decline/gains
-            health -= age / 30; // faster decline
+            health -= age / 30 + (stress-comfort/10); // faster decline
             long revenue = incomePerYear();
             long livingExpenses = (revenue/4 > 10000) ? revenue/4 : 10000; // minimum living expenses of Rs. 10000
             long income = 0;
@@ -156,11 +213,21 @@ public class Person {
 
             clampAll();
 
+            // Track changes in attributes
+            healthChange = health - InitialHealth;
+            happinessChange = happiness - InitialHappiness;
+            intelligenceChange = intelligence - InitialIntelligence;
+            looksChange = looks - InitialLooks;
+            stressChange = stress - InitialStress;
+            comfortChange = comfort - InitialComfort;
+            balanceChange = (int) balance - InitialBalance;
+            loanChange = (int) loan - InitialLoan;
+
             // death checks
             if (health <= 0 || (age >= 90 && RNG.nextInt(100) < 70)) {
                 alive = false;
                 log.add(age + ": " + name + " has died.");
-                PrintMethods.pln(ConsoleColors.ERROR + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                PrintMethods.pln(ConsoleColors.ERROR + "\n" + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 Helpers.showRecentLog(log);
             }
         }
@@ -176,6 +243,35 @@ public class Person {
                 case "Criminal": return 20000 + (100 - happiness) * 20L;
                 default: return 10000;
             }
+        }
+
+        public static int jobStress(String job) {
+            switch (job) {
+                case "Unemployed": return 5;
+                case "Retail Worker": return 30;
+                case "Teacher": return 40;
+                case "Engineer": return 50;
+                case "Doctor": return 70;
+                case "Artist": return 20;
+                case "Criminal": return 60;
+                default: return 30;
+            }
+        }
+
+        public static int comfort() {
+            int comfort = 50; // base comfort
+            // Accomodation effect
+            if (Accomodation.equals("Shack")) comfort -= 20;
+            else if (Accomodation.equals("Apartment")) comfort += 0;
+            else if (Accomodation.equals("House")) comfort += 10;
+            else if (Accomodation.equals("Mansion")) comfort += 20;
+            // Vehicle effect
+            if (Vehicle.equals("None")) comfort -= 10;
+            else if (Vehicle.equals("Bicycle")) comfort += 0;
+            else if (Vehicle.equals("Motorbike")) comfort += 5;
+            else if (Vehicle.equals("Car")) comfort += 10;
+            else if (Vehicle.equals("Luxury Car")) comfort += 15;
+            return Math.max(0, Math.min(100, comfort));
         }
 
         public void doRandomEvent(List<String> log) {
@@ -209,7 +305,7 @@ public class Person {
                 } else {
 
                     happiness -= 4;
-                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -4)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    PrintMethods.pln(ConsoleColors.WARNING + "\n😞 " + name + " had a falling out with a friend (Happiness -4)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(age + ": " + name + " had a falling out with a friend (Happiness -4).");
 
                 }
@@ -242,7 +338,7 @@ public class Person {
             } else if (roll < 50) {
 
                 happiness -= 7;
-                PrintMethods.pln(ConsoleColors.ULTRA_BOLD.BLUE + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                PrintMethods.pln(ConsoleColors.WARNING + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " had a falling out with a friend (Happiness -7).");
 
             } else if (roll < 65) {
@@ -287,10 +383,12 @@ public class Person {
 
         public void showStatus() {
 
-            PrintMethods.pln("\n👤 " + name + " | Age: " + age +
-                               " | Balance: Rs." + balance + " | Loan: Rs." + loan +
-                               " | Health: " + health + " | Happiness: " + happiness +
-                               " | Int: " + intelligence + " | Job: " + job + " | Looks: " + looks);
+            PrintMethods.pln(ConsoleColors.INFO + "\n👤 " + name + " | Age: " + age +
+                               " | Balance: Rs." + balance + "(" + balanceChange + ") | Loan: Rs." + loan + "(" + loanChange + ")" +
+                               " | Health: " + health + "(" + healthChange + ") | Happiness: " + happiness + "(" + happinessChange + ")" +
+                               " | Int: " + intelligence + "(" + intelligenceChange + ") | Job: " + job + " | Looks: " + looks + "(" + looksChange + ")" +
+                               " | Stress: " + stress + "(" + intelligenceChange + ") | Comfort: " + comfort + "(" + comfortChange + ")" +
+                               " | Accomodation: " + Accomodation + " | Vehicle: " + Vehicle + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
 
         }
 

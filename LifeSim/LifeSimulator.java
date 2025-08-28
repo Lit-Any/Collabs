@@ -6,7 +6,7 @@
       * Life actions (study, work, improve, risky, etc.)
       * Economic actions (banking, 20 gambling games, lottery, Rummy)
   - Player creation is handled here (Code1's player-adder removed)
-  - Code1's leaderboard removed as requested
+  - Code1's leaderboard removed as requested (Who requested it? 🤨)
   - Money type unified to 'long' (integer currency). Doubles from Code1 are rounded.
   - Rummy card game preserved (consent poll among current players)
   - BlueJ-friendly, single file, console I/O
@@ -60,8 +60,8 @@ public class LifeSimulator {
             for (Person p : players) {
 
                 if (!p.alive) {
-                    PrintMethods.pln("\n--- " + p.name + " is deceased. Skipping turn. ---");
-                    if (n == 1) { PrintMethods.pln("\nAll players deceased.");   // single-player auto-exit
+                    PrintMethods.pln(ConsoleColors.INFO + "\n--- " + p.name + " is deceased. Skipping turn. ---" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    if (n == 1) { PrintMethods.pln(ConsoleColors.INFO + "\nAll players deceased." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);   // single-player auto-exit
                     running = false; }
                     else {
                         for (Person pp : players) {
@@ -71,7 +71,7 @@ public class LifeSimulator {
                         }
                         
                         if (livePlayers == 0) {
-                            PrintMethods.pln("\nAll players deceased.");
+                            PrintMethods.pln(ConsoleColors.INFO + "\nAll players deceased." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                             running = false; // all players dead, end game
                             break;
                         }
@@ -86,7 +86,7 @@ public class LifeSimulator {
                 PrintMethods.pln("Turn — " + p.name);
                 p.showStatus();
                 PrintMethods.pln("------------------------------");
-                PrintMethods.pln(ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK + 
+                PrintMethods.pln(ConsoleColors.ULTRA.WHITE + ConsoleColors.ULTRA_BG.BLACK + 
                     "1) Live year (auto)\n" +
                     "2) Study\n" +
                     "3) Work\n" +
@@ -95,7 +95,7 @@ public class LifeSimulator {
                     "6) Economic Actions (bank, gamble, lottery, rummy)\n" +
                     "7) Show recent log\n" +
                     "8) Exit game\n" +
-                    ConsoleColors.ULTRA_BOLD.RED + "9)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK
+                    ConsoleColors.ULTRA_BOLD.RED + "9)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK
                 );
                 
                 PrintMethods.p("\nChoose: ");
@@ -194,10 +194,10 @@ public class LifeSimulator {
         }
 
         // Final Results
-        PrintMethods.pln(ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK + "\n📊 Final Results:");
+        PrintMethods.pln(ConsoleColors.INFO + ConsoleColors.ULTRA_BG.BLACK + "\n📊 Final Results:");
         for (Person p : players) {
             p.showStatus();
-            PrintMethods.pln("   Gambles: played " + p.gamblesPlayed + ", won " + p.gamblesWon + ", lost " + p.gamblesLost);
+            PrintMethods.pln(ConsoleColors.INFO + "   Gambles: played " + p.gamblesPlayed + ", won " + p.gamblesWon + ", lost " + p.gamblesLost);
             PrintMethods.pln("   Money Won: Rs." + p.moneyWon + " | Money Lost: Rs." + p.moneyLost + " | Lifetime Flows: Rs." + p.lifetimeTotal);
             PrintMethods.pln("   Biggest Lottery Win: Rs." + p.biggestLotteryWin + " | Lottery Contribution: Rs." + p.lotteryContribution);
             PrintMethods.pln("-------------------------------" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
