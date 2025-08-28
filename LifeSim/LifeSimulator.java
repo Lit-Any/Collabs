@@ -94,7 +94,7 @@ public class LifeSimulator {
                 
 
                 PrintMethods.pln("\n==============================");
-                PrintMethods.pln("Turn — " + p.name);
+                PrintMethods.pln("Turn — " + ConsoleColors.WARNING + p.name + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 p.showStatus();
                 PrintMethods.pln("------------------------------");
                 PrintMethods.pln(ConsoleColors.ULTRA.WHITE + ConsoleColors.ULTRA_BG.BLACK + 
@@ -140,28 +140,27 @@ public class LifeSimulator {
                             break;
                         }
                         LifeActions.doWorkFor(p, log);
-                        Helpers.CompoundLoan(p);
                         break;
                     case 4: 
                         if (Helpers.ForceEmploymentIfInDebt(p)) {
                             break;
                         }
-                        LifeActions.doImproveFor(p, log); Helpers.CompoundLoan(p); break;
+                        LifeActions.doImproveFor(p, log); break;
                     case 5:
                         if (Helpers.ForceEmploymentIfInDebt(p)) {
                             break;
                         }
-                        LifeActions.doRiskyFor(p, log); Helpers.CompoundLoan(p); break;
+                        LifeActions.doRiskyFor(p, log); break;
                     case 6:
                         if (Helpers.ForceEmploymentIfInDebt(p)) {
                             break;
                         }
                         Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
                     case 7:
-                        Helpers.showRecentLog(log); Helpers.CompoundLoan(p); break;
+                        Helpers.showRecentLog(log); break;
                     case 8:
                         running = false;
-                        PrintMethods.pln("\n👋 Game ended by " + p.name);
+                        PrintMethods.pln(ConsoleColors.INFO + "\n👋 Game ended by " + p.name + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         break;
                     case 9:
                         p.counterToNightmareMode++;
