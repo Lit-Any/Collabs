@@ -26,6 +26,7 @@ public class LifeSimulator {
 
     static final Scanner SC = new Scanner(System.in);
     static final Random RNG = new Random();
+    static final StringBuilder sb = new StringBuilder();
 
     public static long lotteryBonusPool = 0L; // lottery: 10% tax accumulates across rounds
     public static long jackpotPool = 0L;       // gambling: all lost bets accumulate here until next win
@@ -36,8 +37,8 @@ public class LifeSimulator {
 
     public static void main(String[] args) {
 
-        String[] elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{};:'\\\",.<>?/|`~".split("");
-        String[] randomText = new String[30];
+        char[] elements = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{};:'\\\",.<>?/|`~".toCharArray();
+        String randomText = new String("");
         int livePlayers = 0;
 
         PrintMethods.pln(ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK + "\n🏦 Welcome to the Life Simulator!");
@@ -72,6 +73,7 @@ public class LifeSimulator {
                         if (livePlayers == 0) {
                             PrintMethods.pln("\nAll players deceased.");
                             running = false; // all players dead, end game
+                            break;
                         }
                         livePlayers = 0;
                     }
@@ -161,20 +163,26 @@ public class LifeSimulator {
                                 PrintMethods.pln(ConsoleColors.WARNING + "I said, DO NOT do that." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                                 break;
                             case 3:
+                                Person.job = "Retail Worker"; // nightmare mode job lock
+                                p.education = "None"; // nightmare mode education lock
                                 PrintMethods.pln(ConsoleColors.WARNING + "Very well then." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                                 PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "\nN I G H T M A R E   M O D E   A C T I V A T E D" 
                                                 + "\nHint: The only way to survive now is through lucky gambles...good luck."+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
-                                p.job = "Retail Worker"; // nightmare mode job lock
-                                p.education = "None"; // nightmare mode education lock
+                                PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Studying is disabled." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                                PrintMethods.pln(ConsoleColors.ULTRA_FG.ULTRA_RED_ON_BLACK + "⚠️  Nightmare Mode: Job locked to Retail Worker - income: " + Person.incomePerYear() + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                                 p.nightmareMode = true;
                                 break;
                             default:
 
-                                for (int i = 0; i < RNG.nextInt(randomText.length); i++) {
-                                    randomText[i] = elements[RNG.nextInt(elements.length)];
+                                for (int i = 0; i < 30; i++) {
+                                    sb.append(elements[RNG.nextInt(elements.length)]);
+                                    randomText = sb.toString();
                                 }
 
-                                PrintMethods.pln(ConsoleColors.ERROR + randomText + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                                PrintMethods.pln(ConsoleColors.ERROR + "\n" + randomText + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                                PrintMethods.pln(ConsoleColors.ERROR + "Game advanced by one year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                                p.passNightmareYear(log);
+                                sb.setLength(0); // reset for next use
                         }
 
                         break;
