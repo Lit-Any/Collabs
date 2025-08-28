@@ -41,7 +41,13 @@ public class LifeSimulator {
         String randomText = new String("");
         int livePlayers = 0;
 
-        PrintMethods.pln(ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK + "\n🏦 Welcome to the Life Simulator!");
+        PrintMethods.pln(ConsoleColors.ULTRA.WHITE + ConsoleColors.ULTRA_BG.BLACK + 
+            "\n=========================================\n" +
+            "      Welcome to Life Simulator!\n" +
+            "=========================================" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+        PrintMethods.pln(ConsoleColors.INFO + "Note: This is a console-based game. Please ensure your console supports ANSI colors for the best experience." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+        Tutorial.CheckTutorial();
+
         PrintMethods.p("\nEnter number of players: ");
         int n = Helpers.readInt();
 
@@ -55,6 +61,11 @@ public class LifeSimulator {
 
         List<String> log = new ArrayList<>();
         boolean running = true;
+
+        if (n < 1) {
+            PrintMethods.pln(ConsoleColors.ERROR + "\n❌ Number of players must be at least 1. Exiting.\n" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            return;
+        }
 
         while (running) {
             for (Person p : players) {
