@@ -290,7 +290,7 @@ public class Person {
             PrintMethods.pln("\n👤 " + name + " | Age: " + age +
                                " | Balance: Rs." + balance + " | Loan: Rs." + loan +
                                " | Health: " + health + " | Happiness: " + happiness +
-                               " | Int: " + intelligence + " | Job: " + job);
+                               " | Int: " + intelligence + " | Job: " + job + " | Looks: " + looks);
 
         }
 
