@@ -46,7 +46,7 @@ public class Helpers {
     }
     
     public static void failJob(Person p, String job, List<String> log) {
-        p.happiness -= 5;
+        Person.happiness -= 5;
         log.add(p.name+" failed job application: " + job);
 
         if (p.nightmareMode) {
@@ -59,11 +59,11 @@ public class Helpers {
     }
 
     public static void showRecentLog(List<String> log) {
-        PrintMethods.pln("\n----- Recent Log -----");
+        PrintMethods.pln(ConsoleColors.INFO + "\n----- Recent Log -----");
         int start = Math.max(0, log.size() - 30);
         for (int i=start; i<log.size(); i++) PrintMethods.pln("• " + log.get(i));
         if (log.isEmpty()) PrintMethods.pln("(empty)");
-        PrintMethods.pln("----------------------");
+        PrintMethods.pln("----------------------"+ ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
     }
 
     public static int readInt() {
@@ -90,7 +90,7 @@ public class Helpers {
     }
 
     public static boolean ForceEmploymentIfInDebt(Person p) {
-        if (p.loan > 0 && p.job == "Unemployed") {
+        if (p.loan > 0 && Person.job == "Unemployed") {
             PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 You have an outstanding loan and must find a job to repay it." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             return true;
         } else {

@@ -24,7 +24,7 @@ public class LifeActions {
                 Helpers.spend(p, 10000, log, "school fees");
 
 
-                    p.intelligence += 5; p.happiness -= 2;
+                    Person.intelligence += 5; Person.happiness -= 2;
                     if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
 
                         p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
@@ -44,7 +44,7 @@ public class LifeActions {
                 Helpers.spend(p, 20000, log, "college fees");
 
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
-                    p.intelligence += 8; p.happiness -= 3;
+                    Person.intelligence += 8; Person.happiness -= 3;
                     if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
                         p.education = "College"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" graduated college." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0;
@@ -64,7 +64,7 @@ public class LifeActions {
                 long fee = 15000;
                 Helpers.spend(p, fee, log, "short course");
 
-                p.intelligence += 3;
+                Person.intelligence += 3;
                 if (p.nightmareMode) {
                     p.passNightmareYear(log);
                 } else {
@@ -98,18 +98,18 @@ public class LifeActions {
 
         if (choice.equals("Keep current job")) {
 
-            p.happiness -= 1; 
+            Person.happiness -= 1; 
             if (p.nightmareMode) {
                 p.passNightmareYear(log);
             } else {
                 p.passYear(log);
             }
 
-        } else if (choice.equals("Quit job") && !p.job.equals("Unemployed")) {
+        } else if (choice.equals("Quit job") && !Person.job.equals("Unemployed")) {
 
-            PrintMethods.pln(p.name+" quit their job: "+p.job);
-            log.add(p.name+" quit their job: "+p.job);
-            p.job = "Unemployed"; p.happiness += 5;
+            PrintMethods.pln(p.name+" quit their job: "+Person.job);
+            log.add(p.name+" quit their job: "+Person.job);
+            Person.job = "Unemployed"; Person.happiness += 5;
 
             if (p.nightmareMode) {
                 p.passNightmareYear(log);
@@ -117,7 +117,7 @@ public class LifeActions {
             }
         }
 
-            if (p.job.equals("Unemployed") && choice.equals("Quit job")) {
+            if (Person.job.equals("Unemployed") && choice.equals("Quit job")) {
 
                 PrintMethods.pln("You are already unemployed.");
 
@@ -130,14 +130,14 @@ public class LifeActions {
             } else {
 
                 // requirements (roughly matching Code2)
-                if (choice.equals("Teacher") && (p.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Engineer") && (p.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Doctor") && (p.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Retail Worker") && p.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Artist") && p.looks < 30) { Helpers.failJob(p, choice, log); return; }
+                if (choice.equals("Teacher") && (Person.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Engineer") && (Person.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Doctor") && (Person.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Retail Worker") && Person.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
+                else if (choice.equals("Artist") && Person.looks < 30) { Helpers.failJob(p, choice, log); return; }
                 // Criminal has no constraints
 
-                p.job = choice; p.happiness += 5; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" got job: "+choice + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                Person.job = choice; Person.happiness += 5; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" got job: "+choice + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(p.name+" got job: " + choice);
 
                 if (p.nightmareMode) {
@@ -157,7 +157,7 @@ public class LifeActions {
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:
-                p.health += 8; p.happiness += 2; Helpers.spend(p, 2000, log, "gym");
+                p.health += 8; Person.happiness += 2; Helpers.spend(p, 2000, log, "gym");
                 if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -165,7 +165,7 @@ public class LifeActions {
                         };
                 break;
             case 2:
-                p.intelligence += 6; p.happiness -= 3; Helpers.spend(p, 1000, log, "study materials");
+                Person.intelligence += 6; Person.happiness -= 3; Helpers.spend(p, 1000, log, "study materials");
                 if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -174,11 +174,11 @@ public class LifeActions {
                 break;
             case 3:
                 if (RNG.nextBoolean()) {
-                    p.happiness += 8; Helpers.spend(p, 3000, log, "date");
+                    Person.happiness += 8; Helpers.spend(p, 3000, log, "date");
                     log.add(p.name+" had a great date.");
                     PrintMethods.pln("Great date!");
                 } else {
-                    p.happiness -= 5; Helpers.spend(p, 2000, log, "bad date");
+                    Person.happiness -= 5; Helpers.spend(p, 2000, log, "bad date");
                     log.add(p.name+" had a bad date.");
                     PrintMethods.pln("Bad date.");
                 }
@@ -203,12 +203,12 @@ public class LifeActions {
             case 1:
                 if (RNG.nextInt(100) < 45) {
                     long win = (RNG.nextInt(10)+1)*1000L;
-                    p.balance += win; p.addFlow(win); p.happiness += 5;
+                    p.balance += win; p.addFlow(win); Person.happiness += 5;
                     log.add(p.name+" won gamble Rs."+win);
                 } else {
                     long lose=(RNG.nextInt(20)+1)*1000L;
                     lose = Math.min(lose, p.balance);
-                    p.balance -= lose; p.addFlow(lose); p.happiness -= 10;
+                    p.balance -= lose; p.addFlow(lose); Person.happiness -= 10;
                     log.add(p.name+" lost gamble Rs."+lose);
                 }
                 if (p.nightmareMode) {
@@ -220,11 +220,11 @@ public class LifeActions {
             case 2:
                 if (RNG.nextInt(100) < 40) {
                     long loot=(RNG.nextInt(30)+1)*1000L;
-                    p.balance += loot; p.addFlow(loot); p.happiness -= 10;
+                    p.balance += loot; p.addFlow(loot); Person.happiness -= 10;
                     log.add(p.name+" crime succeeded Rs."+loot);
                 } else {
                     long fine=5000; fine = Math.min(fine, p.balance);
-                    p.balance -= fine; p.addFlow(fine); p.health -= 10; p.happiness -= 20;
+                    p.balance -= fine; p.addFlow(fine); p.health -= 10; Person.happiness -= 20;
                     log.add(p.name+" was caught committing crime.");
                 }
                 if (p.nightmareMode) {
