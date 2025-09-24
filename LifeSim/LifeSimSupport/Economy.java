@@ -38,7 +38,7 @@ public class Economy {
                 case 5: GambleMenu.gambleMenu(p); break;
                 case 6: Lottery.lotterySystem(allPlayers); break;
                 case 7: Cards.startCardPoll(allPlayers); break;
-                case 8: back = true; break;
+                case 8: back = true; p.backPressed = true; break;
                 default: PrintMethods.pln("❌ Invalid choice.");
             }
         }

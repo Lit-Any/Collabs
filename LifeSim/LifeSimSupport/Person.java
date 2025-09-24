@@ -6,7 +6,7 @@ import utility.PrintMethods;
 
 public class Person {
 
-    Random RNG = new Random();
+    static Random RNG = new Random();
     PrintMethods PrintMethods = new PrintMethods();
 
     // -------- Life-sim attributes (from Code2, simplified to console) --------
@@ -24,9 +24,11 @@ public class Person {
     public static int comfort = comfort();     // 0-100, affected by accomodations and vehicle, offsets stress
     public boolean alive = true;
     public boolean nightmareMode = false; // nightmare mode flag
+    public boolean backPressed = true; // to track if back was pressed in menus
     public int counterToNightmareMode = 0; // counter to track triggers until nightmare mode activates
     public long balance;     // in Rs.
     public int loan = 0;
+    public static int luck = RNG.nextInt(101);         // affects random events, gambling, lottery
 
     // Vars to track changes in attributes
     public int InitialHealth = health;
@@ -37,6 +39,7 @@ public class Person {
     public int InitialComfort = comfort;
     public int InitialBalance = (int) balance;
     public int InitialLoan = (int) loan;
+    public static int InitialLuck = luck;
 
     public int healthChange = 0;
     public int happinessChange = 0;
@@ -45,6 +48,8 @@ public class Person {
     public int stressChange = 0;
     public int comfortChange = 0;
     public int balanceChange = 0;
+    public int luckChange = 0;
+    public int loanChange = 0;
 
     // -------- Economic framework fields (from Code1, unified to long Rs.) --------
     // starting money (Rs.) and outstanding loan (Rs.) initialized in constructor
@@ -77,6 +82,7 @@ public class Person {
         happiness += RNG.nextInt(11) - 5;
         clampAll();
     }
+
     public void clampAll() {
         health = clamp(health);
         happiness = clamp(happiness);
@@ -84,6 +90,7 @@ public class Person {
         looks = clamp(looks);
         stress = clamp(stress);
         comfort = clamp(comfort);
+        luck = clamp(luck);
         if (balance < 0) balance = 0;
     }
 
@@ -119,6 +126,7 @@ public class Person {
         intelligence += RNG.nextInt(3) - 1;
         looks += RNG.nextInt(3) - 1;
         happiness += RNG.nextInt(5) - 2;
+        luck += RNG.nextInt(3) - 1;
 
         // simple random events
         doRandomEvent(log);
@@ -171,6 +179,7 @@ public class Person {
         intelligence += RNG.nextInt(5) - 2;
         looks += RNG.nextInt(5) - 2;
         happiness += RNG.nextInt(7) - 3;
+        luck += RNG.nextInt(5) - 2;
 
         // more frequent random events
         doRandomNightmareEvent(log);
@@ -240,7 +249,7 @@ public class Person {
 
         int roll = RNG.nextInt(100);
 
-        if (roll < 8) {
+        if (roll < 8 && roll > luck) {
             
             int severity = 5 + RNG.nextInt(5);
             health -= severity;
@@ -248,7 +257,7 @@ public class Person {
             PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " fell ill (-" + severity + " health)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             log.add(age + ": " + name + " fell ill (-" + severity + " health).");
 
-        } else if (roll < 16) {
+        } else if (roll < 16 && roll > luck) {
 
             long amount = (RNG.nextInt(20) + 5) * 1000L;
             balance += amount; addFlow(amount);
@@ -256,7 +265,7 @@ public class Person {
             PrintMethods.pln(ConsoleColors.SUCCESS + "\n🎉 " + name + " received a windfall of Rs." + amount + "! (Happiness +5)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             log.add(age + ": " + name + " received windfall Rs." + amount + " (Happiness +5).");
 
-        } else if (roll < 28) {
+        } else if (roll < 28 && roll > luck) {
 
             if (RNG.nextBoolean()) {
 
@@ -272,7 +281,7 @@ public class Person {
 
             }
 
-        } else if (roll < 34) {
+        } else if (roll < 34 && roll > luck) {
             if (RNG.nextInt(100) < (100 - happiness)) {
 
                 long loss = 5000;
@@ -289,7 +298,7 @@ public class Person {
 
         int roll = RNG.nextInt(100);
 
-        if (roll < 15) {
+        if (roll < 15 && roll > luck/2) {
             
             int severity = 10 + RNG.nextInt(30);
             health -= severity;
@@ -297,13 +306,13 @@ public class Person {
             PrintMethods.pln(ConsoleColors.ERROR + "\n⚠️ " + name + " suffered a severe illness (-" + severity + " health)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             log.add(age + ": " + name + " suffered a severe illness (-" + severity + " health).");
 
-        } else if (roll < 50) {
+        } else if (roll < 50 && roll > luck/2) {
 
             happiness -= 7;
             PrintMethods.pln(ConsoleColors.WARNING + "\n😞 " + name + " had a falling out with a friend (Happiness -7)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             log.add(age + ": " + name + " had a falling out with a friend (Happiness -7).");
 
-        } else if (roll < 65) {
+        } else if (roll < 65 && roll > luck/2) {
             if (RNG.nextInt(100) < (100 - happiness)) {
 
                 long loss = 10000;
@@ -312,7 +321,7 @@ public class Person {
                 PrintMethods.pln(ConsoleColors.ERROR + "\n🚨 " + name + " got into serious trouble and lost Rs." + loss + " (-10 happiness)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 log.add(age + ": " + name + " got into serious trouble (-Rs." + loss + ", -10 health).");
             }
-        } else if (roll < 75) {
+        } else if (roll < 75 && roll > luck/2) {
 
             int severity = 10 + RNG.nextInt(20);
             health -= severity;
@@ -320,7 +329,7 @@ public class Person {
             PrintMethods.pln(ConsoleColors.ERROR + "\n💀 " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
             log.add(age + ": " + name + " was in a major accident (-" + severity + " health, -" + severity + " happiness).");
 
-        } else if (roll < 85) {
+        } else if (roll < 85 && roll > luck/2) {
 
             long loss = (RNG.nextInt(50) + 20) * 1000L;
             balance = Math.max(0, balance - loss); addFlow(loss);
@@ -343,6 +352,7 @@ public class Person {
 
     public void addFlow(long amount) { lifetimeTotal += Math.abs(amount); }
 
+    @SuppressWarnings("static-access")
     public void showStatus() {
 
         // Calculate changes
@@ -353,18 +363,20 @@ public class Person {
         stressChange = stress - InitialStress;
         comfortChange = comfort - InitialComfort;
         balanceChange = (int) (balance - InitialBalance);
-        int loanChange = (int) (loan - InitialLoan);
+        loanChange = (int) (loan - InitialLoan);
+
 
         PrintMethods.pln(ConsoleColors.INFO + "\n👤 " + name + " | Age: " + age +
                             " | Balance: Rs." + balance + "(" + balanceChange + ") | Loan: Rs." + loan + "(" + loanChange + ")" +
                             " | Health: " + health + "(" + healthChange + ") | Happiness: " + happiness + "(" + happinessChange + ")" +
                             " | Int: " + intelligence + "(" + intelligenceChange + ") | Looks: " + looks + "(" + looksChange + ")" +
+                            " | Luck: " + luck + "(" + luckChange + ")" +
                             " | Stress: " + stress + "(" + stressChange + ") | Comfort: " + comfort + "(" + comfortChange + ")" +
             "\n            | Job: " + job + " | Accomodation: " + Accomodation + " | Vehicle: " + Vehicle + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
 
         // Reset changes
         healthChange = 0; happinessChange = 0; intelligenceChange = 0; looksChange = 0;
-        stressChange = 0; comfortChange = 0; balanceChange = 0; loanChange = 0;
+        stressChange = 0; comfortChange = 0; balanceChange = 0; loanChange = 0; luckChange = 0;
 
         Person p = this;
         p.InitialHealth = health;
@@ -375,6 +387,7 @@ public class Person {
         p.InitialComfort = comfort;
         p.InitialBalance = (int) balance;
         p.InitialLoan = (int) loan;
+        p.InitialLuck = luck;
 
     }
 
@@ -422,12 +435,12 @@ public class Person {
 
     public String brief() {
 
-        return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happiness:%d | Intelligence:%d | Job:%s | Looks:%d",
-                name, age, balance, loan, health, happiness, intelligence, job, looks);
+        return String.format("%s | Age:%d | Balance:Rs.%d | Loan:Rs.%d | H:%d | Happiness:%d | Intelligence:%d | Job:%s | Looks:%d | Luck:%d | Comfort:%d | Stress:%d | Accomodation:%s | Vehicle:%s",
+                name, age, balance, loan, health, happiness, intelligence, job, looks, luck, comfort, stress, Accomodation, Vehicle);
 
     }
 
-    /* ===== Modifiers for life attributes ===== */
+    /* ===== Modifier methods for life attributes ===== */
 
     public String modHappiness(int delta) {
         happiness = clamp(happiness + delta);
@@ -452,5 +465,10 @@ public class Person {
     public String modStress(int delta) {
         stress = clamp(stress + delta);
         return (" (Stress " + delta + ")");
+    }
+
+    public String modLuck(int delta) {
+        luck = clamp(luck + delta);
+        return (" (Luck " + delta + ")");
     }
 }

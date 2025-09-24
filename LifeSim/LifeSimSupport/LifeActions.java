@@ -76,6 +76,7 @@ public class LifeActions {
                 break;
 
             case 4:
+                p.backPressed = true;
                 break;
 
             default: PrintMethods.pln("Invalid."); break;
@@ -197,7 +198,8 @@ public class LifeActions {
                 }
                 break;
             case 4:
-                    break;
+                p.backPressed = true;
+                break;
             default: PrintMethods.pln("Invalid.");
         }
     }
@@ -247,6 +249,7 @@ public class LifeActions {
                 }
                 break;
             case 3:
+                p.backPressed = true;
                 break;
             default: PrintMethods.pln("Invalid.");
         }
