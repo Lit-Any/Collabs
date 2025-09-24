@@ -211,9 +211,10 @@ public class LifeActions {
         PrintMethods.pln("3) Back");
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
+        int roll = RNG.nextInt(100);
         switch (sel) {
             case 1:
-                if (RNG.nextInt(100) < 45) {
+                if (roll > 55 && roll > Person.luck) {
                     long win = (RNG.nextInt(10)+1)*1000L;
                     p.balance += win; p.addFlow(win); Person.happiness += 5;
                     log.add(p.name+" won gamble Rs."+win);
@@ -231,7 +232,7 @@ public class LifeActions {
                 }
                 break;
             case 2:
-                if (RNG.nextInt(100) < 40) {
+                if (roll > 60 && roll > Person.luck) {
                     long loot=(RNG.nextInt(30)+1)*1000L;
                     p.balance += loot; p.addFlow(loot); Person.happiness -= 10;
                     PrintMethods.pln(ConsoleColors.HIGHLIGHT + p.name + " stole Rs." + loot + p.modHappiness(-10) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
