@@ -55,7 +55,7 @@ public class LifeSimulator {
         List<Person> players = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             PrintMethods.p("\nEnter player " + (i+1) + "'s name: ");
-            String name = SC.next().trim();
+            String name = SC.nextLine().trim();
             if (name.isEmpty()) name = "Player_" + (i+1);
             players.add(new Person(name));
         }
@@ -92,6 +92,8 @@ public class LifeSimulator {
                     continue;
                 }
                 
+                p.backPressed = true; // reset for new turn
+
                 while (p.backPressed) { // handle back action from sub-menus
 
                     p.backPressed = false;  // reset
@@ -105,11 +107,12 @@ public class LifeSimulator {
                         "2) Study\n" +
                         "3) Work\n" +
                         "4) Improve stats\n" +
-                        "5) Risky (life-side)\n" +
-                        "6) Economic Actions (bank, gamble, lottery, rummy)\n" +
-                        "7) Show recent log\n" +
-                        "8) Exit game\n" +
-                        ConsoleColors.ULTRA_BOLD.RED + "9)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK
+                        "5) Make an acquisition (house or car, improves comfort)\n" +
+                        "6) Risky (life-side)\n" +
+                        "7) Economic Actions (bank, gamble, lottery, rummy)\n" +
+                        "8) Show recent log\n" +
+                        "9) Exit game\n" +
+                        ConsoleColors.ULTRA_BOLD.RED + "-1)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK
                     );
                     
                     PrintMethods.p("\nChoose: ");
@@ -153,19 +156,24 @@ public class LifeSimulator {
                             if (Helpers.ForceEmploymentIfInDebt(p)) {
                                 break;
                             }
-                            LifeActions.doRiskyFor(p, log); break;
+                            LifeActions.MakeAcquisition(p, log); break;
                         case 6:
                             if (Helpers.ForceEmploymentIfInDebt(p)) {
                                 break;
                             }
-                            Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
+                            LifeActions.doRiskyFor(p, log); break;
                         case 7:
-                            Helpers.showRecentLog(log); p.backPressed = true; break;
+                            if (Helpers.ForceEmploymentIfInDebt(p)) {
+                                break;
+                            }
+                            Economy.economicMenu(p, players); Helpers.CompoundLoan(p); break;
                         case 8:
+                            Helpers.showRecentLog(log); p.backPressed = true; break;
+                        case 9:
                             running = false;
                             PrintMethods.pln(ConsoleColors.INFO + "\n👋 Game ended by " + p.name + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                             break;
-                        case 9:
+                        case -1: // hidden Nightmare Mode trigger
                             p.counterToNightmareMode++;
 
                             switch (p.counterToNightmareMode) {
@@ -198,6 +206,7 @@ public class LifeSimulator {
                                     sb.setLength(0); // reset for next use
                             }
 
+                            p.backPressed = false;  // reset
                             break;
                         default: PrintMethods.pln(ConsoleColors.WARNING + "\n❌ Invalid choice!" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     }

@@ -7,6 +7,7 @@ public class LifeActions {
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random RNG = new java.util.Random();
     static PrintMethods PrintMethods = new PrintMethods();
+    static PrintMethods pm = new PrintMethods();
 
     public static void doStudyFor(Person p, List<String> log) {
         
@@ -248,6 +249,81 @@ public class LifeActions {
                 } else {
                     p.passYear(log);
                 }
+                break;
+            case 3:
+                p.backPressed = true;
+                break;
+            default: PrintMethods.pln("Invalid.");
+        }
+    }
+
+    @SuppressWarnings("static-access")
+    public static void MakeAcquisition(Person p, List<String> log) {
+        PrintMethods.pln("\nAcquisition options:");
+        PrintMethods.pln("1) Buy a house.");
+        PrintMethods.pln("2) Buy a car.");
+        PrintMethods.pln("3) Back");
+        PrintMethods.p("\nChoose: ");
+        int sel = Helpers.readInt();
+        switch (sel) {
+            case 1:
+                pm.pln("\nHouse options:");
+                pm.pln("1) Shack (Rs.50,000, +5 Happiness, Comfort = 30)");
+                pm.pln("2) Apartment (Rs.150,000, +15 Happiness, Comfort = 50)");
+                pm.pln("3) Bungalow (Rs.300,000, +25 Happiness, Comfort = 60)");
+                pm.pln("4) Villa (Rs.600,000, +35 Happiness, Comfort = 70)");
+                pm.pln("5) Mansion (Rs.1,000,000, +50 Happiness, Comfort = 80)");
+                pm.pln("6) Back");
+                pm.p("\nChoose: ");
+                int choice = Helpers.readInt();
+                switch (choice) {
+                    case 1:
+                        if (p.balance < 50000) { pm.pln("Insufficient balance."); return; }
+                        Helpers.spend(p, 50000, log, "Accomodation - Shack");
+                        p.Accomodation = "Shack"; p.modHappiness(5);
+                        log.add(p.name+" bought a Shack (-Rs.50,000, +5 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Shack (-Rs.50,000, +5 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 2:
+                        if (p.balance < 150000) { pm.pln("Insufficient balance."); return; }
+                        Helpers.spend(p, 150000, log, "Accomodation - Apartment");
+                        p.Accomodation = "Apartment"; p.modHappiness(15);
+                        log.add(p.name+" bought an Apartment (-Rs.150,000, +15 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought an Apartment (-Rs.150,000, +15 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 3:
+                        if (p.balance < 300000) { pm.pln("Insufficient balance."); return; }
+                        Helpers.spend(p, 300000, log, "Accomodation - Bungalow");
+                        p.Accomodation = "Bungalow"; p.modHappiness(25);
+                        log.add(p.name+" bought a Bungalow (-Rs.300,000, +25 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Bungalow (-Rs.300,000, +25 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 4:
+                        if (p.balance < 600000) { pm.pln("Insufficient balance."); return; }
+                        Helpers.spend(p, 600000, log, "Accomodation - Villa");
+                        p.Accomodation = "Villa"; p.modHappiness(35);
+                        log.add(p.name+" bought a Villa (-Rs.600,000, +35 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Villa (-Rs.600,000, +35 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 5:
+                        if (p.balance < 1000000) { pm.pln("Insufficient balance."); return; }
+                        Helpers.spend(p, 1000000, log, "Accomodation - Mansion");
+                        p.Accomodation = "Mansion"; p.modHappiness(50);
+                        log.add(p.name+" bought a Mansion (-Rs.1,000,000, +50 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Mansion (-Rs.1,000,000, +50 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 6:
+                        p.backPressed = true;
+                        return;
+                    default: pm.pln("Invalid."); return;
+                }
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+                break;
+            case 2:
                 break;
             case 3:
                 p.backPressed = true;

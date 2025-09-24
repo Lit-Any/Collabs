@@ -19,7 +19,7 @@ public class Person {
     public String education = "None"; // None, HS, College, Masters
     public static String job = "Unemployed";
     public static int stress = jobStress(job);       // 0-100, affected by job, events, causes health/happiness decline
-    public static String Accomodation = "Shack"; // Shack, Apartment, House, Mansion
+    public static String Accomodation = "Homeless"; // Shack, Apartment, House, Mansion
     public static String Vehicle = "None"; // None, Bicycle, Motorbike, Car, Luxury Car
     public static int comfort = comfort();     // 0-100, affected by accomodations and vehicle, offsets stress
     public boolean alive = true;
@@ -29,6 +29,7 @@ public class Person {
     public long balance;     // in Rs.
     public int loan = 0;
     public static int luck = RNG.nextInt(101);         // affects random events, gambling, lottery
+    public long income = incomePerYear();  // annual income based on job and intelligence
 
     // Vars to track changes in attributes
     public int InitialHealth = health;
@@ -232,10 +233,12 @@ public class Person {
     public static int comfort() {
         int comfort = 50; // base comfort
         // Accomodation effect
-        if (Accomodation.equals("Shack")) comfort -= 20;
+        if (Accomodation.equals("Homeless")) comfort -= 40;
+        else if (Accomodation.equals("Shack")) comfort -= 20;
         else if (Accomodation.equals("Apartment")) comfort += 0;
-        else if (Accomodation.equals("House")) comfort += 10;
-        else if (Accomodation.equals("Mansion")) comfort += 20;
+        else if (Accomodation.equals("Bungalow")) comfort += 10;
+        else if (Accomodation.equals("Villa")) comfort += 30;
+        else if (Accomodation.equals("Mansion")) comfort += 30;
         // Vehicle effect
         if (Vehicle.equals("None")) comfort -= 10;
         else if (Vehicle.equals("Bicycle")) comfort += 0;
