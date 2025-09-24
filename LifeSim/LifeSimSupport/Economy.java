@@ -10,6 +10,7 @@ import utility.*;
 public class Economy {
     static Random rand = new Random();
     static java.util.Scanner SC = new java.util.Scanner(System.in);
+    static PrintMethods PrintMethods = new PrintMethods();
 
     /* ---- Unified Economic Menu ---- */
     public static void economicMenu(Person p, List<Person> allPlayers) {

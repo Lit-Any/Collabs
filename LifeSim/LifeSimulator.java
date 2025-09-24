@@ -27,6 +27,7 @@ public class LifeSimulator {
     static final Scanner SC = new Scanner(System.in);
     static final Random RNG = new Random();
     static final StringBuilder sb = new StringBuilder();
+    static PrintMethods PrintMethods = new PrintMethods();
 
     public static long lotteryBonusPool = 0L; // lottery: 10% tax accumulates across rounds
     public static long jackpotPool = 0L;       // gambling: all lost bets accumulate here until next win

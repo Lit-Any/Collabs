@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Validators {
     
+    static PrintMethods PrintMethods = new PrintMethods();
+
     public boolean yesOrNo(Scanner sc, String question) {
 
         ArrayList <String> validInputs = new ArrayList <>(Arrays.asList("Y", "N", "y", "n", "yes", "no", "Yes", "No", "YES", "NO", "positive", "negative", "Positive", "Negative", 

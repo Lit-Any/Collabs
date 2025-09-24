@@ -7,6 +7,7 @@ import LifeSim.LifeSimulator;
 public class Lottery {
 
     static java.util.Random rand = new java.util.Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
         /* ---- Lottery (with accumulating bonus pool) ---- */
     static void lotterySystem(List<Person> players) {

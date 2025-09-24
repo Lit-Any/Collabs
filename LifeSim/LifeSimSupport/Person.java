@@ -7,6 +7,7 @@ import utility.PrintMethods;
 public class Person {
 
     Random RNG = new Random();
+    PrintMethods PrintMethods = new PrintMethods();
 
     // -------- Life-sim attributes (from Code2, simplified to console) --------
     public String name;

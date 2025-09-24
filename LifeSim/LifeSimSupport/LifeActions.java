@@ -6,6 +6,7 @@ public class LifeActions {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random RNG = new java.util.Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
     public static void doStudyFor(Person p, List<String> log) {
         

@@ -6,6 +6,7 @@ import utility.*;
 
 public class MultiplayerCasino {
     static Random rand = new Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
     // Pools
     public static double jackpotPool = 0.0;       // Gambling: all lost bets accumulate here until the next win

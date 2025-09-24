@@ -8,6 +8,8 @@ import MultiplayerCasino.MultiplayerCasino;
 
 public class GambleMenu {
 
+    static PrintMethods PrintMethods = new PrintMethods();
+
     // 🎲 Gambling Menu (20 games)
     public static void gambleMenu(Player p, Scanner sc) {
         PrintMethods.pln("\n--- 🎰 Gambling Games Menu ---");

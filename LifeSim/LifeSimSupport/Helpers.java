@@ -6,6 +6,7 @@ import utility.*;
 public class Helpers {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
+    static PrintMethods PrintMethods = new PrintMethods();
 
     public static void spend(Person p, long amt, List<String> log, String what) {
 

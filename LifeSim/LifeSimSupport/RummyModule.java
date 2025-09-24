@@ -5,6 +5,8 @@ import utility.*;
 
 public class RummyModule {
 
+    static PrintMethods PrintMethods = new PrintMethods();
+
     // ===== Card Model =====
     enum Suit { H, D, C, S, JOKER }
 

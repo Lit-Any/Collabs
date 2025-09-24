@@ -6,6 +6,9 @@ public class Leaderboard {
     
     // 🏆 Leaderboard (includes lottery awards)
     public static void showLeaderboard(Player[] players) {
+
+        PrintMethods PrintMethods = new PrintMethods();
+        
         PrintMethods.pln("\n===== 🏆 Leaderboard =====");
         Player mostGambles = players[0], mostWins = players[0], mostLosses = players[0];
         Player mostMoneyWon = players[0], mostMoneyLost = players[0], richest = players[0], highestLifetime = players[0];

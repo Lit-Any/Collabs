@@ -6,6 +6,7 @@ public class Tutorial {
 
     static Validators v = new Validators();
     static Scanner sc = new Scanner(System.in);
+    static PrintMethods PrintMethods = new PrintMethods();
 
     public static void CheckTutorial() {
         PrintMethods.pln("\nWelcome to LifeSim!");

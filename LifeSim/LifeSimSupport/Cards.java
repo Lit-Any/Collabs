@@ -7,6 +7,7 @@ public class Cards {
     
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random RNG = new java.util.Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
         /* ---- Card Poll + Rummy (from Code1) ---- */
     static void startCardPoll(List<Person> players) {
