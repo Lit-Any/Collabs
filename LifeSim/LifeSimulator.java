@@ -103,6 +103,7 @@ public class LifeSimulator {
                     p.showStatus();
                     PrintMethods.pln("------------------------------");
                     PrintMethods.pln(ConsoleColors.ULTRA.WHITE + ConsoleColors.ULTRA_BG.BLACK + 
+                        "0) Tutorial\n" +
                         "1) Live year (auto)\n" +
                         "2) Study\n" +
                         "3) Work\n" +
@@ -119,6 +120,7 @@ public class LifeSimulator {
                     int choice = Helpers.readInt();
 
                     switch (choice) {
+                        case 0: Tutorial.showBasics(); p.backPressed = true; break;
                         case 1:
 
                             if (Helpers.ForceEmploymentIfInDebt(p)) {
