@@ -12,10 +12,11 @@ public class LifeActions {
     public static void doStudyFor(Person p, List<String> log) {
         
         PrintMethods.pln("\nStudy options:");
-        PrintMethods.pln("\n1) High School (+5 INT, -2 HAPPY; Chance to complete HS if age>=16)");
-        PrintMethods.pln("2) College (+8 INT, -3 HAPPY; requires HS; chance to complete)");
-        PrintMethods.pln("3) Short Course (+3 INT, -Rs.2000)");
-        PrintMethods.pln("4) Back");
+        PrintMethods.pln("\n1) High School (+5 INT, -2 happiness; Chance to complete)");
+        PrintMethods.pln("2) College (+8 INT, -3 happiness; requires HS; chance to complete)");
+        pm.pln("3) Masters (+10 INT, -5 happiness; requires College; chance to complete)");
+        PrintMethods.pln("4) Short Course (+3 INT, -Rs.2000; higher chance to complete)");
+        PrintMethods.pln("5) Back");
 
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
@@ -28,7 +29,7 @@ public class LifeActions {
 
 
                     Person.intelligence += 5; Person.happiness -= 2;
-                    if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts>=3) && Helpers.eduRank(p.education) < Helpers.eduRank("HS")) {
 
                         p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0;
@@ -48,12 +49,14 @@ public class LifeActions {
 
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     Person.intelligence += 8; Person.happiness -= 3;
-                    if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
+
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts<3) && Helpers.eduRank(p.education) < Helpers.eduRank("College")) {
                         p.education = "College"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" graduated college." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0;
                         p.education = "College";
                     }
                     else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
                     if (p.nightmareMode) {
                         p.passNightmareYear(log);
                     } else {
@@ -63,6 +66,28 @@ public class LifeActions {
                 break;
 
             case 3:
+
+                Helpers.spend(p, 30000, log, "masters fees");
+
+                    if (!p.education.equals("College")) { PrintMethods.pln("Need College first."); return; }
+                    Person.intelligence += 10; Person.happiness -= 5;
+
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts<3) && Helpers.eduRank(p.education) < Helpers.eduRank("Masters")) {
+                        p.education = "Masters"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed Masters." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        log.add(p.name+" completed Masters."); p.CountOfEducationAttempts=0;
+                        p.education = "Masters";
+                    }
+                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
+                    if (p.nightmareMode) {
+                        p.passNightmareYear(log);
+                    } else {
+                        p.passYear(log);
+                    }
+
+                break;
+
+            case 4:
 
                 long fee = 15000;
                 Helpers.spend(p, fee, log, "short course");
@@ -76,7 +101,7 @@ public class LifeActions {
                 
                 break;
 
-            case 4:
+            case 5:
                 p.backPressed = true;
                 break;
 
