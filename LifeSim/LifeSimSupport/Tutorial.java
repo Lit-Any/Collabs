@@ -42,6 +42,6 @@ public class Tutorial {
         }
         samplePerson.showStatus();
         PrintMethods.pln("\nGreat! You've completed the tutorial.");
-        PrintMethods.pln("Have a good run!");
+        PrintMethods.pln("Have fun!");
     }
 }
