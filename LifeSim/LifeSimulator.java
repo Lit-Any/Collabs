@@ -46,7 +46,7 @@ public class LifeSimulator {
             "\n=========================================\n" +
             "      Welcome to Life Simulator!\n" +
             "=========================================" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
-        PrintMethods.pln(ConsoleColors.INFO + "Note: This is a console-based game. Please ensure your console supports ANSI colors for the best experience." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+        PrintMethods.pln(ConsoleColors.INFO + "Your goal is to survive for as long as possible. \n\n Note: This is a console-based game. Please ensure your console supports ANSI colors for the best experience." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
         Tutorial.CheckTutorial();
 
         PrintMethods.p("\nEnter number of players: ");

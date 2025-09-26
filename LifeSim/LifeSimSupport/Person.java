@@ -142,7 +142,7 @@ public class Person {
         clampAll();
 
         // death checks
-        if (health <= 0 || (age >= 100 && RNG.nextInt(100) < 50)) {
+        if (health <= 0 || (age >= 100 && RNG.nextInt(100) > luck)) {
             alive = false;
             log.add(age + ": " + name + " has died.");
             PrintMethods.pln(ConsoleColors.ERROR + "\n" + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
@@ -196,7 +196,7 @@ public class Person {
         clampAll();
 
         // death checks
-        if (health <= 0 || (age >= 90 && RNG.nextInt(100) < 70)) {
+        if (health <= 0 || (age >= 90 && RNG.nextInt(100) > luck)) {
             alive = false;
             log.add(age + ": " + name + " has died.");
             PrintMethods.pln(ConsoleColors.ERROR + "\n" + log.get(log.size()-1) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);

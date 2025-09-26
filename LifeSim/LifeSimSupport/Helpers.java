@@ -93,6 +93,7 @@ public class Helpers {
     public static boolean ForceEmploymentIfInDebt(Person p) {
         if (p.loan > 0 && Person.job == "Unemployed") {
             PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 You have an outstanding loan and must find a job to repay it." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            p.backPressed = true;
             return true;
         } else {
             return false;

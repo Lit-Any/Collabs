@@ -272,41 +272,41 @@ public class LifeActions {
                 pm.pln("2) Apartment (Rs.150,000, +15 Happiness, Comfort = 50)");
                 pm.pln("3) Bungalow (Rs.300,000, +25 Happiness, Comfort = 60)");
                 pm.pln("4) Villa (Rs.600,000, +35 Happiness, Comfort = 70)");
-                pm.pln("5) Mansion (Rs.1,000,000, +50 Happiness, Comfort = 80)");
+                pm.pln("5) Resort (Rs.5,000,000, +50 Happiness, Comfort = 80)");
                 pm.pln("6) Back");
                 pm.p("\nChoose: ");
                 int choice = Helpers.readInt();
                 switch (choice) {
                     case 1:
-                        if (p.balance < 50000) { pm.pln("Insufficient balance."); return; }
+                        if (p.balance < 50000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
                         Helpers.spend(p, 50000, log, "Accomodation - Shack");
                         p.Accomodation = "Shack"; p.modHappiness(5);
                         log.add(p.name+" bought a Shack (-Rs.50,000, +5 Happiness)");
                         pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Shack (-Rs.50,000, +5 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         break;
                     case 2:
-                        if (p.balance < 150000) { pm.pln("Insufficient balance."); return; }
+                        if (p.balance < 150000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
                         Helpers.spend(p, 150000, log, "Accomodation - Apartment");
                         p.Accomodation = "Apartment"; p.modHappiness(15);
                         log.add(p.name+" bought an Apartment (-Rs.150,000, +15 Happiness)");
                         pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought an Apartment (-Rs.150,000, +15 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         break;
                     case 3:
-                        if (p.balance < 300000) { pm.pln("Insufficient balance."); return; }
+                        if (p.balance < 300000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
                         Helpers.spend(p, 300000, log, "Accomodation - Bungalow");
                         p.Accomodation = "Bungalow"; p.modHappiness(25);
                         log.add(p.name+" bought a Bungalow (-Rs.300,000, +25 Happiness)");
                         pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Bungalow (-Rs.300,000, +25 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         break;
                     case 4:
-                        if (p.balance < 600000) { pm.pln("Insufficient balance."); return; }
+                        if (p.balance < 600000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
                         Helpers.spend(p, 600000, log, "Accomodation - Villa");
                         p.Accomodation = "Villa"; p.modHappiness(35);
                         log.add(p.name+" bought a Villa (-Rs.600,000, +35 Happiness)");
                         pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Villa (-Rs.600,000, +35 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         break;
                     case 5:
-                        if (p.balance < 1000000) { pm.pln("Insufficient balance."); return; }
+                        if (p.balance < 1000000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
                         Helpers.spend(p, 1000000, log, "Accomodation - Mansion");
                         p.Accomodation = "Mansion"; p.modHappiness(50);
                         log.add(p.name+" bought a Mansion (-Rs.1,000,000, +50 Happiness)");
@@ -324,6 +324,61 @@ public class LifeActions {
                 }
                 break;
             case 2:
+            pm.pln("\nVehicle options:");
+            pm.pln("1) Bike (Rs.20,000, +2 Happiness, Comfort = 20)");
+            pm.pln("2) Sedan (Rs.100,000, +10 Happiness, Comfort = 40)");
+            pm.pln("3) SUV (Rs.300,000, +20 Happiness, Comfort = 60)");
+            pm.pln("4) Luxury Car (Rs.800,000, +30 Happiness, Comfort = 80)");
+            pm.pln("5) Supercar (Rs.2,000,000, +50 Happiness, Comfort = 100)");
+            pm.pln("6) Back");
+            pm.p("\nChoose: ");
+            int carChoice = Helpers.readInt();
+            switch (carChoice) {
+                case 1:
+                    if (p.balance < 20000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 20000, log, "Vehicle - Bike");
+                    p.Vehicle = "Bike"; p.modHappiness(2);
+                    log.add(p.name+" bought a Bike (-Rs.20,000, +2 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Bike (-Rs.20,000, +2 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 2:
+                    if (p.balance < 100000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 100000, log, "Vehicle - Sedan");
+                    p.Vehicle = "Sedan"; p.modHappiness(10);
+                    log.add(p.name+" bought a Sedan (-Rs.100,000, +10 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Sedan (-Rs.100,000, +10 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 3:
+                    if (p.balance < 300000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 300000, log, "Vehicle - SUV");
+                    p.Vehicle = "SUV"; p.modHappiness(20);
+                    log.add(p.name+" bought an SUV (-Rs.300,000, +20 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought an SUV (-Rs.300,000, +20 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 4:
+                    if (p.balance < 800000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 800000, log, "Vehicle - Luxury Car");
+                    p.Vehicle = "Luxury Car"; p.modHappiness(30);
+                    log.add(p.name+" bought a Luxury Car (-Rs.800,000, +30 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Luxury Car (-Rs.800,000, +30 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 5:
+                    if (p.balance < 2000000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 2000000, log, "Vehicle - Supercar");
+                    p.Vehicle = "Supercar"; p.modHappiness(50);
+                    log.add(p.name+" bought a Supercar (-Rs.2,000,000, +50 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Supercar (-Rs.2,000,000, +50 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 6:
+                    p.backPressed = true;
+                    return;
+                default: pm.pln("Invalid."); return;
+            }
+            if (p.nightmareMode) {
+                p.passNightmareYear(log);
+            } else {
+                p.passYear(log);
+            }
                 break;
             case 3:
                 p.backPressed = true;
