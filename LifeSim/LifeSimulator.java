@@ -108,7 +108,7 @@ public class LifeSimulator {
                         "3) Work\n" +
                         "4) Improve stats\n" +
                         "5) Make an acquisition (house or car, improves comfort)\n" +
-                        "6) Risky (life-side)\n" +
+                        "6) Risky actions\n" +
                         "7) Economic Actions (bank, gamble, lottery, rummy)\n" +
                         "8) Show recent log\n" +
                         "9) Exit game\n" +

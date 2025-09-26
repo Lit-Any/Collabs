@@ -159,8 +159,9 @@ public class LifeActions {
         PrintMethods.pln("\nImprovement options:");
         PrintMethods.pln("\n1) Gym (+8 Health, +2 Happiness, -Rs.2000)");
         PrintMethods.pln("2) Study Hard (+6 Int, -3 Happiness, -Rs.1000)");
-        PrintMethods.pln("3) Go on a Date (swingy)");
-        PrintMethods.pln("4) Back");
+        PrintMethods.pln("3) Go on a Date (+/- Happiness, -Rs.2000 to Rs.3000)");
+        pm.pln("4) Buy a lucky charm (chance for luck +5 permanently, Rs.10,000)");
+        PrintMethods.pln("5) Back");
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
@@ -199,6 +200,23 @@ public class LifeActions {
                 }
                 break;
             case 4:
+                if (p.balance < 10000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                Helpers.spend(p, 10000, log, "a lucky charm");
+                if (RNG.nextInt(100) < 50 || Person.luck < 20 || RNG.nextInt(100) < Person.luck) {
+                    p.modLuck(5);
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "\nYou feel luckier! (Luck +5)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" bought a lucky charm (Luck +5).");
+                } else {
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "The charm broke. No effect." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add("\nThe charm was a dud.");
+                }
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+                break;
+            case 5:
                 p.backPressed = true;
                 break;
             default: PrintMethods.pln("Invalid.");
