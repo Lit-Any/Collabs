@@ -15,7 +15,7 @@ public class LifeActions {
         PrintMethods.pln("\n1) High School (+5 INT, -2 happiness; Chance to complete)");
         PrintMethods.pln("2) College (+8 INT, -3 happiness; requires HS; chance to complete)");
         pm.pln("3) Masters (+10 INT, -5 happiness; requires College; chance to complete)");
-        PrintMethods.pln("4) Short Course (+3 INT, -Rs.2000; higher chance to complete)");
+        PrintMethods.pln("4) Short Course (+3 INT, -Rs.15,000; higher chance to complete)");
         PrintMethods.pln("5) Back");
 
         PrintMethods.p("\nChoose: ");
@@ -92,7 +92,13 @@ public class LifeActions {
                 long fee = 15000;
                 Helpers.spend(p, fee, log, "short course");
 
-                Person.intelligence += 3;
+                if (RNG.nextInt() > Person.luck/2 || p.CountOfEducationAttempts>=1) {
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed a short course." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" completed a short course.");
+                    p.modIntelligence(3);
+                    p.CountOfEducationAttempts=0;
+                } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "You failed the course. 😞" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
                 if (p.nightmareMode) {
                     p.passNightmareYear(log);
                 } else {

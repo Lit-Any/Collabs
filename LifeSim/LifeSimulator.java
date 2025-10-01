@@ -28,6 +28,7 @@ public class LifeSimulator {
     static final Random RNG = new Random();
     static final StringBuilder sb = new StringBuilder();
     static PrintMethods PrintMethods = new PrintMethods();
+    static PrintMethods pm = new PrintMethods();
 
     public static long lotteryBonusPool = 0L; // lottery: 10% tax accumulates across rounds
     public static long jackpotPool = 0L;       // gambling: all lost bets accumulate here until next win
@@ -76,8 +77,8 @@ public class LifeSimulator {
                     if (n == 1) { PrintMethods.pln(ConsoleColors.INFO + "\nAll players deceased." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);   // single-player auto-exit
                     running = false; }
                     else {
-                        for (Person pp : players) {
-                            if (pp.alive) {
+                        for (Person p2 : players) {
+                            if (p2.alive) {
                                 livePlayers++;
                             }
                         }
@@ -172,8 +173,15 @@ public class LifeSimulator {
                         case 8:
                             Helpers.showRecentLog(log); p.backPressed = true; break;
                         case 9:
+                            pm.pln(ConsoleColors.WARNING + "\n⚠️ Exit game?" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                            PrintMethods.p("1) Yes, exit\n2) No, return to menu\nChoose: ");
+                            int exitChoice = Helpers.readInt();
+                            if (exitChoice == 1) {
                             running = false;
                             PrintMethods.pln(ConsoleColors.INFO + "\n👋 Game ended by " + p.name + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                            } else {
+                                p.backPressed = true;
+                            }
                             break;
                         case -1: // hidden Nightmare Mode trigger
                             p.counterToNightmareMode++;
@@ -210,7 +218,7 @@ public class LifeSimulator {
 
                             p.backPressed = false;  // reset
                             break;
-                        default: PrintMethods.pln(ConsoleColors.WARNING + "\n❌ Invalid choice!" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        default: PrintMethods.pln(ConsoleColors.WARNING + "\n❌ Invalid choice!" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.backPressed = true; break;
                     }
 
                 }
