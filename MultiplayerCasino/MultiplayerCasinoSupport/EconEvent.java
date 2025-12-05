@@ -4,6 +4,9 @@ import java.util.Random;
 import utility.*;
 
 public class EconEvent {
+
+    static PrintMethods PrintMethods = new PrintMethods();
+
     // ✅ Random economic events (now count toward lifetimeTotal)
     public static void economicEvent(Player p) {
         PrintMethods.pln("🌍 Economic Event Happening...");

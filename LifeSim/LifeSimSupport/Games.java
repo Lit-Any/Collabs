@@ -6,6 +6,7 @@ public class Games {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random rand = new java.util.Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
 /* ---- Games (adapted to long & console prompts) ---- */
 

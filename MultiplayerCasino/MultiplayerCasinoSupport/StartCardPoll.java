@@ -5,6 +5,9 @@ import java.util.Scanner;
 import utility.*;
 
 public class StartCardPoll {
+
+    static PrintMethods PrintMethods = new PrintMethods();
+    
     // 🃏 Multiplayer Card Poll (now integrated with RummyModule)
     public static void startCardPoll(Player[] players, Scanner sc) {
         int yesVotes = 0;

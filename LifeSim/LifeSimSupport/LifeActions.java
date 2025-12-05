@@ -6,13 +6,17 @@ public class LifeActions {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
     static java.util.Random RNG = new java.util.Random();
+    static PrintMethods PrintMethods = new PrintMethods();
+    static PrintMethods pm = new PrintMethods();
 
     public static void doStudyFor(Person p, List<String> log) {
         
         PrintMethods.pln("\nStudy options:");
-        PrintMethods.pln("1) High School (+5 INT, -2 HAPPY; Chance to complete HS if age>=16)");
-        PrintMethods.pln("2) College (+8 INT, -3 HAPPY; requires HS; chance to complete)");
-        PrintMethods.pln("3) Short Course (+3 INT, -Rs.2000)");
+        PrintMethods.pln("\n1) High School (+5 INT, -2 happiness; Chance to complete)");
+        PrintMethods.pln("2) College (+8 INT, -3 happiness; requires HS; chance to complete)");
+        pm.pln("3) Masters (+10 INT, -5 happiness; requires College; chance to complete)");
+        PrintMethods.pln("4) Short Course (+3 INT, -Rs.15,000; higher chance to complete)");
+        PrintMethods.pln("5) Back");
 
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
@@ -25,13 +29,13 @@ public class LifeActions {
 
 
                     Person.intelligence += 5; Person.happiness -= 2;
-                    if (RNG.nextInt(100) < 30 || p.CountOfEducationAttempts>=3) {
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts>=3) && Helpers.eduRank(p.education) < Helpers.eduRank("HS")) {
 
                         p.education = "HS"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed HS." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" completed HS."); p.CountOfEducationAttempts=0;
                         p.education = "HS";
 
-                    } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+                    } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "\nNo graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
                     if (p.nightmareMode) {
                             p.passNightmareYear(log);
                         } else {
@@ -45,12 +49,14 @@ public class LifeActions {
 
                     if (!p.education.equals("HS")) { PrintMethods.pln("Need HS first."); return; }
                     Person.intelligence += 8; Person.happiness -= 3;
-                    if (RNG.nextInt(100) < 40 && p.CountOfEducationAttempts<3) {
+
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts<3) && Helpers.eduRank(p.education) < Helpers.eduRank("College")) {
                         p.education = "College"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" graduated college." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                         log.add(p.name+" graduated College."); p.CountOfEducationAttempts=0;
                         p.education = "College";
                     }
                     else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
                     if (p.nightmareMode) {
                         p.passNightmareYear(log);
                     } else {
@@ -61,10 +67,38 @@ public class LifeActions {
 
             case 3:
 
+                Helpers.spend(p, 30000, log, "masters fees");
+
+                    if (!p.education.equals("College")) { PrintMethods.pln("Need College first."); return; }
+                    Person.intelligence += 10; Person.happiness -= 5;
+
+                    if ((RNG.nextInt(100) > Person.luck || p.CountOfEducationAttempts<3) && Helpers.eduRank(p.education) < Helpers.eduRank("Masters")) {
+                        p.education = "Masters"; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed Masters." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        log.add(p.name+" completed Masters."); p.CountOfEducationAttempts=0;
+                        p.education = "Masters";
+                    }
+                    else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "No graduation this year." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
+                    if (p.nightmareMode) {
+                        p.passNightmareYear(log);
+                    } else {
+                        p.passYear(log);
+                    }
+
+                break;
+
+            case 4:
+
                 long fee = 15000;
                 Helpers.spend(p, fee, log, "short course");
 
-                Person.intelligence += 3;
+                if (RNG.nextInt() > Person.luck/2 || p.CountOfEducationAttempts>=1) {
+                    PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" completed a short course." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" completed a short course.");
+                    p.modIntelligence(3);
+                    p.CountOfEducationAttempts=0;
+                } else {PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + "You failed the course. 😞" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK); p.CountOfEducationAttempts++;}
+
                 if (p.nightmareMode) {
                     p.passNightmareYear(log);
                 } else {
@@ -73,19 +107,24 @@ public class LifeActions {
                 
                 break;
 
+            case 5:
+                p.backPressed = true;
+                break;
+
             default: PrintMethods.pln("Invalid."); break;
         }
     }
 
     public static void doWorkFor(Person p, List<String> log) {
 
-        String[] jobs = {"Retail Worker","Teacher","Engineer","Doctor","Artist","Criminal","Keep current job","Quit job"};
+        String[] jobs = {"Retail Worker","Teacher","Engineer","Doctor","Artist","Criminal","Keep current job","Quit job","Back"};
 
         PrintMethods.pln("\nWork options:");
 
         for (int i=0;i<jobs.length;i++) {
             PrintMethods.pln((i+1)+") "+jobs[i]);
         }
+
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
 
@@ -114,79 +153,102 @@ public class LifeActions {
             if (p.nightmareMode) {
                 p.passNightmareYear(log);
 
-            }
-        }
-
-            if (Person.job.equals("Unemployed") && choice.equals("Quit job")) {
-
-                PrintMethods.pln("You are already unemployed.");
-
-                if (p.nightmareMode) {
-                    p.passNightmareYear(log);
-                } else {
-                    p.passYear(log);
-                }
-
             } else {
-
-                // requirements (roughly matching Code2)
-                if (choice.equals("Teacher") && (Person.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Engineer") && (Person.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Doctor") && (Person.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Retail Worker") && Person.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
-                else if (choice.equals("Artist") && Person.looks < 30) { Helpers.failJob(p, choice, log); return; }
-                // Criminal has no constraints
-
-                Person.job = choice; Person.happiness += 5; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" got job: "+choice + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
-                log.add(p.name+" got job: " + choice);
-
-                if (p.nightmareMode) {
-                    p.passNightmareYear(log);
-                } else {
-                    p.passYear(log);
-                }
+                p.passYear(log);
             }
         }
+
+        if (Person.job.equals("Unemployed") && choice.equals("Quit job")) {
+
+            PrintMethods.pln("You are already unemployed.");
+
+            return;
+
+        } else {
+
+            // requirements (roughly matching Code2)
+            if (choice.equals("Teacher") && (Person.intelligence < 60 || Helpers.eduRank(p.education) < Helpers.eduRank("HS"))) { Helpers.failJob(p, choice, log); return; }
+            else if (choice.equals("Engineer") && (Person.intelligence < 75 || Helpers.eduRank(p.education) < Helpers.eduRank("College"))) { Helpers.failJob(p, choice, log); return; }
+            else if (choice.equals("Doctor") && (Person.intelligence < 90 || Helpers.eduRank(p.education) < Helpers.eduRank("Masters"))) { Helpers.failJob(p, choice, log); return; }
+            else if (choice.equals("Retail Worker") && Person.intelligence < 20) { Helpers.failJob(p, choice, log); return; }
+            else if (choice.equals("Artist") && Person.looks < 30) { Helpers.failJob(p, choice, log); return; }
+            else if (choice.equals("Back") ) { return; }
+            // Criminal has no constraints
+
+            Person.job = choice; Person.happiness += 5; PrintMethods.pln(ConsoleColors.ULTRA_BOLD.YELLOW + p.name+" got job: "+choice + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            log.add(p.name+" got job: " + choice);
+
+            if (p.nightmareMode) {
+                p.passNightmareYear(log);
+            } else {
+                p.passYear(log);
+            }
+        }
+    }
 
     public static void doImproveFor(Person p, List<String> log) {
-        PrintMethods.pln("\nImprove options:");
-        PrintMethods.pln("1) Gym (+8 Health, +2 Happy, -Rs.2000)");
-        PrintMethods.pln("2) Study Hard (+6 Int, -3 Happy, -Rs.1000)");
-        PrintMethods.pln("3) Go on a Date (swingy)");
+        PrintMethods.pln("\nImprovement options:");
+        PrintMethods.pln("\n1) Gym (+8 Health, +2 Happiness, -Rs.2000)");
+        PrintMethods.pln("2) Study Hard (+6 Int, -3 Happiness, -Rs.1000)");
+        PrintMethods.pln("3) Go on a Date (+/- Happiness, -Rs.2000 to Rs.3000)");
+        pm.pln("4) Buy a lucky charm (chance for luck +5 permanently, Rs.10,000)");
+        PrintMethods.pln("5) Back");
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
         switch (sel) {
             case 1:
-                p.health += 8; Person.happiness += 2; Helpers.spend(p, 2000, log, "gym");
+                PrintMethods.pln(ConsoleColors.HIGHLIGHT + "\nYou went to the gym " + p.modHealth(8) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                p.modHappiness(2); Helpers.spend(p, 2000, log, "gym");
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
                 break;
             case 2:
-                Person.intelligence += 6; Person.happiness -= 3; Helpers.spend(p, 1000, log, "study materials");
+                PrintMethods.pln(ConsoleColors.HIGHLIGHT + "You studied hard " + p.modIntelligence(6) + p.modHappiness(-3) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                Helpers.spend(p, 1000, log, "study materials");
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
                 break;
             case 3:
                 if (RNG.nextBoolean()) {
-                    Person.happiness += 8; Helpers.spend(p, 3000, log, "date");
+                    Helpers.spend(p, 3000, log, "date");
                     log.add(p.name+" had a great date.");
-                    PrintMethods.pln("Great date!");
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "Great date!" + p.modHappiness(8) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 } else {
-                    Person.happiness -= 5; Helpers.spend(p, 2000, log, "bad date");
+                    Helpers.spend(p, 2000, log, "bad date");
                     log.add(p.name+" had a bad date.");
-                    PrintMethods.pln("Bad date.");
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "Bad date." + p.modHappiness(-5) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                 }
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+                break;
+            case 4:
+                if (p.balance < 10000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                Helpers.spend(p, 10000, log, "a lucky charm");
+                if (RNG.nextInt(100) < 50 || Person.luck < 20 || RNG.nextInt(100) < Person.luck) {
+                    p.modLuck(5);
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "\nYou feel luckier! (Luck +5)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" bought a lucky charm (Luck +5).");
+                } else {
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + "The charm broke. No effect." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add("\nThe charm was a dud.");
+                }
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+                break;
+            case 5:
+                p.backPressed = true;
                 break;
             default: PrintMethods.pln("Invalid.");
         }
@@ -196,45 +258,179 @@ public class LifeActions {
         PrintMethods.pln("\nRisky options:");
         PrintMethods.pln("1) Life-side Gamble (quick)");
         PrintMethods.pln("2) Small Crime");
-        PrintMethods.pln("3) Do Nothing");
+        PrintMethods.pln("3) Back");
         PrintMethods.p("\nChoose: ");
         int sel = Helpers.readInt();
+        int roll = RNG.nextInt(100);
         switch (sel) {
             case 1:
-                if (RNG.nextInt(100) < 45) {
+                if (roll > 55 && roll > Person.luck) {
                     long win = (RNG.nextInt(10)+1)*1000L;
                     p.balance += win; p.addFlow(win); Person.happiness += 5;
                     log.add(p.name+" won gamble Rs."+win);
                 } else {
                     long lose=(RNG.nextInt(20)+1)*1000L;
                     lose = Math.min(lose, p.balance);
-                    p.balance -= lose; p.addFlow(lose); Person.happiness -= 10;
-                    log.add(p.name+" lost gamble Rs."+lose);
+                    p.balance -= lose; p.addFlow(lose);
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + p.name + " lost gamble Rs." + lose + p.modHappiness(-10) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" lost gamble Rs."+lose + "(-10 happiness)");
                 }
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
-                        } else {
-                            p.passYear(log);
-                        };
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
                 break;
             case 2:
-                if (RNG.nextInt(100) < 40) {
+                if (roll > 60 && roll > Person.luck) {
                     long loot=(RNG.nextInt(30)+1)*1000L;
                     p.balance += loot; p.addFlow(loot); Person.happiness -= 10;
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + p.name + " stole Rs." + loot + p.modHappiness(-10) + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
                     log.add(p.name+" crime succeeded Rs."+loot);
                 } else {
                     long fine=5000; fine = Math.min(fine, p.balance);
                     p.balance -= fine; p.addFlow(fine); p.health -= 10; Person.happiness -= 20;
-                    log.add(p.name+" was caught committing crime.");
+                    PrintMethods.pln(ConsoleColors.HIGHLIGHT + p.name + " was caught and fined Rs." + fine + " (Health -10, Happiness -20)." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    log.add(p.name+" was caught committing crime (Health -10, Happiness -20).");
                 }
                 if (p.nightmareMode) {
-                            p.passNightmareYear(log);
+                    p.passNightmareYear(log);
                 } else {
                     p.passYear(log);
                 }
                 break;
             case 3:
-                // no passYear here—staying idle in risky panel; let user decide separate Live Year if desired
+                p.backPressed = true;
+                break;
+            default: PrintMethods.pln("Invalid.");
+        }
+    }
+
+    @SuppressWarnings("static-access")
+    public static void MakeAcquisition(Person p, List<String> log) {
+        PrintMethods.pln("\nAcquisition options:");
+        PrintMethods.pln("1) Buy a house.");
+        PrintMethods.pln("2) Buy a car.");
+        PrintMethods.pln("3) Back");
+        PrintMethods.p("\nChoose: ");
+        int sel = Helpers.readInt();
+        switch (sel) {
+            case 1:
+                pm.pln("\nHouse options:");
+                pm.pln("1) Shack (Rs.50,000, +5 Happiness, Comfort = 30)");
+                pm.pln("2) Apartment (Rs.150,000, +15 Happiness, Comfort = 50)");
+                pm.pln("3) Bungalow (Rs.300,000, +25 Happiness, Comfort = 60)");
+                pm.pln("4) Villa (Rs.600,000, +35 Happiness, Comfort = 70)");
+                pm.pln("5) Resort (Rs.5,000,000, +50 Happiness, Comfort = 80)");
+                pm.pln("6) Back");
+                pm.p("\nChoose: ");
+                int choice = Helpers.readInt();
+                switch (choice) {
+                    case 1:
+                        if (p.balance < 50000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                        Helpers.spend(p, 50000, log, "Accomodation - Shack");
+                        p.Accomodation = "Shack"; p.modHappiness(5);
+                        log.add(p.name+" bought a Shack (-Rs.50,000, +5 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Shack (-Rs.50,000, +5 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 2:
+                        if (p.balance < 150000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                        Helpers.spend(p, 150000, log, "Accomodation - Apartment");
+                        p.Accomodation = "Apartment"; p.modHappiness(15);
+                        log.add(p.name+" bought an Apartment (-Rs.150,000, +15 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought an Apartment (-Rs.150,000, +15 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 3:
+                        if (p.balance < 300000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                        Helpers.spend(p, 300000, log, "Accomodation - Bungalow");
+                        p.Accomodation = "Bungalow"; p.modHappiness(25);
+                        log.add(p.name+" bought a Bungalow (-Rs.300,000, +25 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Bungalow (-Rs.300,000, +25 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 4:
+                        if (p.balance < 600000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                        Helpers.spend(p, 600000, log, "Accomodation - Villa");
+                        p.Accomodation = "Villa"; p.modHappiness(35);
+                        log.add(p.name+" bought a Villa (-Rs.600,000, +35 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Villa (-Rs.600,000, +35 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 5:
+                        if (p.balance < 1000000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                        Helpers.spend(p, 1000000, log, "Accomodation - Mansion");
+                        p.Accomodation = "Mansion"; p.modHappiness(50);
+                        log.add(p.name+" bought a Mansion (-Rs.1,000,000, +50 Happiness)");
+                        pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Mansion (-Rs.1,000,000, +50 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                        break;
+                    case 6:
+                        p.backPressed = true;
+                        return;
+                    default: pm.pln("Invalid."); return;
+                }
+                if (p.nightmareMode) {
+                    p.passNightmareYear(log);
+                } else {
+                    p.passYear(log);
+                }
+                break;
+            case 2:
+            pm.pln("\nVehicle options:");
+            pm.pln("1) Bike (Rs.20,000, +2 Happiness, Comfort = 20)");
+            pm.pln("2) Sedan (Rs.100,000, +10 Happiness, Comfort = 40)");
+            pm.pln("3) SUV (Rs.300,000, +20 Happiness, Comfort = 60)");
+            pm.pln("4) Luxury Car (Rs.800,000, +30 Happiness, Comfort = 80)");
+            pm.pln("5) Supercar (Rs.2,000,000, +50 Happiness, Comfort = 100)");
+            pm.pln("6) Back");
+            pm.p("\nChoose: ");
+            int carChoice = Helpers.readInt();
+            switch (carChoice) {
+                case 1:
+                    if (p.balance < 20000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 20000, log, "Vehicle - Bike");
+                    p.Vehicle = "Bike"; p.modHappiness(2);
+                    log.add(p.name+" bought a Bike (-Rs.20,000, +2 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Bike (-Rs.20,000, +2 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 2:
+                    if (p.balance < 100000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 100000, log, "Vehicle - Sedan");
+                    p.Vehicle = "Sedan"; p.modHappiness(10);
+                    log.add(p.name+" bought a Sedan (-Rs.100,000, +10 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Sedan (-Rs.100,000, +10 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 3:
+                    if (p.balance < 300000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 300000, log, "Vehicle - SUV");
+                    p.Vehicle = "SUV"; p.modHappiness(20);
+                    log.add(p.name+" bought an SUV (-Rs.300,000, +20 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought an SUV (-Rs.300,000, +20 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 4:
+                    if (p.balance < 800000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 800000, log, "Vehicle - Luxury Car");
+                    p.Vehicle = "Luxury Car"; p.modHappiness(30);
+                    log.add(p.name+" bought a Luxury Car (-Rs.800,000, +30 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Luxury Car (-Rs.800,000, +30 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 5:
+                    if (p.balance < 2000000) { pm.pln("Insufficient balance."); p.backPressed = true; return; }
+                    Helpers.spend(p, 2000000, log, "Vehicle - Supercar");
+                    p.Vehicle = "Supercar"; p.modHappiness(50);
+                    log.add(p.name+" bought a Supercar (-Rs.2,000,000, +50 Happiness)");
+                    pm.pln(ConsoleColors.HIGHLIGHT + p.name + " bought a Supercar (-Rs.2,000,000, +50 Happiness)" + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+                    break;
+                case 6:
+                    p.backPressed = true;
+                    return;
+                default: pm.pln("Invalid."); return;
+            }
+            if (p.nightmareMode) {
+                p.passNightmareYear(log);
+            } else {
+                p.passYear(log);
+            }
+                break;
+            case 3:
+                p.backPressed = true;
                 break;
             default: PrintMethods.pln("Invalid.");
         }

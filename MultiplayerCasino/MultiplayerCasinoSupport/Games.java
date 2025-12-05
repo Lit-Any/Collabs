@@ -6,6 +6,7 @@ import utility.*;
 public class Games {
 
     private static final Random rand = new Random();
+    private static final PrintMethods PrintMethods = new PrintMethods();
     
     // 🔹 Implemented Gambling Games (20)
     public static double gambleDiceGuess(double bet, Scanner sc) {

@@ -3,46 +3,36 @@ package utility;
 import java.util.*;
 
 public class Validators {
-    public static void yesOrNo(Scanner sc, String question, ArrayList <String> validInputs) {
+    
+    static PrintMethods PrintMethods = new PrintMethods();
+
+    public boolean yesOrNo(Scanner sc, String question) {
+
+        ArrayList <String> validInputs = new ArrayList <>(Arrays.asList("Y", "N", "y", "n", "yes", "no", "Yes", "No", "YES", "NO", "positive", "negative", "Positive", "Negative", 
+        "POSITIVE", "NEGATIVE", "1", "0"));
+        ArrayList <String> PositiveInputs = new ArrayList <>(Arrays.asList("Y", "y", "yes", "Yes", "YES", "positive", "Positive", "POSITIVE", "1"));
+
         PrintMethods.pln(question);
-        String response = sc.next().trim();
+        String response = sc.nextLine().trim();
+
         if (!validInputs.contains(response)) {
             PrintMethods.pln("Invalid input. Please enter Y or N.");
-            yesOrNo(sc, question, validInputs);
+            yesOrNo(sc, question);
         }
+
+        return PositiveInputs.contains(response.trim());
     }
 
-    public static void Validator(Scanner sc, String question, ArrayList <String> validInputs, boolean isBinary) {
-        if (isBinary) {
-            ArrayList <String> binaryInputs = new ArrayList <>(Arrays.asList("Y", "N", "y", "n", "yes", "no", "Yes", "No", "YES", "NO", "positive", "negative", "Positive", "Negative", 
-            "POSITIVE", "NEGATIVE", "1", "0"));
+    public String Validator(Scanner sc, String question, ArrayList <String> validInputs) {
+        
+        PrintMethods.pln(question);
+        String input = sc.nextLine().trim();
 
-            if (validInputs == null) {
-                ArrayList <String> defaultInputs = new ArrayList <>(binaryInputs);
-                for (String input : defaultInputs) {
-                    if (!binaryInputs.contains(input)) {
-                        binaryInputs.add(input);
-                    }
-                }
-                validInputs = defaultInputs;
-            }
-
-            for (String input : validInputs) {
-                if (!binaryInputs.contains(input)) {
-                    binaryInputs.add(input);
-                }
-            }
-
-            yesOrNo(sc, question, validInputs);
-            return;
-
-        } else {
-            PrintMethods.pln(question);
-            String input = sc.nextLine().trim();
-            if (!validInputs.contains(input)) {
-                PrintMethods.pln("Invalid input. Please try again.");
-                Validator(sc, question, validInputs, false);
-            }
+        if (!validInputs.contains(input)) {
+            PrintMethods.pln("Invalid input. Please try again."
+                                    + "\nValid inputs are: " + String.join(", ", validInputs));
+            Validator(sc, question, validInputs);
         }
+        return input;
     }
 }

@@ -6,6 +6,7 @@ import utility.*;
 public class Helpers {
 
     static java.util.Scanner SC = new java.util.Scanner(System.in);
+    static PrintMethods PrintMethods = new PrintMethods();
 
     public static void spend(Person p, long amt, List<String> log, String what) {
 
@@ -92,6 +93,7 @@ public class Helpers {
     public static boolean ForceEmploymentIfInDebt(Person p) {
         if (p.loan > 0 && Person.job == "Unemployed") {
             PrintMethods.pln(ConsoleColors.ULTRA_BOLD.PINK + "\n🏦 You have an outstanding loan and must find a job to repay it." + ConsoleColors.RESET + ConsoleColors.REG.WHITE + ConsoleColors.ULTRA_BG.BLACK);
+            p.backPressed = true;
             return true;
         } else {
             return false;

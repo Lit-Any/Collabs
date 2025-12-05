@@ -9,6 +9,7 @@ public class Lottery {
     // 🎰 Lottery System with Accumulating Bonus Pool (now counts flows)
     public static void lotterySystem(Player[] players, Scanner sc) {
         Random rand = new Random();
+        PrintMethods PrintMethods = new PrintMethods();
 
         PrintMethods.pln("\n🎰 Welcome to the Lottery System!");
         PrintMethods.pln("Each ticket costs $100. The more tickets you buy, the higher your chance of winning!");

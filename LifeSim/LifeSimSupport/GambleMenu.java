@@ -7,6 +7,7 @@ public class GambleMenu {
 
 static java.util.Scanner SC = new java.util.Scanner(System.in);
 static java.util.Random rand = new java.util.Random();
+static PrintMethods PrintMethods = new PrintMethods();
 
 /* ---- Gambling Menu (all 20 games preserved, adapted to long) ---- */
     static void gambleMenu(Person p) {
