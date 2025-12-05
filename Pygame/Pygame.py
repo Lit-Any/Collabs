@@ -73,9 +73,14 @@ while True:
 
         screen.fill((94, 129, 162))
 
-        game_over_surface = pygame.font.Font('Pygame Intro/font/Pixeltype.ttf', 50).render('Game Over! Click to Restart. Final Score: '+str(score), False, (255,255,255)).convert_alpha()
-        game_over_rect = game_over_surface.get_rect(center=(400, 200))
-        screen.blit(game_over_surface, game_over_rect)
+        game_over_surface1 = pygame.font.Font('Pygame Intro/font/Pixeltype.ttf', 50).render('Game Over! Click to Restart.', False, (255,255,255)).convert_alpha()
+        game_over_rect1 = game_over_surface1.get_rect(center=(400, 200))
+
+        game_over_surface2 = pygame.font.Font('Pygame Intro/font/Pixeltype.ttf', 50).render('Final Score: '+str(score)), False, (255,255,255).convert_alpha()
+        game_over_rect2 = game_over_surface2.get_rect(center=(400, game_over_rect1.center+game_over_surface1.get_height()))
+
+        screen.blit(game_over_surface1, game_over_rect1)
+        screen.blit(game_over_surface2, game_over_rect2)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             game_active = True
