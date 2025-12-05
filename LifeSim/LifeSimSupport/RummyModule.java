@@ -1,11 +1,11 @@
-package MultiplayerCasino.MultiplayerCasinoSupport;
+package LifeSim.LifeSimSupport;
 
 import java.util.*;
 import utility.*;
 
 public class RummyModule {
 
-    static PrintMethods PrintMethods = new PrintMethods();  
+    static PrintMethods PrintMethods = new PrintMethods();
 
     // ===== Card Model =====
     enum Suit { H, D, C, S, JOKER }
@@ -114,7 +114,7 @@ public class RummyModule {
 
         void showPublicCodes() {
             PrintMethods.p(name + "'s cards: ");
-            for (Card c : hand) PrintMethods.p(c.code + " ");;
+            for (Card c : hand) PrintMethods.p(c.code + " ");
         }
     }
 
@@ -243,16 +243,16 @@ public class RummyModule {
      * Returns int[]{winnerIndexInElectionPlayersArray, pointsEarned}
      * or {-1,0} if no game/winner.
      */
-    public static int[] runRummyGame(Scanner sc, Player[] electionPlayers) {
-        if (electionPlayers == null || electionPlayers.length < 2) {
+    public static int[] runRummyGame(Scanner sc, LifeSim.LifeSimSupport.Cards.PlayerAdapter[] arr) {
+        if (arr == null || arr.length < 2) {
             PrintMethods.pln("Need at least 2 consenting players to play Rummy.");
             return new int[]{-1,0};
         }
 
         // Map election players to RummyPlayers (preserve order)
-        RummyPlayer[] rPlayers = new RummyPlayer[electionPlayers.length];
-        for (int i=0;i<electionPlayers.length;i++) {
-            rPlayers[i] = new RummyPlayer(electionPlayers[i].name);
+        RummyPlayer[] rPlayers = new RummyPlayer[arr.length];
+        for (int i=0;i<arr.length;i++) {
+            rPlayers[i] = new RummyPlayer(arr[i].name);
         }
 
         // Use same scanner. Clear newline (safe guard) if any leftover

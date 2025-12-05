@@ -3,6 +3,9 @@ package MultiplayerCasino.MultiplayerCasinoSupport;
 import utility.*;
 
 public class Player {
+
+    static PrintMethods PrintMethods = new PrintMethods();
+
     public String name;
     public double balance;
     double loan;

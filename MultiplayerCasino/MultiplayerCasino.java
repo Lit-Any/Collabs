@@ -6,6 +6,7 @@ import utility.*;
 
 public class MultiplayerCasino {
     static Random rand = new Random();
+    static PrintMethods PrintMethods = new PrintMethods();
 
     // Pools
     public static double jackpotPool = 0.0;       // Gambling: all lost bets accumulate here until the next win
@@ -14,7 +15,7 @@ public class MultiplayerCasino {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        PrintMethods.pln("Enable win/loss condition? (Y/N)\nSaying no enables infinite play. ");
+        PrintMethods.pln("\nEnable win/loss condition? (Y/N)\nSaying no enables infinite play.\nIf yes, players who fall below 1/3 of the highest balance will be eliminated.\n(If single player, you will play against an AI).\n");
         boolean enableCondition = sc.next().trim().equalsIgnoreCase("Y") || sc.nextLine().trim().equalsIgnoreCase("YES");
         sc.nextLine(); // Consume newline after next()
 
@@ -77,7 +78,7 @@ public class MultiplayerCasino {
                     } else if (choice == 6) {
                         EconEvent.economicEvent(p);
                     } else if (choice == 7) {
-                        GambleMenu.gambleMenu(p, sc);
+                        GambleMenu.gambleMenuAI(p, sc);
                     } else if (choice == 8) {
                         StartCardPoll.startCardPoll(players, sc);
                     } else if (choice == 9) {
