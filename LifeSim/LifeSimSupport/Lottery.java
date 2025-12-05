@@ -7,9 +7,8 @@ import LifeSim.LifeSimulator;
 public class Lottery {
 
     static java.util.Random rand = new java.util.Random();
-    static PrintMethods PrintMethods = new PrintMethods();
 
-        /* ---- Lottery (with accumulating bonus pool) ---- */
+    /* ---- Lottery (with accumulating bonus pool) ---- */
     static void lotterySystem(List<Person> players) {
         PrintMethods.pln("\n🎰 Lottery System — Each ticket costs Rs.100");
         PrintMethods.pln("💡 Winner takes 90% of the pot + accumulated bonus pool!");
